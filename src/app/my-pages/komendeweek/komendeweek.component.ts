@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { map } from 'rxjs/internal/operators/map';
+import { map } from 'rxjs/operators';
 import { AgendaItem, AgendaService } from 'src/app/services/agenda.service';
 import { ParentComponent } from 'src/app/shared/components/parent.component';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
