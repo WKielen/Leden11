@@ -6,7 +6,10 @@ import { NotFoundError } from '../shared/error-handling/not-found-error';
 import { DuplicateKeyError } from '../shared/error-handling/duplicate-key-error';
 import { NoChangesMadeError } from '../shared/error-handling/no-changes-made-error';
 import { ServiceUnavailableError } from '../shared/error-handling/service-unavailable-error';
+import { Directive } from '@angular/core';
 
+// TODO: Add Angular decorator.
+@Directive()
 export class DataService {
 
   private observableSubscriptions = [];
