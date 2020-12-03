@@ -163,3 +163,32 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+
+
+
+Na de update naar 11 kreeg ik diverse warnings:
+Warning: A:\Angular11\src\app\my-pages\download\download.component.ts depends on 'export-to-csv'. CommonJS or AMD dependencies can cause optimization bailouts.
+
+Dit betekent dat er in de componenten die ik gebruik, gebruik wordt gemaakt van CommonJS
+Eigenlijk is dit niet goed.
+
+De warning kan onderdrukt worden met:
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+              "allowedCommonJsDependencies": [
+                 "xlsx",
+                 "export-to-csv",
+                 "highcharts"
+              ],
+
+Daarnaast moest ik 
+import { map } from 'rxjs/internal/operators/map';
+vervangen door  rxjs/internal/operators
+
+Data.services.ts --> @Directive toegevoegd
+
+
+

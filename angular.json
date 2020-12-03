@@ -17,6 +17,11 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+              "allowedCommonJsDependencies": [
+                 "xlsx",
+                 "export-to-csv",
+                 "highcharts"
+              ],
             "outputPath": "dist/Leden",
             "index": "src/index.html",
             "main": "src/main.ts",

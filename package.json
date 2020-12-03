@@ -44,7 +44,7 @@
     "rxjs": "~6.6.3",
     "tslib": "^2.0.0",
     "web-push": "^3.4.4",
-    "xlsx": "^0.15.6",
+    "xlsx": "^0.16.9",
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
