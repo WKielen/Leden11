@@ -10,10 +10,13 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 @Component({
     selector: 'singlemail-dialog',
     templateUrl: './singlemail.dialog.html',
+    styleUrls: ['./singlemail.dialog.scss']
+
 })
 export class SingleMailDialogComponent implements OnInit {
 
     mailText: string = '';
+    mailSubject: string = '';
     itemsToMail: Array<MailItem> = [];
     subject: string = '';
 
@@ -80,6 +83,7 @@ export class SingleMailDialogComponent implements OnInit {
         this.readTextFileService.read(this.singleMailInputDialog.TemplatePathandName)
             .subscribe(data => {
                 this.mailText = ReplaceKeywords(this.singleMailInputDialog.Lid, data);
+                this.mailSubject = this.singleMailInputDialog.Subject;
             });
     }
 
@@ -94,7 +98,7 @@ export class SingleMailDialogComponent implements OnInit {
         mailAddresses.forEach(element => {
             let itemToMail = new MailItem();
             itemToMail.Message = this.mailText;
-            itemToMail.Subject = this.singleMailInputDialog.Subject;
+            itemToMail.Subject = this.mailSubject;
             itemToMail.To = element;
             mailDialogInputMessage.MailItems.push(itemToMail);
         });

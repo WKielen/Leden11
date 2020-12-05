@@ -1,5 +1,13 @@
 <h2 mat-dialog-title>Mail</h2>
 <mat-card-content>
+    <div class="internalcard">
+        <form>
+            <mat-form-field>
+                <mat-label>Onderwerp:</mat-label>
+                <input matInput type="text" placeholder="Onderwerp" [(ngModel)]="mailSubject" [ngModelOptions]="{standalone: true}">
+            </mat-form-field>
+        </form>
+    </div>
     <angular-editor [(ngModel)]="mailText" [config]="editorConfig" [placeholder]="'Enter text here...'">
     </angular-editor>
 </mat-card-content>
