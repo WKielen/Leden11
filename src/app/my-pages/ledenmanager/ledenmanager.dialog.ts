@@ -1,10 +1,10 @@
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { BetaalWijzeValues, LidTypeValues } from 'src/app/services/leden.service';
 import { FormValueToDutchDateString } from 'src/app/shared/modules/DateRoutines';
-// import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {ValidatorService} from 'angular-iban';
+import { ValidatorService } from 'angular-iban';
+import { SingleMail, SingleMailDialogComponent } from '../mail/singlemail.dialog';
 
 @Component({
     selector: 'app-ledenmanager-dialog',
@@ -60,10 +60,9 @@ export class LedenDialogComponent implements OnInit {
 
     constructor(
         public dialogRef: MatDialogRef<LedenDialogComponent>,
+        public dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public data,
-        // private adapter: DateAdapter<any>
     ) {
-        // this.adapter.setLocale('nl');
         if (data.method === 'Toevoegen') {
             this.newlid = true;
         }
@@ -150,6 +149,17 @@ export class LedenDialogComponent implements OnInit {
         this.dialogRef.close(this.data.data);
     }
 
+    onMail(): void {
+        let data = new SingleMail();
+        data.TemplatePathandName = 'templates/template_gegevens.html';
+        data.Subject = "Mail van TTVN";
+        data.Lid = this.data.data;
+        this.dialog.open(SingleMailDialogComponent, {
+            data: data,
+            disableClose: true
+        })
+    }
+    
     /***************************************************************************************************
     / Properties
     /***************************************************************************************************/

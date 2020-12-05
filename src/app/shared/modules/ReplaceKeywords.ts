@@ -41,6 +41,8 @@ export function ReplaceKeywords(lid: LedenItemExt, body: string): string {
     body = Replace(body, /%leeftijd%/gi, lid.Leeftijd);
     body = Replace(body, /%iban%/gi, lid.IBAN);
     body = Replace(body, /%magopfoto%/gi, String(!lid.MagNietOpFoto).toDutchTextString());
+    body = Replace(body, /%ouders1mobiel%/gi, lid.Ouder1_Mobiel);
+    body = Replace(body, /%ouder1email1%/gi, lid.Ouder1_Email1);
 
     return body;
 }
