@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 import { TestComponent } from './test.component';
 import { A2hsComponent } from 'src/app/shared/components/a2hs/a2hs.component';
 import { CustomMaterialModule } from 'src/app/material.module';
-
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -21,6 +21,7 @@ import { CustomMaterialModule } from 'src/app/material.module';
     ]),
     CommonModule,
     CustomMaterialModule,
+    MatProgressBarModule,
   ]
 })
 

@@ -30,6 +30,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPT
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { ParentComponent } from './shared/components/parent.component';
 import { AngularIbanModule } from 'angular-iban';
+import { HoldableDirective } from './shared/directives/holdable.directive';
 
 registerLocaleData(localeNl);
 
@@ -38,6 +39,7 @@ registerLocaleData(localeNl);
   declarations: [
     AppComponent,
     ParentComponent,
+    HoldableDirective,
   ],
   imports: [
     AppRoutingModule,
