@@ -39,7 +39,6 @@ registerLocaleData(localeNl);
   declarations: [
     AppComponent,
     ParentComponent,
-    HoldableDirective,
   ],
   imports: [
     AppRoutingModule,
