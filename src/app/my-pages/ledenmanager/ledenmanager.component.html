@@ -1,7 +1,5 @@
 <mat-card>
-  <mat-card-header>
-    <mat-card-title>Leden</mat-card-title>
-  </mat-card-header>
+  <mat-card-header-spinner title="Muteren Leden" [progress]="progress"></mat-card-header-spinner>
   <mat-card-content>
 
     <mat-table #table [dataSource]="dataSource" class="mat-cell">
@@ -30,7 +28,7 @@
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
           <button mat-icon-button color="warn">
-            <mat-icon aria-label="Delete" (click)="onDelete(i)">delete</mat-icon>
+            <mat-icon aria-label="Delete" holdable (holdTime)="onDelete($event, i)">delete</mat-icon>
           </button>
         </mat-cell>
       </ng-container>

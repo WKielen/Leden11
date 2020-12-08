@@ -22,6 +22,7 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
 
     columnsToDisplay: string[] = ['StartDate', 'EndDate', 'Header', 'actions2'];
     dataSource = new MatTableDataSource<WebsiteText>();
+    progress:number = 0;  // for the progress-spinner in de header
 
     constructor(private paramService: ParamService,
         protected snackBar: MatSnackBar,
@@ -137,17 +138,6 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
                 });
         this.registerSubscription(sub);
     }
-
-    progress = 0;
-
-    holdHandler($event, index) {
-      this.progress = $event / 10;
-      if (this.progress == 100) {
-        console.log('%c============> HIT', 'color: black; font-weight:bolder');
-        this.showSnackBar('Doe iets na een seconde');
-      }
-    }
-
 }
 
  // see: https://github.com/angular-university/angular-material-course/blob/2-data-table-finished/src/app/services/lessons.datasource.ts

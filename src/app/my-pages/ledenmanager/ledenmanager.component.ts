@@ -27,6 +27,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
 
     columnsToDisplay: string[] = ['Naam', 'Leeftijd', 'actions2'];
     dataSource = new MatTableDataSource<LedenItem>();
+    progress:number = 0;  // for the progress-spinner in de header
 
     constructor(private ledenService: LedenService,
         protected notificationService: NotificationService,
@@ -105,7 +106,10 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onDelete(index: number): void {
+    onDelete($event ,index: number): void {
+        this.progress = $event / 10;
+        if (this.progress != 100) return;
+        this.progress = 0;
         let toBeDeleted: LedenItem = this.dataSource.data[index];
 
         toBeDeleted.LidTot = new Date().to_YYYY_MM_DD();
