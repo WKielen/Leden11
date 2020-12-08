@@ -44,9 +44,9 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { MasterzComponent } from './masterz/masterz.component';
 import { KomendeWeekComponent } from './komendeweek/komendeweek.component'; // the main connector. must go first
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import { HoldableModule } from '../shared/directives/holdable.directive';
 import { AngularIbanModule } from 'angular-iban';
 import { SharedComponentsModule } from '../shared/components/component.module';
+import { HoldableModule } from '../shared/directives/directives.module';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,

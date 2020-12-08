@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
 import { AppError } from '../../shared/error-handling/app-error';
-import { ParentComponent } from '../../shared/components/parent.component';
+import { ParentComponent } from '../../shared/parent.component';
 import { SwPush } from '@angular/service-worker';
 import { NotificationRecord, NotificationService } from '../../services/notification.service';
 import { NotFoundError } from '../../shared/error-handling/not-found-error';

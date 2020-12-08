@@ -9,7 +9,7 @@ import { DuplicateKeyError } from '../../shared/error-handling/duplicate-key-err
 import { NotFoundError } from '../../shared/error-handling/not-found-error';
 import { LedenDialogComponent } from './ledenmanager.dialog';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { SingleMailDialogComponent, SingleMail } from '../mail/singlemail.dialog';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 import { NotificationService } from 'src/app/services/notification.service';

@@ -6,7 +6,7 @@ import { DynamicDownload } from 'src/app/shared/modules/DynamicDownload';
 import { AgendaService } from 'src/app/services/agenda.service';
 import * as moment from 'moment';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { ReadTextFileService } from 'src/app/services/readtextfile.service';
 import { CheckImportedAgenda, AddImportedAgendaToDB } from 'src/app/shared/modules/AgendaRoutines';

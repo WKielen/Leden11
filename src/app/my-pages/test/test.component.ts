@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ParentComponent } from "src/app/shared/components/parent.component";
+import { ParentComponent } from "src/app/shared/parent.component";
 
 @Component({
   selector: "app-test",

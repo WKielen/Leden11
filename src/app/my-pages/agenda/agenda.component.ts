@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "src/app/services/auth.service";
-import { ParentComponent } from "src/app/shared/components/parent.component";
+import { ParentComponent } from "src/app/shared/parent.component";
 import { Calendar, CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, FullCalendarComponent } from "@fullcalendar/angular";
 import { AgendaItem, AgendaService } from "src/app/services/agenda.service";
 import { MatDialog } from "@angular/material/dialog";

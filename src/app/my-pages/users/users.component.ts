@@ -11,7 +11,7 @@ import { AppError } from '../../shared/error-handling/app-error';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { ROLES } from 'src/app/shared/classes/Page-Role-Variables';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { RolesDialogComponent } from './roles.dialog';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 

@@ -4,7 +4,7 @@ import { LedenService, LedenItemExt, LedenItem } from '../../services/leden.serv
 import { AppError } from '../../shared/error-handling/app-error';
 import { DuplicateKeyError } from '../../shared/error-handling/duplicate-key-error';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { read, write, utils, WorkBook } from 'xlsx'
 import { ParamService } from 'src/app/services/param.service';
 import { AuthService } from 'src/app/services/auth.service';

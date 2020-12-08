@@ -7,7 +7,7 @@ import { ParamService, ParamItem } from 'src/app/services/param.service';
 import { WebsiteText } from 'src/app/shared/classes/WebsiteText';
 import { WebsiteDialogComponent } from './website.dialog';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 
 @Component({

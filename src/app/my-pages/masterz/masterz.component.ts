@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { LedenItemExt, LedenService } from 'src/app/services/leden.service';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { MatTable, MatTableDataSource } from '@angular/material/table';

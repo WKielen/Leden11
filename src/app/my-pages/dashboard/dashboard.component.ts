@@ -3,7 +3,7 @@ import { LedenItem, LedenItemExt, LedenService } from 'src/app/services/leden.se
 import * as moment from 'moment';
 import { formatDate } from '@angular/common';
 import { DateRoutines } from 'src/app/services/leden.service';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
 

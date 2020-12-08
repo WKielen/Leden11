@@ -13,7 +13,7 @@ import { AppError } from 'src/app/shared/error-handling/app-error';
 import { AuthService } from 'src/app/services/auth.service';
 import { TrainingOverzichtDialogComponent } from './trainingoverzicht.dialog';
 import { DialogRecord } from './DialogRecord';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 
 @Component({
   selector: 'app-trainingoverzicht',

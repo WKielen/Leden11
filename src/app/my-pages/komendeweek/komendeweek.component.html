@@ -11,5 +11,8 @@
                 <div [innerHTML]="dagen.getIndex(i)[j].Toelichting"></div>
             </div>
         </div>
+        <div *ngIf="dagen.length() == 0"> 
+            <h1>Geen activiteiten</h1>
+        </div>
     </mat-card-content>
 </mat-card>

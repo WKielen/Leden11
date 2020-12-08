@@ -9,7 +9,7 @@ import { AppError } from '../../shared/error-handling/app-error';
 import { NotFoundError } from '../../shared/error-handling/not-found-error';
 import { DuplicateKeyError } from '../../shared/error-handling/duplicate-key-error';
 import { SnackbarTexts } from '../../shared/error-handling/SnackbarTexts';
-import { ParentComponent } from '../../shared/components/parent.component';
+import { ParentComponent } from '../../shared/parent.component';
 import { NoChangesMadeError } from '../../shared/error-handling/no-changes-made-error';
 
 @Component({

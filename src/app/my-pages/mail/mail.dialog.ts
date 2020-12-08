@@ -5,7 +5,7 @@ import { DynamicDownload } from 'src/app/shared/modules/DynamicDownload';
 import { MailItem, MailService } from 'src/app/services/mail.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { environment } from 'src/environments/environment';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { ServiceUnavailableError } from 'src/app/shared/error-handling/service-unavailable-error';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 

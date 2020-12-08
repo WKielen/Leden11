@@ -9,7 +9,7 @@ import { ContributieBedragen } from "src/app/shared/classes/ContributieBedragen"
 import { DirectDebit } from 'src/app/shared/classes/DirectDebit';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { LedenItemExt, LedenService, LidTypeValues } from 'src/app/services/leden.service';
 import { ExternalMailApiRecord, MailItem } from 'src/app/services/mail.service';
 import { ParamItem, ParamService } from 'src/app/services/param.service';

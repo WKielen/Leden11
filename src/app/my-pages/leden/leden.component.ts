@@ -5,7 +5,7 @@ import { CountingValues } from 'src/app/shared/modules/CountingValues';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { Clipboard } from '@angular/cdk/clipboard';
 @Component({
   selector: 'app-leden',

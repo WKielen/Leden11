@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { AgendaItem, AgendaService } from 'src/app/services/agenda.service';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import * as moment from 'moment';
 
@@ -28,13 +28,15 @@ export class KomendeWeekComponent extends ParentComponent implements OnInit {
         .nextWeek$()
         .pipe(
           map(function (value: AgendaItem[]) {
-            let localdata: Array<AgendaItem> = []
-            value.forEach(element => {
-              element.Toelichting = element.Toelichting.replace(new RegExp('\n', 'g'), "<br>")
-              if (!moment(element.Tijd, "HH:mm", true).isValid())
-                element.Tijd = '';
-              localdata.push(element)
-            });
+            let localdata: Array<AgendaItem> = [];
+            if (value) {
+              value.forEach(element => {
+                element.Toelichting = element.Toelichting.replace(new RegExp('\n', 'g'), "<br>")
+                if (!moment(element.Tijd, "HH:mm", true).isValid())
+                  element.Tijd = '';
+                localdata.push(element)
+              });
+            }
             return localdata;
           })
         )

@@ -42,23 +42,14 @@ export class AgendaService extends DataService {
   /***************************************************************************************************
   / Alle agenda items voor komende week
   /***************************************************************************************************/
-  nextWeek$() : Observable<Array<AgendaItem>>{
+  nextWeek$() {
     return this.http.get(environment.baseUrl + '/agenda/komendeweek')
       .pipe(
         retry(3),
         tap( // Log the result or error
           data => console.log('Received: ', data),
           error => console.log('Oeps: ', error)
-        ),
-        map(function (value) {
-          this.localdata = value;
-          this.localdata.forEach(element => {
-            delete element['ExtraA'];
-            delete element['ExtraB'];
-            delete element['DatumWijziging'];
-          });
-          return this.localdata;
-        })
+        )
       );
   }
 

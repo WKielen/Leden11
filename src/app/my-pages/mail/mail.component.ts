@@ -13,7 +13,7 @@ import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-e
 import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
 import { MailDialogComponent } from '../mail/mail.dialog';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { ParentComponent } from 'src/app/shared/components/parent.component';
+import { ParentComponent } from 'src/app/shared/parent.component';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 import { ExternalMailApiRecord, MailItem, MailService } from 'src/app/services/mail.service';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';

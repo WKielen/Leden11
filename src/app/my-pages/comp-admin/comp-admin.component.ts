@@ -4,7 +4,7 @@ import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { AuthService } from "src/app/services/auth.service";
 import { LedenItem, LedenItemExt, LedenService } from 'src/app/services/leden.service';
 import { ParamService } from 'src/app/services/param.service';
-import { ParentComponent } from "src/app/shared/components/parent.component";
+import { ParentComponent } from "src/app/shared/parent.component";
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { LedenDialogComponent } from '../ledenmanager/ledenmanager.dialog';
 import { MatDialog } from '@angular/material/dialog';
