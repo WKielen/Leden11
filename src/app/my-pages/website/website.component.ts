@@ -54,7 +54,10 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onDelete(index: number): void {
+    onDelete($event ,index: number): void {
+        this.progress = $event / 10;
+        if (this.progress != 100) return;
+        this.progress = 0;
         const toBeDeleted: WebsiteText = this.dataSource.data[index];
         this.dataSource.data.splice(index, 1);
         this.saveParam();
@@ -137,8 +140,7 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
 
     progress = 0;
 
-    holdHandler($event) {
-      console.log($event)
+    holdHandler($event, index) {
       this.progress = $event / 10;
       if (this.progress == 100) {
         console.log('%c============> HIT', 'color: black; font-weight:bolder');

@@ -1,11 +1,6 @@
 <mat-card>
-  <!-- <mat-card-header-spinner title="Website mededelingen" [progress]="progress"></mat-card-header-spinner> -->
-  <mat-card-header>
-    <mat-card-title>Website mededelingen</mat-card-title>
-  </mat-card-header>
+  <mat-card-header-spinner title="Website mededelingen" [progress]="progress"></mat-card-header-spinner>
   <mat-card-content>
-    <button mat-raised-button holdable (holdTime)="holdHandler($event)" color="primary">Doe iets na een seconde</button>
-
     <mat-table #table [dataSource]="dataSource" class="mat-cell">
 
       <ng-container matColumnDef="StartDate">
@@ -35,8 +30,8 @@
           <button mat-icon-button color="primary" (click)="onEdit(i)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn">
-            <mat-icon aria-label="Delete" (click)="onDelete(i)">delete</mat-icon>
+          <button mat-icon-button color="warn" >
+            <mat-icon aria-label="Delete" holdable (holdTime)="onDelete($event, i)">delete</mat-icon>
           </button>
         </mat-cell>
       </ng-container>

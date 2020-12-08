@@ -10,7 +10,7 @@ import { Component, Input } from '@angular/core';
     <mat-card-title> {{ title }}</mat-card-title>
       <div style="flex: 1;"></div>
       <div fxFlex fxLayout='row' fxLayoutAlign='flex-end'>
-        <mat-spinner color="warn" mode="determinate" diameter="35" [value]="progress * 1.5" strokeWidth="7">
+        <mat-spinner color="warn" mode="determinate" diameter="35" [value]="Value" strokeWidth="7">
         </mat-spinner>
       </div>
     </mat-card-header>
@@ -21,4 +21,7 @@ import { Component, Input } from '@angular/core';
 export class CardHeaderSpinnerComponent {
   @Input('progress') progress: number;
   @Input('title') title: string;
+  get Value() {
+    return this.progress * 1.5;
+  }
 }

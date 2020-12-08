@@ -7,13 +7,14 @@ import { A2hsComponent } from 'src/app/shared/components/a2hs/a2hs.component';
 import { CustomMaterialModule } from 'src/app/material.module';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { HoldableModule } from 'src/app/shared/directives/holdable.directive';
+import { SharedComponentsModule } from 'src/app/shared/components/component.module';
 import { CardHeaderSpinnerComponent } from 'src/app/shared/components/card.header.spinner';
 
 @NgModule({
   declarations: [
     TestComponent,
     A2hsComponent,
-    CardHeaderSpinnerComponent,
+    // CardHeaderSpinnerComponent,
 
   ],
   imports: [
@@ -27,6 +28,7 @@ import { CardHeaderSpinnerComponent } from 'src/app/shared/components/card.heade
     CustomMaterialModule,
     MatProgressBarModule,
     HoldableModule,
+    SharedComponentsModule,
   ]
 })
 

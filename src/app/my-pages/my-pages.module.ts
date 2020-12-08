@@ -47,6 +47,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HoldableModule } from '../shared/directives/holdable.directive';
 import { AngularIbanModule } from 'angular-iban';
 import { CardHeaderSpinnerComponent } from '../shared/components/card.header.spinner';
+import { SharedComponentsModule } from '../shared/components/component.module';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -103,6 +104,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     AngularEditorModule,
     HoldableModule,
     AngularIbanModule,
+    SharedComponentsModule,
+
   ],
 })
 export class MyPagesModule { }
