@@ -29,8 +29,7 @@ import localeNl from '@angular/common/locales/nl';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { ParentComponent } from './shared/components/parent.component';
-import { AngularIbanModule } from 'angular-iban';
-import { HoldableDirective } from './shared/directives/holdable.directive';
+import { CardHeaderSpinnerComponent } from './shared/components/card.header.spinner';
 
 registerLocaleData(localeNl);
 
@@ -39,7 +38,9 @@ registerLocaleData(localeNl);
   declarations: [
     AppComponent,
     ParentComponent,
+
   ],
+
   imports: [
     AppRoutingModule,
     AppNavModule,
@@ -47,7 +48,6 @@ registerLocaleData(localeNl);
     // Registratie van sw veranderd omdat we niet in de base href zitten maar in admin.
     // Note: if you are using a base-href in production, you’ll need to change the '/ngsw-worker.js' path to './ngsw-worker.js' to prevent a 404 error.
     ServiceWorkerModule.register('./ngsw-worker.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' }),
-    AngularIbanModule,
   ],
 
   providers: [AuthService,

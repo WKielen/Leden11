@@ -24,6 +24,8 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 @NgModule({
    exports: [
     MatToolbarModule,
@@ -50,6 +52,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTooltipModule,
     MatDividerModule,
     MatTabsModule,
+    MatProgressSpinnerModule, 
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })

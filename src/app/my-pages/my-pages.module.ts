@@ -44,6 +44,9 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { MasterzComponent } from './masterz/masterz.component';
 import { KomendeWeekComponent } from './komendeweek/komendeweek.component'; // the main connector. must go first
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { HoldableModule } from '../shared/directives/holdable.directive';
+import { AngularIbanModule } from 'angular-iban';
+import { CardHeaderSpinnerComponent } from '../shared/components/card.header.spinner';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -70,9 +73,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     SyncNttbComponent,
     TrainingDeelnameComponent,
     TrainingOverzichtComponent,
-    // TestComponent,
-    // AgendaManagerComponent,
-
 
     LedenDialogComponent,
     LedenDeleteDialogComponent,
@@ -86,6 +86,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     CheckboxListComponent,
     MasterzComponent,
     KomendeWeekComponent,
+
   ],
   imports: [
     CommonModule,
@@ -100,8 +101,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     SharedModule,
     FullCalendarModule,
     AngularEditorModule,
-
-    // AngularIbanModule,
+    HoldableModule,
+    AngularIbanModule,
   ],
 })
 export class MyPagesModule { }

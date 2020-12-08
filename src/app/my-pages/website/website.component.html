@@ -1,8 +1,11 @@
 <mat-card>
+  <!-- <mat-card-header-spinner title="Website mededelingen" [progress]="progress"></mat-card-header-spinner> -->
   <mat-card-header>
     <mat-card-title>Website mededelingen</mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <button mat-raised-button holdable (holdTime)="holdHandler($event)" color="primary">Doe iets na een seconde</button>
+
     <mat-table #table [dataSource]="dataSource" class="mat-cell">
 
       <ng-container matColumnDef="StartDate">

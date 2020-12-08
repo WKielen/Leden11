@@ -31,5 +31,4 @@ export class TestComponent
       this.showSnackBar('Doe iets na een seconde');
     }
   }
-
 }
