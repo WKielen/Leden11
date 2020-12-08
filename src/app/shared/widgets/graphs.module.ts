@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AreaComponent } from './widgets/area/area.component';
-import { PieComponent } from './widgets/pie/pie.component';
+import { AreaComponent } from './area/area.component';
+import { PieComponent } from './pie/pie.component';
 import { HighchartsChartModule } from 'highcharts-angular';
 
 @NgModule({
@@ -18,4 +18,4 @@ import { HighchartsChartModule } from 'highcharts-angular';
     PieComponent,
   ]
 })
-export class SharedModule { }
+export class HighGraphsModule { }

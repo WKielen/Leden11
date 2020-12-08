@@ -5,11 +5,11 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-select-lid-dropdown',
-  template: '<mat-form-field>' +
-              '<mat-select placeholder="Kies lid" (selectionChange)="onChanged($event)">' +
-              '<mat-option *ngFor="let Lid of leden" [value]="Lid.LidNr">{{Lid.Voornaam + " " + Lid.Tussenvoegsel + " " + Lid.Achternaam }}</mat-option>' +
-              '</mat-select>' +
-              '</mat-form-field>'
+  template: `<mat-form-field>
+              <mat-select placeholder="Kies lid" (selectionChange)="onChanged($event)">
+              <mat-option *ngFor="let Lid of leden" [value]="Lid.LidNr">{{Lid.Voornaam + " " + Lid.Tussenvoegsel + " " + Lid.Achternaam }}</mat-option>
+              </mat-select>
+              </mat-form-field>`
 })
 
 export class SelectLidDropdownComponent {

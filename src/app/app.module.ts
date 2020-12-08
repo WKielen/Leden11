@@ -29,7 +29,6 @@ import localeNl from '@angular/common/locales/nl';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import { ParentComponent } from './shared/components/parent.component';
-import { CardHeaderSpinnerComponent } from './shared/components/card.header.spinner';
 
 registerLocaleData(localeNl);
 
@@ -38,7 +37,6 @@ registerLocaleData(localeNl);
   declarations: [
     AppComponent,
     ParentComponent,
-
   ],
 
   imports: [

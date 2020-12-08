@@ -35,7 +35,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LayoutModule } from '@angular/cdk/layout';
 import { HttpClientModule } from '@angular/common/http';
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { SharedModule } from '../shared/shared.module';
+import { HighGraphsModule } from '../shared/widgets/graphs.module';
 import dayGridPlugin from '@fullcalendar/daygrid'; // a plugin
 import interactionPlugin from '@fullcalendar/interaction'; // a plugin
 import listPlugin from '@fullcalendar/list';
@@ -46,7 +46,6 @@ import { KomendeWeekComponent } from './komendeweek/komendeweek.component'; // t
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HoldableModule } from '../shared/directives/holdable.directive';
 import { AngularIbanModule } from 'angular-iban';
-import { CardHeaderSpinnerComponent } from '../shared/components/card.header.spinner';
 import { SharedComponentsModule } from '../shared/components/component.module';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
@@ -83,8 +82,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     TrainingOverzichtDialogComponent,
     WebsiteDialogComponent,
 
-    SelectLidDropdownComponent,
-    CheckboxListComponent,
     MasterzComponent,
     KomendeWeekComponent,
 
@@ -99,7 +96,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     BrowserAnimationsModule,
     LayoutModule,
     HttpClientModule,
-    SharedModule,
+    HighGraphsModule,
     FullCalendarModule,
     AngularEditorModule,
     HoldableModule,

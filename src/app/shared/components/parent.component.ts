@@ -3,9 +3,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-parent',
   template: '',
-
 })
 export class ParentComponent {
 
