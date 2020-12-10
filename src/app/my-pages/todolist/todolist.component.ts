@@ -16,6 +16,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   deleteprogress1 = 0;
   deleteprogress2 = 0;
   deleteprogress3 = 0;
+  headerToggleChecked: boolean = false;
   actionList: Array<ActionItem> = [];
   
   columnsToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
