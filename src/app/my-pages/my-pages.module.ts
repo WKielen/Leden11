@@ -47,6 +47,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularIbanModule } from 'angular-iban';
 import { SharedComponentsModule } from '../shared/components/component.module';
 import { HoldableModule } from '../shared/directives/directives.module';
+import { TodolistComponent } from './todolist/todolist.component';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -84,6 +85,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
 
     MasterzComponent,
     KomendeWeekComponent,
+    TodolistComponent,
 
   ],
   imports: [

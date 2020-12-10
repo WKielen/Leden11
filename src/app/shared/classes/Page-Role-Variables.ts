@@ -24,6 +24,7 @@ export const PAGEROLES = {
     testPageRoles: [ROLES.TEST],
     trainingdeelnamePageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN, ROLES.BESTUUR,],
     masterzPageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN, ROLES.BESTUUR,],
+    todolistPageRoles: [ROLES.TEST],
 };
 
 export const ROUTE = {
@@ -50,5 +51,6 @@ export const ROUTE = {
     loginPageRoute: 'login',
     masterzPageRoute: 'masterz',
     compadminPageRoute: 'compadmin',
+    todolistPageRoute: 'todo',
 };
 

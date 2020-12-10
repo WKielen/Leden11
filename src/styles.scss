@@ -68,13 +68,24 @@ body {
     width: 30px !important;
   }
 
-  // Voor kolommen met 2 actions. Kolom naam moet 'actions' zijn.  actions zijn dan edit en delete
+  // Voor kolommen met 2 actions. Kolom naam moet 'actions2' zijn.  actions zijn dan edit en delete
   .mat-column-actions2 {
     flex: 0 0 50px !important;
     width: 50px !important;
   }
-}
 
+  // Voor kolommen met 3 actions. Kolom naam moet 'actions3' zijn.
+  .mat-column-actions3 {
+    flex: 0 0 70px !important;
+    width: 70px !important;
+    .mat-icon-button {
+      height: 20px !important;
+      width: 20px !important;
+      margin-left: 5px !important;
+      margin-right: 5px !important;
+    }
+  }
+}
 
 //
 // Flex-Contrainer: Voor KLEINE schermen, hebben we een kolommen onder elkaar
@@ -89,6 +100,17 @@ body {
   .mat-column-actions2 {
     flex: 0 0 40px !important;
     width: 40px !important;
+
+    .mat-icon-button {
+      height: 20px !important;
+      width: 20px !important;
+      margin-left: 5px !important;
+      margin-right: 5px !important;
+    }
+  }
+  .mat-column-actions3 {
+    flex: 0 0 70px !important;
+    width: 70px !important;
 
     .mat-icon-button {
       height: 20px !important;
@@ -113,10 +135,6 @@ body {
   }
 }
 
-
-
-
-
 // voor de floating action buttons
 .fab-container {
   position: fixed;
@@ -139,9 +157,6 @@ body {
   }
 }
 
-
-
-
 // hightlighted van oneven rows
 .mat-row:nth-child(even) {
   background-color: white;
@@ -156,7 +171,6 @@ body {
 .margin-right-20 {
   margin-right: 20px;
 }
-
 
 //
 // Material boxes and dialogs

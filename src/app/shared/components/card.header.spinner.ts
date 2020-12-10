@@ -22,6 +22,6 @@ export class CardHeaderSpinnerComponent {
   @Input('progress') progress: number;
   @Input('title') title: string;
   get Value() {
-    return this.progress * 1.5;
+    return this.progress * 1.4;
   }
 }
