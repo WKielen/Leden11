@@ -63,7 +63,6 @@ export class AuthService {
       return false;
     }
     const jsonToken = this.jwtHelper.decodeToken(token);
-    console.log('json', jsonToken);
     return jsonToken.lidnr;
   }
   
