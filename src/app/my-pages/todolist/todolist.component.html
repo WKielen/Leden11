@@ -3,7 +3,7 @@
     toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
     ></mat-card-header-spinner>
     <mat-card-content>
-        <mat-table #table [dataSource]="dataSourceOpenActions" class="mat-cell">
+        <mat-table #tableOpenActions [dataSource]="dataSourceOpenActions" class="mat-cell">
 
             <ng-container matColumnDef="Title">
                 <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
@@ -30,13 +30,13 @@
             <!-- actions -->
             <ng-container matColumnDef="actions3">
                 <mat-header-cell *matHeaderCellDef>
-                    <button mat-icon-button color="primary" (click)="onAddAction()">
+                    <button mat-icon-button color="primary" (click)="onAddOpenAction()">
                         <mat-icon aria-label="Add icon">add</mat-icon>
                     </button>
                 </mat-header-cell>
 
                 <mat-cell *matCellDef="let row; let i=index;">
-                    <button mat-icon-button color="primary" holdable (holdTime)="onDoneAction($event, i)">
+                    <button mat-icon-button color="primary" holdable (holdTime)="onDoneOpenAction($event, i)">
                         <mat-icon aria-label="Done">done</mat-icon>
                     </button>
                     <button mat-icon-button color="primary" (click)="onEditAction(i)">
@@ -89,13 +89,13 @@
             <!-- actions -->
             <ng-container matColumnDef="actions3">
                 <mat-header-cell *matHeaderCellDef>
-                    <button mat-icon-button color="primary" (click)="onAddAction()">
+                    <button mat-icon-button color="primary" (click)="onAddOpenAction()">
                         <mat-icon aria-label="Add icon">add</mat-icon>
                     </button>
                 </mat-header-cell>
 
                 <mat-cell *matCellDef="let row; let i=index;">
-                    <button mat-icon-button color="primary" holdable (holdTime)="onDoneAction($event, i)">
+                    <button mat-icon-button color="primary" holdable (holdTime)="onDoneOpenAction($event, i)">
                         <mat-icon aria-label="Done">done</mat-icon>
                     </button>
                     <button mat-icon-button color="primary" (click)="onEditAction(i)">
