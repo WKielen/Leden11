@@ -57,6 +57,16 @@ export class AuthService {
     return jsonToken.userid;
   }
 
+  get LidNr() {
+    const token = localStorage.getItem('token');
+    if (!this.token) {
+      return false;
+    }
+    const jsonToken = this.jwtHelper.decodeToken(token);
+    console.log('json', jsonToken);
+    return jsonToken.lidnr;
+  }
+  
   get fullName() {
     const token = localStorage.getItem('token');
     if (!this.token) {

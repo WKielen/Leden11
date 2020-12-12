@@ -411,26 +411,29 @@ export class MailComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / Whether the number of selected elements matches the total number of rows.
   /***************************************************************************************************/
-  // isAllSelected(): boolean {
-  //   const numSelected = this.selection.selected.length;
-  //   const numRows = this.dataSource.data.length;
-  //   return numSelected === numRows;
-  // }
+  isAllSelected(): boolean {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
 
   /***************************************************************************************************
   / Selects all rows if they are not all selected; otherwise clear selection.
   /***************************************************************************************************/
-  // masterToggle(): void {
-  //   this.isAllSelected() ?
-  //     this.selection.clear() :
-  //     this.dataSource.data.forEach(row => this.selection.select(row));
-  //   this.determineMailToSend();
-  // }
+  masterToggle(): void {
+    this.isAllSelected() ?
+      this.selection.clear() :
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    this.determineMailToSend();
+  }
 
   /***************************************************************************************************
   / The label for the checkbox on the passed row. Voor als de regel wordt geklikt
   /***************************************************************************************************/
   checkboxLabel(row?: LedenItemExt): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+    }
     return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.LidNr}`;
   }
 

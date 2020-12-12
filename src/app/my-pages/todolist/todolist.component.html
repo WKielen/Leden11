@@ -1,6 +1,6 @@
 <mat-card>
-    <mat-card-header-spinner title="Actie lijst" [progress]="deleteprogress1"
-    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked'
+    <mat-card-header-spinner title="Actie lijst" [progress]="deleteprogress1" (onHoldAction)="onHoldAction($event)"
+    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
     ></mat-card-header-spinner>
     <mat-card-content>
         <mat-table #table [dataSource]="dataSource" class="mat-cell">
