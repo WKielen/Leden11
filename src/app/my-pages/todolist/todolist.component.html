@@ -3,7 +3,7 @@
     toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
     ></mat-card-header-spinner>
     <mat-card-content>
-        <mat-table #table [dataSource]="dataSource" class="mat-cell">
+        <mat-table #table [dataSource]="dataSourceOpenActions" class="mat-cell">
 
             <ng-container matColumnDef="Title">
                 <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
@@ -14,7 +14,6 @@
                 <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
                 <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
             </ng-container>
-
 
             <ng-container matColumnDef="StartDate">
                 <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
@@ -59,14 +58,65 @@
 </mat-card>
 
 <mat-card>
-    <mat-card-header-spinner title="Besluiten lijst" [progress]="deleteprogress2"></mat-card-header-spinner>
+    <mat-card-header-spinner title="Agehandelde acties" [progress]="deleteprogress2" (onHoldAction)="onHoldAction($event)"
+    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderFinishedChanged($event)"
+    ></mat-card-header-spinner>
     <mat-card-content>
+        <mat-table #table [dataSource]="dataSourceFinishedActions" class="mat-cell">
 
+            <ng-container matColumnDef="Title">
+                <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
+                <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Title }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="HolderName">
+                <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="StartDate">
+                <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="TargetDate">
+                <mat-header-cell *matHeaderCellDef class="hideonmobile">Uiterste</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.TargetDate }}</mat-cell>
+            </ng-container>
+
+
+            <!-- actions -->
+            <ng-container matColumnDef="actions3">
+                <mat-header-cell *matHeaderCellDef>
+                    <button mat-icon-button color="primary" (click)="onAddAction()">
+                        <mat-icon aria-label="Add icon">add</mat-icon>
+                    </button>
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row; let i=index;">
+                    <button mat-icon-button color="primary" holdable (holdTime)="onDoneAction($event, i)">
+                        <mat-icon aria-label="Done">done</mat-icon>
+                    </button>
+                    <button mat-icon-button color="primary" (click)="onEditAction(i)">
+                        <mat-icon aria-label="Edit">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn">
+                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteAction($event, i)">delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+            <mat-row *matRowDef="let row; index as i; columns: columnsToDisplay;"
+                (dblclick)="onDblclickAction($event, i)">
+            </mat-row>
+        </mat-table>
     </mat-card-content>
 </mat-card>
 
 <mat-card>
-    <mat-card-header-spinner title="Afgehandelde acties" [progress]="deleteprogress3"></mat-card-header-spinner>
+    <mat-card-header-spinner title="Actie Archief" [progress]="deleteprogress3"></mat-card-header-spinner>
     <mat-card-content>
 
     </mat-card-content>

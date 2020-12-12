@@ -1,19 +1,8 @@
-<h2 mat-dialog-title>
-  <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
-    <button mat-icon-button color="white" (click)="onClickModify()">
-      <mat-icon>edit</mat-icon>
-    </button>
-    <button mat-icon-button color="white" (click)="onClickCopy()">
-      <mat-icon>content_copy</mat-icon>
-    </button>
-    <button mat-icon-button color="warn" (click)="onClickDelete()">
-      <mat-icon>delete</mat-icon>
-    </button>
-    <button mat-icon-button color="white" [mat-dialog-close]="data.data" cdkFocusInitial>
-      <mat-icon>close</mat-icon>
-    </button>
-  </div>
-</h2>
+<mat-dialog-header-detail (onClickModify)="onClickModify()"
+  (onClickCopy)="onClickCopy()"
+  (onClickDelete)="onClickDelete()">
+</mat-dialog-header-detail>
+
 <mat-dialog-content>
   <h2>{{data.data.EvenementNaam}}</h2>
   <table id="table">

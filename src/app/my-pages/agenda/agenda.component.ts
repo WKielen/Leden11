@@ -108,8 +108,6 @@ export class AgendaComponent
 
     this.dialog
       .open(AgendaDialogComponent, {
-        // panelClass: "custom-dialog-container",
-        // width: "1200px",
         data: { method: "Toevoegen", data: toBeAdded },
       })
       .afterClosed() // returns an observable
@@ -125,7 +123,6 @@ export class AgendaComponent
   /***************************************************************************************************/
   onEventClick(clickInfo: EventClickArg): void {
     this.dialog.open(AgendaDetailDialogComponent, {
-      panelClass: 'detail-agenda-dialog-container',
       width: '500px',
       data: {
         method: "Wijzigen",

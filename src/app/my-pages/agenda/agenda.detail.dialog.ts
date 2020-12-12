@@ -37,8 +37,6 @@ export class AgendaDetailDialogComponent {
 
     showDialog(actiontype: string) {
         const dialogRef = this.dialog.open(AgendaDialogComponent, {
-            // panelClass: "custom-dialog-container",
-            // width: "1200px",
             data: {
                 method: actiontype,        // for display in the header of the pop-up
                 data: this.data.data,

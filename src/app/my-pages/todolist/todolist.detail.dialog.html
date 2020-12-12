@@ -1,0 +1,30 @@
+<h2 mat-dialog-title>Details</h2>
+<mat-dialog-content>
+  <h2>{{data.data.EvenementNaam}}</h2>
+  <table id="table">
+    <tr>
+      <td width="25%"></td>
+      <td width="75%"></td>
+    </tr>
+    <tr *ngIf="data.data.Title">
+      <td>Actie:</td>
+      <td>{{ data.data.Title }}</td>
+    </tr>
+        <tr *ngIf="data.data.HolderName">
+      <td>Door:</td>
+      <td>{{ data.data.HolderName }}</td>
+    </tr>
+    <tr *ngIf="data.data.StartDate">
+      <td>Opvoer:</td>
+      <td>{{ data.data.StartDate }}</td>
+    </tr>
+    <tr *ngIf="data.data.TargetDate">
+      <td>Voor:</td>
+      <td>{{ data.data.TargetDate }}</td>
+    </tr>
+    <tr *ngIf="toelichting">
+      <td>Toelichting:</td>
+      <td><div [innerHTML]="toelichting"></div></td>
+    </tr>
+  </table>
+</mat-dialog-content>
