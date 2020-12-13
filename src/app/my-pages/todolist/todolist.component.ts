@@ -92,16 +92,21 @@ export class TodolistComponent extends ParentComponent implements OnInit, OnChan
 
   // progress1Enabled: boolean = true;
   triggerCallback: boolean = false;
+
   /***************************************************************************************************
   / Open Actions Table Done Knop
   /***************************************************************************************************/
   onDoneOpenAction($event, index: number): void {
-    // console.log('$event', $event);
+    this.mooieNaam($event, index, this.dataSourceOpenActions,this.cbDoneOpenAction )
+  }
+
+  // kan dit naar de header?
+  mooieNaam($event, index: number, dataSource: MatTableDataSource<ActionItem>, func ) {
     this.deleteprogress1 = $event / 10;
     if ($event == 0) {
       this.triggerCallback = false;
-      const actionItem = this.dataSourceOpenActions.filteredData[index];
-      this.theBoundCallback = this.cbDoneOpenAction.bind(this, actionItem);
+      const actionItem = dataSource.filteredData[index];
+      this.theBoundCallback = func.bind(this, actionItem);
     }
     if ($event == 1000) {
       this.triggerCallback = true;
