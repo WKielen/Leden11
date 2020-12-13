@@ -49,6 +49,7 @@ import { SharedComponentsModule } from '../shared/components/component.module';
 import { HoldableModule } from '../shared/directives/directives.module';
 import { TodolistComponent } from './todolist/todolist.component';
 import { TodoListDetailDialogComponent } from './todolist/todolist.detail.dialog';
+import { TodoListDialogComponent } from './todolist/todolist.dialog';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -88,6 +89,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     KomendeWeekComponent,
     TodolistComponent,
     TodoListDetailDialogComponent,
+    TodoListDialogComponent,
   ],
   imports: [
     CommonModule,

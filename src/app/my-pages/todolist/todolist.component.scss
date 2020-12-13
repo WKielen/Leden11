@@ -34,3 +34,14 @@ mat-card {
   width: 10% !important;
 }
 
+.mat-column-TargetDate {
+  @include s.mat-text-column-wrap-stuff;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+}
+
+.mat-column-EndDate {
+  @include s.mat-text-column-wrap-stuff;
+  flex: 0 0 10% !important;
+  width: 10% !important;
+}

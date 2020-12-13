@@ -27,10 +27,11 @@ export class ActionService extends DataService {
     x.TargetDate = '2020-12-02';
     x.HolderName = 'Wim';
     x.Title = 'Action1';
-    x.Finished = "0";
+    x.Status = "0";
     x.Description = 'Beschrijving 1'
     actions.add(x.Id, x);
     list.push(x);
+
     x = new ActionItem();
     x.Id = "2";
     x.Title = 'Action2';
@@ -39,6 +40,7 @@ export class ActionService extends DataService {
     x.LidNr = "23";
     x.TargetDate = '2020-12-03';
     x.Description = 'Beschrijving 2\nTweede regel';
+    x.Status = "0";
     list.push(x);
     actions.add(x.Id, x);
 
@@ -50,6 +52,7 @@ export class ActionService extends DataService {
     x.TargetDate = '2020-12-04';
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Kees';
+    x.Status = "2";
     list.push(x);
     actions.add(x.Id, x);
 
@@ -62,6 +65,7 @@ export class ActionService extends DataService {
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Piet';
     x.EndDate = '2020-12-01';
+    x.Status = "1";
 
     list.push(x);
     actions.add(x.Id, x);
@@ -83,6 +87,6 @@ export class ActionItem {
   Title?: string = '';
   Description?: string = '';
   HolderName?: string = '';
-  Finished?: string = '';
+  Status?: string = '';
 
 }
