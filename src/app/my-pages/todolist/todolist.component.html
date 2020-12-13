@@ -1,8 +1,8 @@
 <mat-card>
-    <mat-card-header-spinner title="Actie lijst" [progress]="deleteprogress1" 
-    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
-    [myCallback]="theBoundCallback" [triggerCallback]="triggerCallback"
-    ></mat-card-header-spinner>
+    <mat-card-header-spinner title="Actie lijst" [progress]="deleteprogress1" toggleTitle="Eigen acties"
+        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
+        [myCallback]="theBoundCallback">
+    </mat-card-header-spinner>
     <mat-card-content>
         <mat-table #tableOpenActions [dataSource]="dataSourceOpenActions" class="mat-cell">
 
@@ -59,9 +59,9 @@
 </mat-card>
 
 <mat-card>
-    <mat-card-header-spinner title="Agehandelde acties" [progress]="deleteprogress2" 
-    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderFinishedChanged($event)"
-    ></mat-card-header-spinner>
+    <mat-card-header-spinner title="Agehandelde acties" [progress]="deleteprogress2" toggleTitle="Eigen acties"
+        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderFinishedChanged($event)">
+    </mat-card-header-spinner>
     <mat-card-content>
         <mat-table #table [dataSource]="dataSourceFinishedActions" class="mat-cell">
 

@@ -102,17 +102,13 @@ export class TodolistComponent extends ParentComponent implements OnInit, OnChan
 
   // kan dit naar de header?
   mooieNaam($event, index: number, dataSource: MatTableDataSource<ActionItem>, func ) {
-    this.deleteprogress1 = $event / 10;
-    if ($event == 0) {
-      this.triggerCallback = false;
+    this.deleteprogress1 = $event;
+    if ($event == 0) {  // first time call
       const actionItem = dataSource.filteredData[index];
       this.theBoundCallback = func.bind(this, actionItem);
     }
-    if ($event == 1000) {
-      this.triggerCallback = true;
-      this.deleteprogress1 = 0;
-    }
   }
+
 
   /***************************************************************************************************
   / Deze functie wordt aangeroepen vanuit de callback uit de header.
