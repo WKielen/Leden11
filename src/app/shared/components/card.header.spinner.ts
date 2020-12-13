@@ -34,14 +34,17 @@ export class CardHeaderSpinnerComponent implements OnChanges {
   @Input('title') title: string;
   @Input('toggleChecked') checked: boolean = true;
   @Input('toggleTitle') toggleTitle: string;
+  @Input('triggerCallback') triggerCallback: boolean;
+  @Input() public myCallback: Function;
+  
   @Output('onSliderChanged') slided = new EventEmitter();
-  @Output('onHoldAction') holdAction = new EventEmitter();
+
 
   ngOnChanges(changes) {
-    if (changes.hasOwnProperty('progress')) {
-      if (this.progress == 100) {
-        this.holdAction.emit("nog bedenken");
-        this.progress = 0;
+    if (changes.hasOwnProperty('triggerCallback')) {
+      // console.log('triggerCallback in header', this.triggerCallback);
+      if (this.triggerCallback) {
+        this.myCallback();
       }
     }
   }

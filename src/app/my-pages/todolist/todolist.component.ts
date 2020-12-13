@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, DoCheck, OnChanges, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
@@ -14,10 +14,9 @@ import { TodoListDetailDialogComponent } from './todolist.detail.dialog';
   templateUrl: './todolist.component.html',
   styleUrls: ['./todolist.component.scss']
 })
-export class TodolistComponent extends ParentComponent implements OnInit {
+export class TodolistComponent extends ParentComponent implements OnInit, OnChanges, DoCheck {
 
-  // @ViewChild(MatTable, {static: false}) tableOpenActions: MatTable<any>;
-
+  public theBoundCallback: Function;
 
   deleteprogress1 = 0;
   deleteprogress2 = 0;
@@ -31,7 +30,6 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   dataSourceOpenActions = new MatTableDataSource<ActionItem>();
 
   dataSourceFinishedActions = new MatTableDataSource<ActionItem>();
-  selectedAction: ISelectedAction;
 
   constructor(private actionService: ActionService,
     protected notificationService: NotificationService,
@@ -57,38 +55,20 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
   }
 
-/***************************************************************************************************
-/ De klik op de Done en Delete knop start 'timer' in de header. Na een seconde komt er een event
-/ Dit event kikt deze method af.
-/ Aan de hand van de selected item bepaal ik welke actie is doe op welk record
-/***************************************************************************************************/
-  onHoldAction($event): void {   // uit de header
-    console.log('onHoldAction', this.selectedAction);
-    // Dus Done knop. Vul Eind datum in zodat hij doorschuift naar volgende tabel
-    if (this.selectedAction.operation == "done") {
-      const id = this.selectedAction.action.Id;
-      let action: ActionItem = this.actionList.get(id)
-      action.EndDate = '2020-01-01';
-      this.refreshFilters();
-      return;
-    }
+  ngOnChanges(changes): void {
+    console.log('chnges', changes);
+  }
 
-    if (this.selectedAction.operation == "delete") {
-      const id = this.selectedAction.action.Id;
-      this.actionList.remove(id);
-      this.refreshFilters();
-      return;
-    }
-
+  ngDoCheck() {
 
 
   }
+
 
   refreshFilters() {
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterValues);
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterValues);
   }
-
 
   /***************************************************************************************************
   / Open Actions Table Add Knop
@@ -110,17 +90,34 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
   }
 
+  // progress1Enabled: boolean = true;
+  triggerCallback: boolean = false;
   /***************************************************************************************************
   / Open Actions Table Done Knop
-  / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
   onDoneOpenAction($event, index: number): void {
+    // console.log('$event', $event);
     this.deleteprogress1 = $event / 10;
-    if (this.deleteprogress1 == 0) {
-      this.selectedAction = { operation: "done", action: this.dataSourceOpenActions.filteredData[index] };
+    if ($event == 0) {
+      this.triggerCallback = false;
+      const actionItem = this.dataSourceOpenActions.filteredData[index];
+      this.theBoundCallback = this.cbDoneOpenAction.bind(this, actionItem);
+    }
+    if ($event == 1000) {
+      this.triggerCallback = true;
+      this.deleteprogress1 = 0;
     }
   }
 
+  /***************************************************************************************************
+  / Deze functie wordt aangeroepen vanuit de callback uit de header.
+  /***************************************************************************************************/
+  cbDoneOpenAction($event) {
+    let action: ActionItem = this.actionList.get($event.Id)
+    action.EndDate = '2020-01-01';
+    this.refreshFilters();
+    // this.progress1Enabled = true;
+  }
 
   /***************************************************************************************************
   / Open Actions Table Edit Knop
@@ -149,7 +146,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onDeleteAction($event, index: number): void {
     this.deleteprogress1 = $event / 10;
     if (this.deleteprogress1 == 0) {
-      this.selectedAction = { operation: "delete", action: this.dataSourceOpenActions.filteredData[index] };
+      // this.selectedAction = { operation: "delete", action: this.dataSourceOpenActions.filteredData[index] };
     }
   }
 
@@ -205,11 +202,4 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     }
     return filterFunction;
   }
-
-}
-
-
-interface ISelectedAction {
-  operation: string,
-  action: ActionItem
 }
