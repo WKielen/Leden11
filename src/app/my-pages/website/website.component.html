@@ -1,5 +1,5 @@
 <mat-card>
-  <mat-card-header-spinner title="Website mededelingen" [progress]="progress"></mat-card-header-spinner>
+  <mat-card-header-spinner title="Website mededelingen" [progress]="progress" [myCallback]="theBoundCallback"></mat-card-header-spinner>
   <mat-card-content>
     <mat-table #table [dataSource]="dataSource" class="mat-cell">
 

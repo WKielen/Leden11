@@ -55,11 +55,15 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onDelete($event ,index: number): void {
-        this.progress = $event / 10;
-        if (this.progress != 100) return;
-        this.progress = 0;
-        const toBeDeleted: WebsiteText = this.dataSource.data[index];
+    public theBoundCallback: Function;
+    onDelete($event, index: number): void {
+        this.progress = $event;
+        if ($event == 0) {  // first time call
+            this.theBoundCallback = this.cbOnDelete.bind(this, index);
+        }
+    }
+
+    cbOnDelete(index) {
         this.dataSource.data.splice(index, 1);
         this.saveParam();
         this.refreshTableLayout();

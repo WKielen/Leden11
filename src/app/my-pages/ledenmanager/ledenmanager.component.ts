@@ -27,7 +27,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
 
     columnsToDisplay: string[] = ['Naam', 'Leeftijd', 'actions2'];
     dataSource = new MatTableDataSource<LedenItem>();
-    progress:number = 0;  // for the progress-spinner in de header
+    progress: number = 0;  // for the progress-spinner in de header
 
     constructor(private ledenService: LedenService,
         protected notificationService: NotificationService,
@@ -65,7 +65,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
 
         // let tmp;
         this.dialog.open(LedenDialogComponent, {
-            data: { 'method': 'Toevoegen', 'data': toBeAdded },  
+            data: { 'method': 'Toevoegen', 'data': toBeAdded },
             disableClose: true
         })
             .afterClosed()  // returns an observable
@@ -106,16 +106,22 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onDelete($event ,index: number): void {
-        this.progress = $event / 10;
-        if (this.progress != 100) return;
-        this.progress = 0;
-        let toBeDeleted: LedenItem = this.dataSource.data[index];
+    public theBoundCallback: Function;
+    onDelete($event, index: number): void {
+        this.progress = $event;
+        if ($event == 0) {  // first time call
+            const data = { 'record': this.dataSource.data[index], 'index': index};
+            this.theBoundCallback = this.cbOnDelete.bind(this, data);
+        }
+    }
 
+    cbOnDelete(data) {
+        const toBeDeleted = data.record;
+        const index = data.index;
         toBeDeleted.LidTot = new Date().to_YYYY_MM_DD();
         const dialogRef = this.dialog.open(LedenDeleteDialogComponent, {
-            data: { 'method': 'Opzeggen', 'data': toBeDeleted },  
-            disableClose: true 
+            data: { 'method': 'Opzeggen', 'data': toBeDeleted },
+            disableClose: true
         });
 
         dialogRef.afterClosed().subscribe((result: LedenItem) => {
@@ -155,7 +161,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
         let toBeEdited: LedenItem = this.dataSource.data[index];
 
         const dialogRef = this.dialog.open(LedenDialogComponent, {
-            data: { 'method': 'Wijzigen', 'data': toBeEdited },  
+            data: { 'method': 'Wijzigen', 'data': toBeEdited },
             disableClose: true
         });
 
@@ -203,7 +209,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
         data.Lid = lid;
 
         this.dialog.open(SingleMailDialogComponent, {
-            data: data,  
+            data: data,
             disableClose: true
         })
     }
