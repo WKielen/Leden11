@@ -1,7 +1,7 @@
 //
 // use as: <app-select-lid-dropdown [leden-array]="ledenArray" (valueSelected)="onValueSelected($event)"></app-select-lid-dropdown>
 //
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'mat-card-header-spinner',
@@ -29,23 +29,12 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
   ]
 })
 
-export class CardHeaderSpinnerComponent implements OnChanges {
+export class CardHeaderSpinnerComponent {
   @Input('progress') progress: number;
   @Input('title') title: string;
   @Input('toggleChecked') checked: boolean = true;
   @Input('toggleTitle') toggleTitle: string;
-  @Input() public myCallback: Function;
-
   @Output('onSliderChanged') slided = new EventEmitter();
-
-
-  ngOnChanges(changes) {
-    // if (changes.hasOwnProperty('triggerCallback')) {
-    if (this.progress == 1000) {
-      this.myCallback();
-      this.progress = 0;
-    }
-  }
 
   get Value() {
     return (this.progress / 10) * 1.4;

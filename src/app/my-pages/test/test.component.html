@@ -8,5 +8,9 @@
     <mat-card-actions>
       <button mat-raised-button holdable (holdTime)="holdHandler($event)" color="primary">Doe iets na een
         seconde</button>
+        <mat-waiting-button icon="edit" (holdTime)="holdHandler($event)" [myCallback]="theBoundCallback"></mat-waiting-button>
+        <button mat-icon-button color="primary" holdable (holdTime)="holdHandler($event)">
+          <mat-icon aria-label="Done">done</mat-icon>
+      </button>
     </mat-card-actions>
 </mat-card>

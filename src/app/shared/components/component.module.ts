@@ -6,6 +6,8 @@ import { CardHeaderDetailComponent } from './dialog.header.detail';
 import { CardHeaderSpinnerComponent } from './card.header.spinner';
 import { CheckboxListComponent } from './checkbox.list.component';
 import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
+import { WaitingButtonComponent } from './waiting-button.component';
+import { HoldableModule } from '../directives/directives.module';
 
 @NgModule({
   declarations: [
@@ -14,10 +16,13 @@ import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
     CheckboxListComponent,
     SelectLidDropdownComponent,
     CardHeaderDetailComponent,
+    WaitingButtonComponent,
   ],
   imports: [
     CommonModule,
     CustomMaterialModule,
+    HoldableModule,
+
   ],
   exports: [
     CardHeaderSpinnerComponent,
@@ -25,6 +30,7 @@ import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
     CheckboxListComponent,
     SelectLidDropdownComponent,
     CardHeaderDetailComponent,
+    WaitingButtonComponent,
   ]
 })
 export class SharedComponentsModule { }

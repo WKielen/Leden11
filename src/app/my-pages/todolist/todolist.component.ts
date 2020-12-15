@@ -24,9 +24,9 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
   public theBoundCallback: Function;
 
-  deleteprogress1 = 0;
-  deleteprogress2 = 0;
-  deleteprogress3 = 0;
+  openActionSpinner = 0;
+  finishedActionSpinner = 0;
+  archivedActionSpinner = 0;
 
   headerToggleChecked: boolean = false;
   actionList: Dictionary = new Dictionary([]);
@@ -86,11 +86,9 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
   triggerCallback: boolean = false;
-  setCallBackParameters($event, index: number, dataSource: MatTableDataSource<ActionItem>, func) {
-    if ($event == 0) {  // first time call
-      const actionItem = dataSource.filteredData[index];
-      this.theBoundCallback = func.bind(this, actionItem);
-    }
+  setCallBackParameters(index: number, dataSource: MatTableDataSource<ActionItem>, func) {
+    const actionItem = dataSource.filteredData[index];
+    this.theBoundCallback = func.bind(this, actionItem);
   }
 
   /***************************************************************************************************
@@ -132,8 +130,10 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Open Actions Table Done Knop
   /***************************************************************************************************/
   onDoneOpenAction($event, index: number): void {
-    this.deleteprogress1 = $event;
-    this.setCallBackParameters($event, index, this.dataSourceOpenActions, this.cbDoneOpenAction)
+    this.openActionSpinner = $event;  // openActionSpinner wordt gelezen door spinner
+    if ($event == 0) {  // first time call
+      this.setCallBackParameters(index, this.dataSourceOpenActions, this.cbDoneOpenAction)
+    }
   }
 
   /***************************************************************************************************
@@ -147,6 +147,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
   updateAction(toBeEdited: ActionItem): void {
+    // console.log('updateAction', toBeEdited);
     let sub = this.actionService.update$(toBeEdited)
       .subscribe(data => {
         this.refreshFilters();
@@ -187,11 +188,15 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
   onDeleteOpenAction($event, index: number): void {
-    this.deleteprogress1 = $event;
-    this.setCallBackParameters($event, index, this.dataSourceOpenActions, this.cbDeleteOpenAction)
+    this.openActionSpinner = $event;
+    if ($event == 0) {  // first time call
+      this.setCallBackParameters(index, this.dataSourceOpenActions, this.cbDeleteOpenAction); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
+      // console.log('set call back', index );
+    }
   }
 
   cbDeleteOpenAction($event): void {
+    // console.log('in call back', $event );
     let toBeEdited: ActionItem = this.actionList.get($event.Id)
     toBeEdited.Status = '2';
     this.updateAction(toBeEdited);
@@ -217,10 +222,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
   onDeleteFinishedAction($event, index: number): void {
-    this.deleteprogress2 = $event;
-    this.setCallBackParameters($event, index, this.dataSourceFinishedActions, this.cbDeleteFinishedAction)
+    this.finishedActionSpinner = $event;
+    if ($event == 0) {  // first time call
+      this.setCallBackParameters(index, this.dataSourceFinishedActions, this.cbDeleteFinishedAction)
+    }
   }
-
   cbDeleteFinishedAction($event): void {
     let toBeDeleted: ActionItem = this.actionList.get($event.Id)
     toBeDeleted.Status = '2';
@@ -267,10 +273,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
   onDeleteArchiveAction($event, index: number): void {
-    this.deleteprogress3 = $event;
-    this.setCallBackParameters($event, index, this.dataSourceArchiveActions, this.cbDeleteArchiveAction)
+    this.archivedActionSpinner = $event;
+    if ($event == 0) {  // first time call
+      this.setCallBackParameters(index, this.dataSourceArchiveActions, this.cbDeleteArchiveAction)
+    }
   }
-
   cbDeleteArchiveAction(toBeDeleted): void {
     let sub = this.actionService.delete$(toBeDeleted.Id)
       .subscribe(data => {

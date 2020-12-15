@@ -1,7 +1,6 @@
 <mat-card>
-    <mat-card-header-spinner title="Actie lijst" [progress]="deleteprogress1" toggleTitle="Eigen acties"
-        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
-        [myCallback]="theBoundCallback">
+    <mat-card-header-spinner title="Actie lijst" [progress]="openActionSpinner" toggleTitle="Eigen acties"
+        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)">
     </mat-card-header-spinner>
     <mat-card-content>
         <mat-table #tableOpenActions [dataSource]="dataSourceOpenActions" class="mat-cell">
@@ -37,16 +36,11 @@
                 </mat-header-cell>
 
                 <mat-cell *matCellDef="let row; let i=index;">
-                    <button mat-icon-button color="primary" holdable (holdTime)="onDoneOpenAction($event, i)">
-                        <mat-icon aria-label="Done">done</mat-icon>
-                    </button>
+                    <mat-waiting-button icon="done" (holdTime)="onDoneOpenAction($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
                     <button mat-icon-button color="primary" (click)="onEditAction(i)">
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn">
-                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteOpenAction($event, i)" >delete
-                        </mat-icon>
-                    </button>
+                    <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteOpenAction($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
                 </mat-cell>
             </ng-container>
 
@@ -60,9 +54,8 @@
 </mat-card>
 
 <mat-card>
-    <mat-card-header-spinner title="Agehandelde acties" [progress]="deleteprogress2" toggleTitle="Eigen acties"
-        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderFinishedChanged($event)"
-        [myCallback]="theBoundCallback">
+    <mat-card-header-spinner title="Agehandelde acties" [progress]="finishedActionSpinner" toggleTitle="Eigen acties"
+        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderFinishedChanged($event)">
     </mat-card-header-spinner>
     <mat-card-content>
         <mat-table #table [dataSource]="dataSourceFinishedActions" class="mat-cell">
@@ -97,10 +90,7 @@
                     <button mat-icon-button color="primary" (click)="onEditFinished(i)">
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn">
-                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteFinishedAction($event, i)" >delete
-                        </mat-icon>
-                    </button>
+                    <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteFinishedAction($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
                 </mat-cell>
             </ng-container>
 
@@ -113,7 +103,7 @@
 </mat-card>
 
 <mat-card>
-    <mat-card-header-spinner title="Actie Archief" [progress]="deleteprogress3" [myCallback]="theBoundCallback">
+    <mat-card-header-spinner title="Actie Archief" [progress]="archivedActionSpinner">
     </mat-card-header-spinner>
     <mat-card-content>
         <mat-table #table [dataSource]="dataSourceArchiveActions" class="mat-cell">
@@ -148,10 +138,7 @@
                     <button mat-icon-button color="primary" (click)="onEditArchived(i)">
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
-                    <button mat-icon-button color="warn">
-                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteArchiveAction($event, i)">delete
-                        </mat-icon>
-                    </button>
+                    <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteArchiveAction($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
                 </mat-cell>
             </ng-container>
 

@@ -15,20 +15,24 @@ export class TestComponent
   ) {
     super(snackBar);
   }
+  public theBoundCallback: Function;
 
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
   /***************************************************************************************************/
   ngOnInit() {
+    this.theBoundCallback = this.dezeGraag.bind(this, "actionItem");
+
   }
   progress = 0;
 
   holdHandler($event) {
     console.log($event)
-    this.progress = $event / 10;
-    if (this.progress == 100) {
-      console.log('%c============> HIT', 'color: black; font-weight:bolder');
-      this.showSnackBar('Doe iets na een seconde');
-    }
   }
+
+  dezeGraag($event) {
+    console.log('dezeGraag', $event);
+  }
+
+
 }
