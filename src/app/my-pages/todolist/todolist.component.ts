@@ -30,9 +30,9 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   columnsFinishedToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
   columnsArchiveToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
 
-  filterOpenValues = { LidNr: '' };
-  filterFininshedValues = { LidNr: '' };
-  filterArchiveValues = { LidNr: '' };
+  filterOpenValues = { Voornaam: '' };
+  filterFininshedValues = { Voornaam: '' };
+  filterArchiveValues = { Voornaam: '' };
 
   dataSourceOpenActions = new MatTableDataSource<ActionItem>();
   dataSourceFinishedActions = new MatTableDataSource<ActionItem>();
@@ -50,17 +50,17 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
     this.actionList = this.actionService.GetSome();
 
-    this.filterOpenValues.LidNr = '';
+    this.filterOpenValues.Voornaam = '';
     this.dataSourceOpenActions.data = this.actionList.values();
     this.dataSourceOpenActions.filterPredicate = this.createOpenActionFilter();
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
 
-    this.filterOpenValues.LidNr = '';
+    this.filterOpenValues.Voornaam = '';
     this.dataSourceFinishedActions.data = this.actionList.values();
     this.dataSourceFinishedActions.filterPredicate = this.createFinishedActionFilter();
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
 
-    this.filterArchiveValues.LidNr = '';
+    this.filterArchiveValues.Voornaam = '';
     this.dataSourceArchiveActions.data = this.actionList.values();
     this.dataSourceArchiveActions.filterPredicate = this.createArchiveActionFilter();
     this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
@@ -133,45 +133,6 @@ export class TodolistComponent extends ParentComponent implements OnInit {
       });
   }
 
-  // let x = new ActionItem();
-  // x.Id = "9";
-  // x.StartDate = '2020-12-01';
-  // x.LidNr = "23";
-  // x.TargetDate = '2020-12-02';
-  // x.HolderName = 'Wim';
-  // x.Title = 'Action9';
-  // x.Status = "0";
-  // x.Description = 'Beschrijving 1'
-  // console.log('Add action',);
-  // this.actionList.add(x.Id, x)
-  // this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
-  // console.log('list ', this.actionList);
-  //   this.showDialog('Toevoegen');
-  // }
-
-  // showDialog(actiontype: string) {
-  //   const dialogRef = this.dialog.open(TodoListDialogComponent, {
-  //     data: {
-  //       method: actiontype,        // for display in the header of the pop-up
-  //       data: this.dataSourceOpenActions.data,
-  //     },
-  //   });
-
-  //   dialogRef.afterClosed().subscribe((result: ActionItem) => {
-  //     if (result) {
-  //       this.data.data = result;
-  //       this.data.method = actiontype;
-  //       // this.dialogRef.close(this.data);
-  //     }
-  //     else {
-  //       // this.data.method = 'Cancel';
-  //       // this.dialogRef.close(this.data);
-  //     }
-  //   });
-  // }
-
-
-
 
   /***************************************************************************************************
   / Open Actions Table Done Knop
@@ -195,9 +156,9 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Open Actions Table Edit Knop
   /***************************************************************************************************/
   onEditAction(index: number): void {
-    let toBeEdited: ActionItem = this.dataSourceOpenActions.data[index];
+    let toBeEdited: ActionItem = this.dataSourceOpenActions.filteredData[index];
 
-    this.dialog.open(TodoListDetailDialogComponent, {
+    this.dialog.open(TodoListDialogComponent, {
       width: '500px',
       data: {
         method: "Wijzigen",
@@ -209,7 +170,6 @@ export class TodolistComponent extends ParentComponent implements OnInit {
         // this.storeResults(clickInfo.event, result);
       });
   }
-
 
   /***************************************************************************************************
   / Open Actions Table Delete Knop
@@ -242,6 +202,26 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
 
   /***************************************************************************************************
+  / Finished Actions Table Edit Knop
+  /***************************************************************************************************/
+  onEditFinished(index: number): void {
+    let toBeEdited: ActionItem = this.dataSourceFinishedActions.filteredData[index];
+
+    this.dialog.open(TodoListDialogComponent, {
+      width: '500px',
+      data: {
+        method: "Wijzigen",
+        data: toBeEdited,
+      },
+    })
+      .afterClosed()
+      .subscribe(result => {
+        // this.storeResults(clickInfo.event, result);
+      });
+  }
+
+
+  /***************************************************************************************************
   / Finished Actions Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
@@ -257,6 +237,24 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
 
+  /***************************************************************************************************
+  / Archived Actions Table Edit Knop
+  /***************************************************************************************************/
+  onEditArchived(index: number): void {
+    let toBeEdited: ActionItem = this.dataSourceArchiveActions.filteredData[index];
+
+    this.dialog.open(TodoListDialogComponent, {
+      width: '500px',
+      data: {
+        method: "Wijzigen",
+        data: toBeEdited,
+      },
+    })
+      .afterClosed()
+      .subscribe(result => {
+        // this.storeResults(clickInfo.event, result);
+      });
+  }
 
   /***************************************************************************************************
   / Archived Actions Table Delete Knop
@@ -280,18 +278,18 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
   onSliderChanged($event): void {
     if ($event.checked) {
-      this.filterOpenValues.LidNr = this.authService.LidNr;
+      this.filterOpenValues.Voornaam = this.authService.firstname;
     } else {
-      this.filterOpenValues.LidNr = '';
+      this.filterOpenValues.Voornaam = '';
     }
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
   }
 
   onSliderFinishedChanged($event): void {
     if ($event.checked) {
-      this.filterFininshedValues.LidNr = this.authService.LidNr;
+      this.filterFininshedValues.Voornaam = this.authService.firstname;
     } else {
-      this.filterFininshedValues.LidNr = '';
+      this.filterFininshedValues.Voornaam = '';
     }
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
   }
@@ -302,24 +300,24 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   private createOpenActionFilter(): (data: ActionItem, filter: string) => boolean {
     let filterFunction = function (data: ActionItem, filter: string): boolean {
-      let searchTerms: ActionItem = JSON.parse(filter);
-      return ((data.LidNr == searchTerms.LidNr || searchTerms.LidNr == '') && data.Status == '0');
+      let searchTerms = JSON.parse(filter);
+      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '0');
     }
     return filterFunction;
   }
 
   private createFinishedActionFilter(): (data: ActionItem, filter: string) => boolean {
     let filterFunction = function (data: ActionItem, filter: string): boolean {
-      let searchTerms: ActionItem = JSON.parse(filter);
-      return ((data.LidNr == searchTerms.LidNr || searchTerms.LidNr == '') && data.Status == '1');
+      let searchTerms = JSON.parse(filter);
+      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '1');
     }
     return filterFunction;
   }
 
   private createArchiveActionFilter(): (data: ActionItem, filter: string) => boolean {
     let filterFunction = function (data: ActionItem, filter: string): boolean {
-      let searchTerms: ActionItem = JSON.parse(filter);
-      return ((data.LidNr == searchTerms.LidNr || searchTerms.LidNr == '') && data.Status == '2');
+      let searchTerms = JSON.parse(filter);
+      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '2');
     }
     return filterFunction;
   }

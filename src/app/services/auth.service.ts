@@ -81,6 +81,15 @@ export class AuthService {
     return name;
   }
 
+  get firstname() {
+    const token = localStorage.getItem('token');
+    if (!this.token) {
+      return false;
+    }
+    const jsonToken = this.jwtHelper.decodeToken(token);
+    return jsonToken.firstname;
+  }
+
   get roles() {
     const token = localStorage.getItem('token');
     if (!this.token) {

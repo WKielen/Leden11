@@ -38,7 +38,7 @@ export class TodoListDialogComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.title.setValue(this.data.data.Tijd);
+        this.title.setValue(this.data.data.Title);
         this.targetdate.setValue(this.data.data.TargetDate);
         this.description.setValue(this.data.data.Description);
         this.holdername.setValue(this.data.data.HolderName);
@@ -49,7 +49,7 @@ export class TodoListDialogComponent implements OnInit {
     /***************************************************************************************************/
     onSubmit(): void {
         this.data.data.Title = this.title.value;
-        this.data.data.TargetDate = this.targetdate.value;
+        this.data.data.TargetDate = FormValueToDutchDateString(this.targetdate.value);
         this.data.data.Description = this.description.value;
         this.data.data.HolderName = this.holdername.value;
         this.dialogRef.close(this.data.data);

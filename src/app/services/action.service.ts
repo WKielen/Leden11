@@ -23,7 +23,6 @@ export class ActionService extends DataService {
     let x = new ActionItem();
     x.Id = "1";
     x.StartDate = '2020-12-01';
-    x.LidNr ="23";
     x.TargetDate = '2020-12-02';
     x.HolderName = 'Wim';
     x.Title = 'Action1';
@@ -37,7 +36,6 @@ export class ActionService extends DataService {
     x.Title = 'Action2';
     x.StartDate = '2020-12-01';
     x.HolderName = 'Wim';
-    x.LidNr = "23";
     x.TargetDate = '2020-12-03';
     x.Description = 'Beschrijving 2\nTweede regel';
     x.Status = "0";
@@ -48,7 +46,6 @@ export class ActionService extends DataService {
     x.Id = "3";
     x.Title = 'Action3';
     x.StartDate = '2020-12-01';
-    x.LidNr = "256";
     x.TargetDate = '2020-12-04';
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Kees';
@@ -60,12 +57,37 @@ export class ActionService extends DataService {
     x.Id = "4";
     x.Title = 'Action4';
     x.StartDate = '2020-12-01';
-    x.LidNr = "256";
     x.TargetDate = '2020-12-04';
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Piet';
     x.EndDate = '2020-12-01';
     x.Status = "1";
+
+    list.push(x);
+    actions.add(x.Id, x);
+
+    x = new ActionItem();
+    x.Id = "5";
+    x.Title = 'Action5';
+    x.StartDate = '2020-12-01';
+    x.TargetDate = '2020-12-04';
+    x.Description = 'Beschrijving 3';
+    x.HolderName = 'Wim';
+    x.EndDate = '2020-12-01';
+    x.Status = "1";
+
+    list.push(x);
+    actions.add(x.Id, x);
+
+    x = new ActionItem();
+    x.Id = "6";
+    x.Title = 'Action6';
+    x.StartDate = '2020-12-01';
+    x.TargetDate = '2020-12-04';
+    x.Description = 'Beschrijving 3';
+    x.HolderName = 'Piet';
+    x.EndDate = '2020-12-01';
+    x.Status = "0";
 
     list.push(x);
     actions.add(x.Id, x);
@@ -80,7 +102,6 @@ export class ActionService extends DataService {
 
 export class ActionItem {
   Id?: string = '';
-  LidNr? = '';
   StartDate?: string = '';
   TargetDate?: string = '';
   EndDate?: string = '';
