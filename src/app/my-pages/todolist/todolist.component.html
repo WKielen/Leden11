@@ -44,7 +44,7 @@
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
                     <button mat-icon-button color="warn">
-                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteOpenAction($event, i)">delete
+                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteOpenAction($event, i)" >delete
                         </mat-icon>
                     </button>
                 </mat-cell>
@@ -52,7 +52,7 @@
 
             <mat-header-row *matHeaderRowDef="columnsOpenToDisplay"></mat-header-row>
             <mat-row *matRowDef="let row; index as i; columns: columnsOpenToDisplay;"
-                (dblclick)="onDblclickAction($event, i)">
+                (dblclick)="onDblclickOpenAction($event, i)">
             </mat-row>
         </mat-table>
 
@@ -98,7 +98,7 @@
                         <mat-icon aria-label="Edit">edit</mat-icon>
                     </button>
                     <button mat-icon-button color="warn">
-                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteFinishedAction($event, i)">delete
+                        <mat-icon aria-label="Delete" holdable (holdTime)="onDeleteFinishedAction($event, i)" >delete
                         </mat-icon>
                     </button>
                 </mat-cell>
@@ -106,7 +106,7 @@
 
             <mat-header-row *matHeaderRowDef="columnsFinishedToDisplay"></mat-header-row>
             <mat-row *matRowDef="let row; index as i; columns: columnsFinishedToDisplay;"
-                (dblclick)="onDblclickAction($event, i)">
+                (dblclick)="  onDblclickFinishedAction($event, i)">
             </mat-row>
         </mat-table>
     </mat-card-content>
@@ -157,7 +157,7 @@
 
             <mat-header-row *matHeaderRowDef="columnsArchiveToDisplay"></mat-header-row>
             <mat-row *matRowDef="let row; index as i; columns: columnsArchiveToDisplay;"
-                (dblclick)="onDblclickAction($event, i)">
+                (dblclick)="onDblclickArchiveAction($event, i)">
             </mat-row>
         </mat-table>
 

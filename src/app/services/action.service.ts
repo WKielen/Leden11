@@ -111,3 +111,13 @@ export class ActionItem {
   Status?: string = '';
 
 }
+
+// `Id` int(11) NOT NULL AUTO_INCREMENT,
+// `StartDate` date NOT NULL,
+// `TargetDate` date NOT NULL,
+// `EndDate` date NOT NULL,
+// `Title` mediumtext NOT NULL,
+// `Description` text NOT NULL,
+// `HolderName` tinytext NOT NULL,
+// `Status` tinyint(4) NOT NULL,
+// PRIMARY KEY (`Id`)

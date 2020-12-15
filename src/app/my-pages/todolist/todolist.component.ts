@@ -5,6 +5,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ActionItem, ActionService } from 'src/app/services/action.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
+import { AppError } from 'src/app/shared/error-handling/app-error';
+import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
+import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
+import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
+import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { TodoListDetailDialogComponent } from './todolist.detail.dialog';
@@ -47,9 +52,17 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    let sub = this.actionService.getAll$()
+      .subscribe((data: Array<ActionItem>) => {
+        data.forEach((item) => {
+          this.actionList.add(item.Id, item);
+        });
+        this.createFilters();
+      });
+    this.registerSubscription(sub);
+  }
 
-    this.actionList = this.actionService.GetSome();
-
+  createFilters(): void {
     this.filterOpenValues.Voornaam = '';
     this.dataSourceOpenActions.data = this.actionList.values();
     this.dataSourceOpenActions.filterPredicate = this.createOpenActionFilter();
@@ -66,14 +79,14 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
   }
 
-  refreshFilters() {
+  refreshFilters(): void {
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
     this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
   }
 
   triggerCallback: boolean = false;
-  mooieNaam($event, index: number, dataSource: MatTableDataSource<ActionItem>, func) {
+  setCallBackParameters($event, index: number, dataSource: MatTableDataSource<ActionItem>, func) {
     if ($event == 0) {  // first time call
       const actionItem = dataSource.filteredData[index];
       this.theBoundCallback = func.bind(this, actionItem);
@@ -96,39 +109,20 @@ export class TodolistComponent extends ParentComponent implements OnInit {
       .afterClosed()  // returns an observable
       .subscribe(result => {
         if (result) {  // in case of cancel the result will be false
-          this.actionList.add(result.Id, result);
-
-
-          // let sub = this.ledenService.create$(result)
-          //   .subscribe(addResult => {
-          //     result.Naam = LedenItem.getFullNameAkCt(result.Voornaam, result.Tussenvoegsel, result.Achternaam);
-          //     result.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(result.GeboorteDatum);
-          //     result.Leeftijd = DateRoutines.Age(result.GeboorteDatum);
-
-
-          //     result.VolledigeNaam = LedenItem.getFullNameVtA(result.Voornaam, result.Tussenvoegsel, result.Achternaam);
-
-          //     this.dataSource.data.unshift(result);
-
-          //     this.refreshTableLayout();
-          //     this.showSnackBar(SnackbarTexts.SuccessNewRecord);
-
-          //     if (LedenItem.GetEmailList(toBeAdded).length > 0) {
-          //       this.showMailDialog(toBeAdded, 'add');
-          //     }
-
-          //     let message = "Nieuw lid: " + result.VolledigeNaam + " , " + result.Leeftijd + " jaar"
-          //     this.notificationService.sendNotificationsForRole([ROLES.BESTUUR], "Ledenadministratie", message);
-          //   },
-          //     (error: AppError) => {
-          //       if (error instanceof DuplicateKeyError) {
-          //         this.showSnackBar(SnackbarTexts.DuplicateKey);
-          //       } else { throw error; }
-          //     }
-          //   );
-          // this.registerSubscription(sub);
-          this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
-
+          let sub = this.actionService.create$(result)
+            .subscribe(addResult => {
+              this.showSnackBar(SnackbarTexts.SuccessNewRecord);
+              result.Id = addResult['Key'];
+              this.actionList.add(result.Id, result);
+              this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
+            },
+              (error: AppError) => {
+                if (error instanceof DuplicateKeyError) {
+                  this.showSnackBar(SnackbarTexts.DuplicateKey);
+                } else { throw error; }
+              }
+            );
+          this.registerSubscription(sub);
         }
       });
   }
@@ -139,25 +133,34 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   onDoneOpenAction($event, index: number): void {
     this.deleteprogress1 = $event;
-    this.mooieNaam($event, index, this.dataSourceOpenActions, this.cbDoneOpenAction)
+    this.setCallBackParameters($event, index, this.dataSourceOpenActions, this.cbDoneOpenAction)
   }
 
   /***************************************************************************************************
   / Deze functie wordt aangeroepen vanuit de callback uit de header.
   /***************************************************************************************************/
-  cbDoneOpenAction($event) {
-    let action: ActionItem = this.actionList.get($event.Id)
-    action.Status = '1';
-    action.EndDate = '2020-01-01';
-    this.refreshFilters();
+  cbDoneOpenAction($event): void {
+    let toBeEdited: ActionItem = this.actionList.get($event.Id)
+    toBeEdited.Status = '1';
+    toBeEdited.EndDate = '2020-01-01';
+    this.updateAction(toBeEdited);
   }
 
-  /***************************************************************************************************
-  / Open Actions Table Edit Knop
-  /***************************************************************************************************/
-  onEditAction(index: number): void {
-    let toBeEdited: ActionItem = this.dataSourceOpenActions.filteredData[index];
+  updateAction(toBeEdited: ActionItem): void {
+    let sub = this.actionService.update$(toBeEdited)
+      .subscribe(data => {
+        this.refreshFilters();
+        this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+      },
+        (error: AppError) => {
+          if (error instanceof NoChangesMadeError) {
+            this.showSnackBar(SnackbarTexts.NoChanges);
+          } else { throw error; }
+        });
+    this.registerSubscription(sub);
+  }
 
+  updateActionWithDialog(toBeEdited: ActionItem): void {
     this.dialog.open(TodoListDialogComponent, {
       width: '500px',
       data: {
@@ -167,8 +170,16 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     })
       .afterClosed()
       .subscribe(result => {
-        // this.storeResults(clickInfo.event, result);
+        this.updateAction(toBeEdited);
       });
+  }
+
+  /***************************************************************************************************
+  / Open Actions Table Edit Knop
+  /***************************************************************************************************/
+  onEditAction(index: number): void {
+    let toBeEdited: ActionItem = this.dataSourceOpenActions.filteredData[index];
+    this.updateActionWithDialog(toBeEdited);
   }
 
   /***************************************************************************************************
@@ -177,49 +188,29 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   onDeleteOpenAction($event, index: number): void {
     this.deleteprogress1 = $event;
-    this.mooieNaam($event, index, this.dataSourceOpenActions, this.cbDeleteOpenAction)
+    this.setCallBackParameters($event, index, this.dataSourceOpenActions, this.cbDeleteOpenAction)
   }
 
   cbDeleteOpenAction($event): void {
-    let action: ActionItem = this.actionList.get($event.Id)
-    action.Status = '2';
-    this.refreshFilters();
+    let toBeEdited: ActionItem = this.actionList.get($event.Id)
+    toBeEdited.Status = '2';
+    this.updateAction(toBeEdited);
   }
 
   /***************************************************************************************************
   / Open Actions Table Dubbel Klik op regels geeft details
   /***************************************************************************************************/
-  onDblclickAction($event, index: number): void {
-    let toBetoBeShown: ActionItem = this.dataSourceOpenActions.data[index];
-
-    this.dialog.open(TodoListDetailDialogComponent, {
-      width: '500px',
-      data: {
-        data: toBetoBeShown,
-      },
-    })
+  onDblclickOpenAction($event, index: number): void {
+    this.showDetailDialog(this.dataSourceOpenActions.filteredData[index]);
   }
-
 
   /***************************************************************************************************
   / Finished Actions Table Edit Knop
   /***************************************************************************************************/
   onEditFinished(index: number): void {
     let toBeEdited: ActionItem = this.dataSourceFinishedActions.filteredData[index];
-
-    this.dialog.open(TodoListDialogComponent, {
-      width: '500px',
-      data: {
-        method: "Wijzigen",
-        data: toBeEdited,
-      },
-    })
-      .afterClosed()
-      .subscribe(result => {
-        // this.storeResults(clickInfo.event, result);
-      });
+    this.updateActionWithDialog(toBeEdited);
   }
-
 
   /***************************************************************************************************
   / Finished Actions Table Delete Knop
@@ -227,15 +218,21 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   onDeleteFinishedAction($event, index: number): void {
     this.deleteprogress2 = $event;
-    this.mooieNaam($event, index, this.dataSourceFinishedActions, this.cbDeleteFinishedAction)
+    this.setCallBackParameters($event, index, this.dataSourceFinishedActions, this.cbDeleteFinishedAction)
   }
 
   cbDeleteFinishedAction($event): void {
-    let action: ActionItem = this.actionList.get($event.Id)
-    action.Status = '2';
-    this.refreshFilters();
+    let toBeDeleted: ActionItem = this.actionList.get($event.Id)
+    toBeDeleted.Status = '2';
+    this.updateAction(toBeDeleted);
   }
 
+  /***************************************************************************************************
+  / Finished Actions Table Dubbel Klik op regels geeft details
+  /***************************************************************************************************/
+  onDblclickFinishedAction($event, index: number): void {
+    this.showDetailDialog(this.dataSourceFinishedActions.filteredData[index]);
+  }
 
   /***************************************************************************************************
   / Archived Actions Table Edit Knop
@@ -256,18 +253,44 @@ export class TodolistComponent extends ParentComponent implements OnInit {
       });
   }
 
+
+  /***************************************************************************************************
+  / Archived Actions Table Dubbel Klik op regels geeft details
+  /***************************************************************************************************/
+  onDblclickArchiveAction($event, index: number): void {
+    this.showDetailDialog(this.dataSourceArchiveActions.filteredData[index]);
+  }
+
+
   /***************************************************************************************************
   / Archived Actions Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
   onDeleteArchiveAction($event, index: number): void {
     this.deleteprogress3 = $event;
-    this.mooieNaam($event, index, this.dataSourceArchiveActions, this.cbDeleteArchiveAction)
+    this.setCallBackParameters($event, index, this.dataSourceArchiveActions, this.cbDeleteArchiveAction)
   }
 
-  cbDeleteArchiveAction($event): void {
-    this.actionList.remove($event.Id);
-    this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
+  cbDeleteArchiveAction(toBeDeleted): void {
+    let sub = this.actionService.delete$(toBeDeleted.Id)
+      .subscribe(data => {
+        this.actionList.remove(toBeDeleted.Id);
+        this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
+        this.showSnackBar(SnackbarTexts.SuccessDelete);
+      },
+        (error: AppError) => {
+          console.log('error', error);
+          if (error instanceof NotFoundError) {
+            this.showSnackBar(SnackbarTexts.NotFound);
+          } else { throw error; } // global error handler
+        }
+      );
+    this.registerSubscription(sub);
+
+
+
+
+
   }
 
 
@@ -294,6 +317,17 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
   }
 
+  /***************************************************************************************************
+  / Show the detail dialog
+  /***************************************************************************************************/
+  showDetailDialog(item: ActionItem): void {
+    this.dialog.open(TodoListDetailDialogComponent, {
+      width: '500px',
+      data: {
+        data: item,
+      },
+    })
+  }
 
   /***************************************************************************************************
   / This filter is created at initialize of the page.
