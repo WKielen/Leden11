@@ -19,20 +19,24 @@
         <mat-icon matSuffix (click)="showPw = !showPw">{{showPw ? 'visibility_off' : 'visibility'}}</mat-icon>
         <mat-error *ngIf="password.hasError('minlength') && !password.hasError('required')">
             Het wachtwoord moet minimaal {{
-                password.errors.minlength.requiredLength }} lang zijn
+            password.errors.minlength.requiredLength }} lang zijn
         </mat-error>
         <mat-error *ngIf="password.hasError('required')">
             Wachtwoord is verplicht
         </mat-error>
     </mat-form-field>
     <mat-checkbox name="keepSignedIn" formControlName='keepSignedIn'>
-        Keep me signed in
+        Hou me ingelogd (max 30 dagen)
     </mat-checkbox>
 </mat-dialog-content>
 
 <mat-dialog-actions>
-    <button mat-raised-button *ngIf="!invalidLogin" color="primary" [disabled]='!loginForm.valid' (click)="onSubmit()">Login</button>
-    <button mat-raised-button *ngIf="invalidLogin" color="warn" [disabled]='!loginForm.valid' (click)="onSubmit()">Login
-        mislukt, opnieuw</button>
-    <button mat-raised-button type="button" color="accent" (click)="onCancel()" style="margin-left:25px">Cancel</button>
+    <button mat-raised-button *ngIf="!invalidLogin" color="primary" [disabled]='!loginForm.valid'
+        (click)="onSubmit()">Login</button>
+    <button mat-raised-button *ngIf="invalidLogin" color="warn" [disabled]='!loginForm.valid' (click)="onSubmit()">Fout, opnieuw</button>
+
+    <div *ngIf="testRegisterpage" fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+        <a mat-button (click)="onRegister()" color="primary">Register</a>
+        <a mat-button (click)="onResetPassword()" color="primary">Reset password</a>
+    </div>
 </mat-dialog-actions>

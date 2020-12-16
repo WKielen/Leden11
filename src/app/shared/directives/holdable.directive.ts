@@ -1,5 +1,4 @@
-import { Directive, HostListener, EventEmitter, Output } from '@angular/core';
-import { ThirdPartyDraggable } from '@fullcalendar/interaction';
+import { Directive, HostListener, EventEmitter, Output, Input } from '@angular/core';
 import { Observable, Subject, interval } from 'rxjs';
 import { takeUntil, tap, filter } from 'rxjs/operators';
 
@@ -8,6 +7,7 @@ import { takeUntil, tap, filter } from 'rxjs/operators';
 })
 export class HoldableDirective {
 
+  @Input() targetTime: number = 1000;
   @Output() holdTime: EventEmitter<number> = new EventEmitter();
   
   state: Subject<string> = new Subject();
@@ -35,7 +35,7 @@ export class HoldableDirective {
       takeUntil(this.cancel),
       tap(v => {
         this.holdTime.emit(v * n);
-        if ((v * n) == 1000) {
+        if ((v * n) == this.targetTime) {
           this.onExit();
         }
       }),

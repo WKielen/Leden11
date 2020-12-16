@@ -37,7 +37,10 @@ export class SignInDialogComponent {
         private authService: AuthService,
         private route: ActivatedRoute,
         public dialogRef: MatDialogRef<SignInDialogComponent>,
-        ) {}
+        ) {
+            this.testRegisterpage = !environment.production;
+        }
+    public testRegisterpage: boolean;
 
     /***************************************************************************************************
     / 
@@ -64,8 +67,13 @@ export class SignInDialogComponent {
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onCancel(): void {
-        this.dialogRef.close(false);
+    onRegister(): void{
+        this.router.navigate([ ROUTE.offlinePageRoute ]);
+        this.dialogRef.close();
+    }
+    onResetPassword(): void {
+        this.router.navigate([ ROUTE.offlinePageRoute ]);
+        this.dialogRef.close();   
     }
 
     /***************************************************************************************************
