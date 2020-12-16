@@ -22,7 +22,7 @@ export function createEventId() {
 }
 
 /***************************************************************************************************
-/ Voeg de vakanties toe aan de kalender 
+/ Voeg de vakanties toe aan de kalender
 /***************************************************************************************************/
 export function addHolidaysToEvents(): EventInput[] {
   let holidays: EventInput[] = [];
@@ -73,11 +73,20 @@ export const HOLIDAYS = [
 export function agendaToEvent(agendaItem: AgendaItem): any {
   let event: any = new Object();
   event.title = agendaItem.EvenementNaam;
-  event.date = agendaItem.Datum;
+
+  const valid = !isNaN(Date.parse(agendaItem.Datum + 'T'+ agendaItem.Tijd));
+  if (valid) {
+    event.allDay = false;
+    event.date = agendaItem.Datum + 'T'+ agendaItem.Tijd;
+  } else {
+    event.allDay = true;
+    event.date = agendaItem.Datum ;
+  }
 
   // Als je start gebruikt dat krijg je een punt te zien met de begintijd. Als je het niet gebruikt dan
   // krijgen we een 'allDay' te zien. Dus een gekleurde achtergrond.
   //event.start = agendaItem.Datum + 'T'+ agendaItem.Tijd;
+  // event.start = "10:00"
   event.id = agendaItem.Id;
   event.borderColor = setBorderColor(agendaItem.DoelGroep);
   event.backgroundColor = setBackgroundColor(agendaItem.Type, agendaItem.Extra1)[0];
@@ -86,13 +95,18 @@ export function agendaToEvent(agendaItem: AgendaItem): any {
   return event;
 }
 
-export function setEventProps(
-  eventApi: EventApi,
-  agendaItem: AgendaItem
-): void {
-  let newDate: Date = new Date(agendaItem.Datum);
-  eventApi.setStart(newDate);
-  eventApi.setEnd(newDate.setDate(newDate.getDate() + 1));
+export function setEventProps(eventApi: EventApi, agendaItem: AgendaItem): void {
+
+  let newDate: Date;
+  const valid = !isNaN(Date.parse(agendaItem.Datum + 'T'+ agendaItem.Tijd));
+  if (valid) {
+    newDate = new Date(agendaItem.Datum + 'T'+ agendaItem.Tijd);
+    eventApi.setAllDay(false);
+  } else {
+    newDate = new Date(agendaItem.Datum);
+    eventApi.setAllDay(true);
+  }
+
   eventApi.setExtendedProp("agendaItem", agendaItem);
   eventApi.setProp("title", agendaItem.EvenementNaam);
   eventApi.setProp("id", agendaItem.Id);
@@ -137,7 +151,7 @@ function setBackgroundColor(type: string, organiser: string): string[] {
     textcolor = 'white'
     return [boxcolor, textcolor];
   }
-  
+
   switch (organiser) {
     case "0":
       return ["orange", "white"];
