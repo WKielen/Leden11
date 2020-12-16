@@ -103,6 +103,61 @@
 </mat-card>
 
 <mat-card>
+    <mat-card-header-spinner title="Herhalende acties" [progress]="repeatingActionSpinner" toggleTitle="Eigen acties"
+        [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderRepeatingChanged($event)">
+    </mat-card-header-spinner>
+    <mat-card-content>
+        <mat-table #tableOpenActions [dataSource]="dataSourceRepeatingActions" class="mat-cell">
+
+            <ng-container matColumnDef="Title">
+                <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
+                <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Title }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="HolderName">
+                <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="StartDate">
+                <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
+            </ng-container>
+
+
+            <ng-container matColumnDef="TargetDate">
+                <mat-header-cell *matHeaderCellDef class="hideonmobile">Uiterste</mat-header-cell>
+                <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.TargetDate }}</mat-cell>
+            </ng-container>
+
+
+            <!-- actions -->
+            <ng-container matColumnDef="actions3">
+                <mat-header-cell *matHeaderCellDef>
+                    <button mat-icon-button color="primary" (click)="onAddRepeatingAction()">
+                        <mat-icon aria-label="Add icon">add</mat-icon>
+                    </button>
+                </mat-header-cell>
+
+                <mat-cell *matCellDef="let row; let i=index;">
+                    <mat-waiting-button icon="done" (holdTime)="onDoneRepeatingAction($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
+                    <button mat-icon-button color="primary" (click)="onEditRepeatingAction(i)">
+                        <mat-icon aria-label="Edit">edit</mat-icon>
+                    </button>
+                    <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteRepeatingAction($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
+                </mat-cell>
+            </ng-container>
+
+            <mat-header-row *matHeaderRowDef="columnsRepeatingToDisplay"></mat-header-row>
+            <mat-row *matRowDef="let row; index as i; columns: columnsRepeatingToDisplay;"
+                (dblclick)="onDblclickRepeatingAction($event, i)">
+            </mat-row>
+        </mat-table>
+
+    </mat-card-content>
+</mat-card>
+
+<mat-card>
     <mat-card-header-spinner title="Actie Archief" [progress]="archivedActionSpinner">
     </mat-card-header-spinner>
     <mat-card-content>

@@ -23,6 +23,7 @@ export class TodoListDialogComponent implements OnInit {
             '',
             [Validators.required]
         ),
+        startdate: new FormControl(),
         targetdate: new FormControl(),
         description: new FormControl(),
         holdername: new FormControl(),
@@ -33,12 +34,13 @@ export class TodoListDialogComponent implements OnInit {
         public dialogRef: MatDialogRef<TodoListDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data,
         // private adapter: DateAdapter<any>
-        ) {
+    ) {
         // this.adapter.setLocale('nl');
     }
 
     ngOnInit(): void {
         this.title.setValue(this.data.data.Title);
+        this.startdate.setValue(this.data.data.StartDate);
         this.targetdate.setValue(this.data.data.TargetDate);
         this.description.setValue(this.data.data.Description);
         this.holdername.setValue(this.data.data.HolderName);
@@ -50,6 +52,7 @@ export class TodoListDialogComponent implements OnInit {
     onSubmit(): void {
         this.data.data.Title = this.title.value;
         this.data.data.TargetDate = FormValueToDutchDateString(this.targetdate.value);
+        this.data.data.StartDate = FormValueToDutchDateString(this.startdate.value);
         this.data.data.Description = this.description.value;
         this.data.data.HolderName = this.holdername.value;
         this.dialogRef.close(this.data.data);
@@ -60,6 +63,9 @@ export class TodoListDialogComponent implements OnInit {
     /***************************************************************************************************/
     get title() {
         return this.actionItemForm.get('title');
+    }
+    get startdate() {
+        return this.actionItemForm.get('startdate');
     }
     get targetdate() {
         return this.actionItemForm.get('targetdate');

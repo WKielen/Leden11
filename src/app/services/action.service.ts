@@ -26,7 +26,7 @@ export class ActionService extends DataService {
     x.TargetDate = '2020-12-02';
     x.HolderName = 'Wim';
     x.Title = 'Action1';
-    x.Status = "0";
+    x.Status = "9";
     x.Description = 'Beschrijving 1'
     actions.add(x.Id, x);
     list.push(x);
@@ -38,7 +38,7 @@ export class ActionService extends DataService {
     x.HolderName = 'Wim';
     x.TargetDate = '2020-12-03';
     x.Description = 'Beschrijving 2\nTweede regel';
-    x.Status = "0";
+    x.Status = "9";
     list.push(x);
     actions.add(x.Id, x);
 
@@ -49,7 +49,7 @@ export class ActionService extends DataService {
     x.TargetDate = '2020-12-04';
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Kees';
-    x.Status = "2";
+    x.Status = "9";
     list.push(x);
     actions.add(x.Id, x);
 
@@ -61,7 +61,7 @@ export class ActionService extends DataService {
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Piet';
     x.EndDate = '2020-12-01';
-    x.Status = "1";
+    x.Status = "9";
 
     list.push(x);
     actions.add(x.Id, x);
@@ -74,7 +74,7 @@ export class ActionService extends DataService {
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Wim';
     x.EndDate = '2020-12-01';
-    x.Status = "1";
+    x.Status = "9";
 
     list.push(x);
     actions.add(x.Id, x);
@@ -87,7 +87,7 @@ export class ActionService extends DataService {
     x.Description = 'Beschrijving 3';
     x.HolderName = 'Piet';
     x.EndDate = '2020-12-01';
-    x.Status = "0";
+    x.Status = "9";
 
     list.push(x);
     actions.add(x.Id, x);
