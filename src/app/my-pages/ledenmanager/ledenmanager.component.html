@@ -27,9 +27,7 @@
           <button mat-icon-button color="primary" (click)="onEdit(i)">
             <mat-icon aria-label="Edit">edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn">
-            <mat-icon aria-label="Delete" holdable (holdTime)="onDelete($event, i)">delete</mat-icon>
-          </button>
+          <mat-waiting-button icon="delete" color="warn" (holdTime)="onDelete($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
         </mat-cell>
       </ng-container>
 

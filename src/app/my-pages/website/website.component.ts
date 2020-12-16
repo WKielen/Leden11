@@ -65,6 +65,7 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
 
     cbOnDelete(index) {
         this.dataSource.data.splice(index, 1);
+        this.progress = 0;
         this.saveParam();
         this.refreshTableLayout();
     }

@@ -36,7 +36,6 @@ export class HoldableDirective {
       tap(v => {
         this.holdTime.emit(v * n);
         if ((v * n) == 1000) {
-          // console.log('onExit in directive', );
           this.onExit();
         }
       }),
