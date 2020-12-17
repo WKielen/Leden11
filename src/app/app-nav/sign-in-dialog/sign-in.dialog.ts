@@ -37,7 +37,10 @@ export class SignInDialogComponent {
         private authService: AuthService,
         private route: ActivatedRoute,
         public dialogRef: MatDialogRef<SignInDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: Credentials) { }
+        ) {
+            this.testRegisterpage = !environment.production;
+        }
+    public testRegisterpage: boolean;
 
     /***************************************************************************************************
     / 
@@ -64,8 +67,13 @@ export class SignInDialogComponent {
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onCancel(): void {
-        this.dialogRef.close(false);
+    onRegister(): void{
+        this.router.navigate([ ROUTE.offlinePageRoute ]);
+        this.dialogRef.close();
+    }
+    onResetPassword(): void {
+        this.router.navigate([ ROUTE.offlinePageRoute ]);
+        this.dialogRef.close();   
     }
 
     /***************************************************************************************************
@@ -78,14 +86,4 @@ export class SignInDialogComponent {
     get password() {
         return this.loginForm.get('password');
     }
-}
-
-/***************************************************************************************************
-/ 
-/***************************************************************************************************/
-export interface Credentials {
-    userid: string;
-    password: string;
-    database: string;
-    keepsignedin: boolean;
 }
