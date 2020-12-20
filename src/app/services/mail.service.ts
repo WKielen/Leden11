@@ -1,8 +1,8 @@
 import { environment } from '../../environments/environment';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, Optional } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
-import { retry, tap, catchError, timeout } from 'rxjs/operators';
+import { retry, tap, catchError } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { ParamService } from './param.service';
 import { AppError } from '../shared/error-handling/app-error';
@@ -20,9 +20,20 @@ export class MailService extends DataService {
     http: HttpClient,
     protected paramService: ParamService,
     protected authService: AuthService,
-  ) {
+    // De inject is om door een param door te geven aan de MailService vanuit een component
+    // Dit lukt nog niet.
+    @Inject('param') @Optional() public useServerSideParams: string
+    ) {
     super(environment.baseUrl + '/param', http);
-    this.readMailLoginData();
+    if (authService.isLoggedIn()) {
+      // if (!useServerSideParams)
+      this.readMailLoginData();
+    // } else {
+    //   this.mailBoxParam.UserId = '';
+    //   this.mailBoxParam.Password = '';
+    //   this.mailBoxParam.UserId = '';
+    //   this.mailBoxParam.Name = '';
+    } 
   }
 
   /***************************************************************************************************
@@ -30,8 +41,6 @@ export class MailService extends DataService {
   /***************************************************************************************************/
   mail$(mailItems: MailItem[] ): Observable<Object> {
     let externalRecord = new ExternalMailApiRecord();
-    // console.log('mailBoxParam',this.mailBoxParam);
-    
     externalRecord.UserId = this.mailBoxParam.UserId;
     externalRecord.Password = this.mailBoxParam.Password;
     externalRecord.From = this.mailBoxParam.UserId;
@@ -149,6 +158,6 @@ export class MailItem {
 /***************************************************************************************************/
 export class MailBoxParam {
   UserId: string = '';
-  Password: string = ''
+  Password: string = '';
   Name: string = '';
 }

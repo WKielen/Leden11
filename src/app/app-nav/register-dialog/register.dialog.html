@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>Registeren nieuwe gebruiker</h2>
+<mat-dialog-content [formGroup]="registerForm" novalidate>
+    <!-- 1 -->
+    <mat-form-field>
+        <input matInput placeholder="Naam" formControlName="naam" [formControl]="naam">
+        <mat-error *ngIf="naam.hasError('required')">
+            Naam is verplicht
+        </mat-error>
+    </mat-form-field>
+    <!-- 2 -->
+    <mat-form-field>
+        <input matInput placeholder="Email" formControlName="email" [formControl]="email">
+        <mat-error *ngIf="email.hasError('email')">
+            Onjuist email adres
+        </mat-error>
+        <mat-error *ngIf="email.hasError('required')">
+            Email adres is verplicht
+        </mat-error>
+    </mat-form-field>
+    <!-- 3 -->
+    <mat-form-field>
+        <input matInput placeholder="Kies een gebruikersnaam" formControlName="userid" [formControl]="userid">
+        <mat-error *ngIf="naam.hasError('required')">
+            USerid is verplicht
+        </mat-error>
+    </mat-form-field>
+    <!-- 5 -->
+    <mat-form-field>
+        <input matInput [type]="showPw ? 'text' : 'password'" placeholder="Kies een Wachtwoord"
+            formControlName='password'>
+        <mat-icon matSuffix (click)="showPw = !showPw">{{showPw ? 'visibility_off' : 'visibility'}}</mat-icon>
+        <mat-error *ngIf="password.hasError('minlength') && !password.hasError('required')">
+            Het wachtwoord moet minimaal {{
+            password.errors.minlength.requiredLength }} lang zijn
+        </mat-error>
+        <mat-error *ngIf="password.hasError('required')">
+            Wachtwoord is verplicht
+        </mat-error>
+    </mat-form-field>
+    Na goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je
+    aanloggen.
+</mat-dialog-content>
+<mat-card-content *ngIf="responseText">
+    <div class="internalcard"  [style.backgroundColor]="boxColor">
+        <div class="internalcardcontent">
+            {{ responseText }}
+        </div>
+    </div>
+</mat-card-content>
+
+<mat-dialog-actions>
+    <button mat-raised-button color="primary" [disabled]='!registerForm.valid' (click)="onSubmit()">Registreer</button>
+    <button mat-raised-button color="accent" mat-dialog-close >Cancel</button>
+</mat-dialog-actions>

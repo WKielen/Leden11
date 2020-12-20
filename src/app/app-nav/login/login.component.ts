@@ -14,8 +14,6 @@ export class LoginComponent {
   ) { }
 
   openSigninDialog(): void {
-    this.signinDialog.open(SignInDialogComponent, {
-      panelClass: 'custom-dialog-container', width: '400px',
-    });
+    this.signinDialog.open(SignInDialogComponent, { width: '400px' });
   }
 }

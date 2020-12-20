@@ -1,17 +1,22 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, Inject, Optional } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { MailService } from "src/app/services/mail.service";
+import { UserService } from "src/app/services/user.service";
 import { ParentComponent } from "src/app/shared/parent.component";
 
 @Component({
   selector: "app-test",
   templateUrl: "./test.component.html",
   styleUrls: ["./test.component.scss"],
+  providers: [ { provide: 'param', useValue: 'progress'} ]
 })
 export class TestComponent
   extends ParentComponent
   implements OnInit, OnDestroy {
   constructor(
-    protected snackBar: MatSnackBar
+  protected snackBar: MatSnackBar,
+  protected userService: UserService,
+  public mailService: MailService,
   ) {
     super(snackBar);
   }
@@ -22,7 +27,7 @@ export class TestComponent
   /***************************************************************************************************/
   ngOnInit() {
     this.theBoundCallback = this.dezeGraag.bind(this, "actionItem");
-
+    this.userService.getAll$().subscribe();
   }
   progress = 0;
 
@@ -33,6 +38,26 @@ export class TestComponent
   dezeGraag($event) {
     console.log('dezeGraag', $event);
   }
+
+  onClick() {
+    const credentials = { 'database': 'ttest'};
+    this.userService.register$(credentials)
+      .subscribe(result => {
+        if (result) {
+      this.showSnackBar("OK", '');
+          
+        } else {
+        //   this.registerForm = true;
+        }
+    },
+    err => {
+    //   this.registerForm = true;
+    });
+
+
+  }
+
+
 
 
 }

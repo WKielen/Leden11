@@ -74,7 +74,7 @@
 
                 <mat-form-field class="margin-right-20" style="max-width: 150px;">
                     <input matInput placeholder="Mobiel" formControlName="mobiel" [formControl]="mobiel">
-                    <mat-error *ngIf="email1.hasError('tel')">
+                    <mat-error *ngIf="mobiel.hasError('tel')">
                         Onjuist telefoonnummer
                     </mat-error>
                 </mat-form-field>

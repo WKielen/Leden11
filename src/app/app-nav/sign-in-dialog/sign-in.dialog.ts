@@ -1,11 +1,11 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ROUTE } from 'src/app/shared/classes/Page-Role-Variables';
-import { MyErrorStateMatcher } from 'src/app/shared/error-handling/Field.Error.State.Matcher';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
+import { RegisterDialogComponent } from '../register-dialog/register.dialog';
 
 @Component({
     selector: 'app-signin-dialog',
@@ -19,17 +19,16 @@ export class SignInDialogComponent {
     keepSignedIn: boolean;
     invalidLogin: boolean;
 
-    matcher = new MyErrorStateMatcher();
-    loginForm = new FormGroup ({
-        userid : new FormControl(
+    loginForm = new FormGroup({
+        userid: new FormControl(
             '',
-            [Validators.required, Validators.minLength(7), Validators.maxLength(7) ]
+            [Validators.required, Validators.minLength(7), Validators.maxLength(7)]
         ),
-        password : new FormControl(
+        password: new FormControl(
             '',
-            [Validators.required, Validators.minLength(6) ]
+            [Validators.required, Validators.minLength(6)]
         ),
-        keepSignedIn : new FormControl()
+        keepSignedIn: new FormControl()
     });
 
     constructor(
@@ -37,43 +36,48 @@ export class SignInDialogComponent {
         private authService: AuthService,
         private route: ActivatedRoute,
         public dialogRef: MatDialogRef<SignInDialogComponent>,
-        ) {
-            this.testRegisterpage = !environment.production;
-        }
+        public registerDialog: MatDialog,
+
+    ) {
+        this.testRegisterpage = !environment.production;
+    }
     public testRegisterpage: boolean;
 
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
     onSubmit(): void {
-        const credentials = { 'userid': this.loginForm.value['userid'], 'password': this.loginForm.value['password'],
-                             'database': environment.databaseName, 'keepsignedin': this.loginForm.value['keepSignedIn'] ? 'true' : 'false'};
+        const credentials = {
+            'userid': this.loginForm.value['userid'], 'password': this.loginForm.value['password'],
+            'database': environment.databaseName, 'keepsignedin': this.loginForm.value['keepSignedIn'] ? 'true' : 'false'
+        };
         this.authService.login$(credentials)
-          .subscribe(result => {
-            if (result) {
-              const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
-              this.router.navigate([returnUrl || ROUTE.dashboardPageRoute ]);
-              this.dialogRef.close(true);
-            } else {
-              this.invalidLogin = true;
-            }
-        },
-        err => {
-          this.invalidLogin = true;
-        });
+            .subscribe(result => {
+                if (result) {
+                    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
+                    this.router.navigate([returnUrl || ROUTE.dashboardPageRoute]);
+                    this.dialogRef.close(true);
+                } else {
+                    this.invalidLogin = true;
+                }
+            },
+                err => {
+                    this.invalidLogin = true;
+                });
 
     }
 
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onRegister(): void{
-        this.router.navigate([ ROUTE.offlinePageRoute ]);
+    onRegister(): void {
+        this.registerDialog.open(RegisterDialogComponent, { width: '400px' });
         this.dialogRef.close();
     }
+
     onResetPassword(): void {
-        this.router.navigate([ ROUTE.offlinePageRoute ]);
-        this.dialogRef.close();   
+        this.router.navigate([ROUTE.offlinePageRoute]);
+        this.dialogRef.close();
     }
 
     /***************************************************************************************************

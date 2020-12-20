@@ -19,6 +19,7 @@ import { NotallowedComponent } from './notallowed/notallowed.component';
 import { SignInDialogComponent } from './sign-in-dialog/sign-in.dialog';
 import { OfflineComponent } from './offline/offline.component';
 import { CustomMaterialModule } from '../material.module';
+import { RegisterDialogComponent } from './register-dialog/register.dialog';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { CustomMaterialModule } from '../material.module';
     OfflineComponent,
     LoginComponent,
     SignInDialogComponent,
+    RegisterDialogComponent,
   ],
   imports: [
     CommonModule,

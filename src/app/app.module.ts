@@ -18,6 +18,7 @@ import { ParamService } from './services/param.service';
 import { MailService } from './services/mail.service';
 import { TrainingService } from './services/training.service';
 import { NotificationService } from './services/notification.service';
+import { UserService } from './services/user.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptorService } from './services/token-interceptor.service';
 import { ErrorHandler, LOCALE_ID } from '@angular/core';
@@ -65,6 +66,7 @@ registerLocaleData(localeNl);
     ParamService,
     MailService,
     TrainingService,
+    UserService,
     NotificationService,
     {
       provide: HTTP_INTERCEPTORS,
