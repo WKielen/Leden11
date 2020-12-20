@@ -28,7 +28,17 @@ export class UserService extends DataService {
   }
 
 
-
+  delete$(userid) {
+    return this.http.delete(this.url + '/Delete?Userid=' + '"' + userid + '"')
+      .pipe(
+        retry(3),
+        tap(
+          data => console.log('Deleted: ', data),
+          error => console.log('Oeps: ', error)
+        ),
+        catchError(this.errorHandler)
+      );
+  }
 
 
 }
@@ -36,21 +46,11 @@ export class UserService extends DataService {
 / 
 /***************************************************************************************************/
 export class UserItem {
-  Id?: string = '';
-  Datum?: string = '';
-  Tijd?: string = '';
-  EvenementNaam?: string = '';
-  Lokatie?: string = '';
-  Type?: string = '';
-  DoelGroep?: string = '';
-  Toelichting?: string = '';
-  Inschrijven?: string = '';
-  Inschrijfgeld?: string = '';
-  BetaalMethode?: string = '';
-  ContactPersoon?: string = '';
-  Vervoer?: string = '';
-  VerzamelAfspraak?: string = '';
-  Extra1?: string = '';
-  Extra2?: string = '';
+  Userid?: string = '';
+  Password?: string = '';
+  Email?: string = '';
+  Name?: string = '';
+  Role?: string = '';
+  Activated?: string = '';
 }
 

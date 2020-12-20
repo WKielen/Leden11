@@ -37,6 +37,7 @@ export class SidebarComponent implements OnInit {
   showRouteMasterz: boolean = false;
   showRouteCompAdmin: boolean = false;
   showRouteTodoList: boolean = false;
+  showRouteRegister: boolean = false;
 
   // De routes naar de pagina's 
   routeDashboard = ROUTE.dashboardPageRoute;
@@ -59,7 +60,9 @@ export class SidebarComponent implements OnInit {
   routeMasterz = ROUTE.masterzPageRoute;
   routeCompAdmin = ROUTE.compadminPageRoute;
   routeTodoList = ROUTE.todolistPageRoute;
+  routeRegister = ROUTE.registerPageRoute;
 
+  // Wordt gebruikt om de naam te tonen bovenaan het menu
   // Wordt gebruikt om de naam te tonen bovenaan het menu
   name = this.authService.fullName;
 
@@ -88,6 +91,7 @@ export class SidebarComponent implements OnInit {
     this.showRouteMasterz = this.authService.showRoute(PAGEROLES.masterzPageRoles);
     this.showRouteCompAdmin = this.authService.showRoute(PAGEROLES.testPageRoles);
     this.showRouteTodoList = this.authService.showRoute(PAGEROLES.todolistPageRoles);
+    this.showRouteRegister = this.authService.showRoute(PAGEROLES.registerPageRoles);
   }
   // Op de mobiel wordt het menu automatisch gesloten wanneer en een keuze is gemaakt.
   route(myRoute: string): void {

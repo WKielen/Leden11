@@ -55,11 +55,13 @@ export class RegisterDialogComponent {
     }
     public testRegisterpage: boolean;
 
+
     /***************************************************************************************************
     / 
     /***************************************************************************************************/
-    onSubmit(): void {
+    async onSubmit() {
         const credentials = { "Userid": this.userid.value, "Password": this.password.value, "Email": this.email.value, "Name": this.naam.value };
+
         this.userService.register$(credentials)
             .subscribe(addResult => {
                 if (addResult.hasOwnProperty('Key')) {
@@ -107,3 +109,27 @@ export class RegisterDialogComponent {
         return this.registerForm.get('password');
     }
 }
+
+const toCharCodes = (arr: Uint8Array) => {
+    const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    return arr.map(x => validChars.charCodeAt(x % validChars.length));
+}
+
+const sha256 = (message: string) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    return window.crypto.subtle.digest('SHA-256', data);
+}
+
+const bufferToBase64UrlEncoded = (input: ArrayBuffer) => {
+    const bytes = new Uint8Array(input);
+    return urlEncodeBase64(window.btoa(String.fromCharCode(...bytes)));
+}
+
+const urlEncodeBase64 = (input: string) => {
+    const chars = { '+': '-', '/': '_', '=': '' };
+    return input.replace(/[\+\/=]/g, m => chars[m]);
+}
+
+
+

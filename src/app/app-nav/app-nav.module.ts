@@ -20,6 +20,11 @@ import { SignInDialogComponent } from './sign-in-dialog/sign-in.dialog';
 import { OfflineComponent } from './offline/offline.component';
 import { CustomMaterialModule } from '../material.module';
 import { RegisterDialogComponent } from './register-dialog/register.dialog';
+import { RegistrationComponent } from './register/register.component';
+import { HoldableModule } from '../shared/directives/directives.module';
+import { SharedComponentsModule } from '../shared/components/component.module';
+import { RegistrationDetailDialogComponent } from './register/register.detail.dialog';
+import { RegistrationDialogComponent } from './register/register.dialog';
 
 @NgModule({
   declarations: [
@@ -35,6 +40,9 @@ import { RegisterDialogComponent } from './register-dialog/register.dialog';
     LoginComponent,
     SignInDialogComponent,
     RegisterDialogComponent,
+    RegistrationComponent,
+    RegistrationDetailDialogComponent,
+    RegistrationDialogComponent
   ],
   imports: [
     CommonModule,
@@ -46,6 +54,8 @@ import { RegisterDialogComponent } from './register-dialog/register.dialog';
     BrowserAnimationsModule,
     LayoutModule,
     CustomMaterialModule,
+    HoldableModule,
+    SharedComponentsModule,
   ],
 })
 

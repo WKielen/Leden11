@@ -25,8 +25,6 @@ import { SingleMailDialogComponent } from './../my-pages/mail/singlemail.dialog'
 import { TrainingOverzichtDialogComponent } from './../my-pages/trainingoverzicht/trainingoverzicht.dialog';
 import { WebsiteDialogComponent } from './../my-pages/website/website.dialog';
 
-import { SelectLidDropdownComponent } from '../shared/components/select.lid.dropdown.component';
-import { CheckboxListComponent } from '../shared/components/checkbox.list.component';
 import { CustomMaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';

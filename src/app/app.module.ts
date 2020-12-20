@@ -28,7 +28,7 @@ import { registerLocaleData, APP_BASE_HREF, LocationStrategy, HashLocationStrate
 import localeNl from '@angular/common/locales/nl';
 // Material Date Locale hieronder toegevoegd voor Angular 9 conversie
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ParentComponent } from './shared/parent.component';
 
 registerLocaleData(localeNl);
