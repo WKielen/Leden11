@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PAGEROLES } from 'src/app/shared/classes/Page-Role-Variables';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
-import { CheckboxDictionairy } from 'src/app/shared/components/checkbox.list.component';
+import { CheckboxDictionairy } from 'src/app/shared/components/oldcheckbox.list.component';
 
 
 @Component({
@@ -25,10 +25,10 @@ export class RolesDialogComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     private getPagesPerRoles(): void {
-        // Onderstaande gegoogled om gegevens uit de CONST PAGEROLES te halen    
+        // Onderstaande gegoogled om gegevens uit de CONST PAGEROLES te halen
         type PAGEROLES = typeof PAGEROLES;
         let pageRoleKeys = Object.keys(PAGEROLES).map(key => {
             return { text: key, value: key };  // text en value bevatten dezelfde waarde
@@ -44,7 +44,7 @@ export class RolesDialogComponent implements OnInit {
         // toPrintDict = { Bestuur, [ledenPageRole, mailPageRole]}
         // foreach is een rol zoals bestuur, trainer e.d.       { 'Id': ROLES.BESTUUR, 'Value': 'Bestuur' }
         this.myCheckboxDictionairy.forEach(element => {
-            // we gaan uitzoeken tot welke pagina deze rol toegang heeft    
+            // we gaan uitzoeken tot welke pagina deze rol toegang heeft
             let allowedPages: Array<string> = [];
             // vanuit de pagesroles gaan we kijken of er in de rollen eentje zit gelijk aan die van de checkbox dict
             for (let i = 0; i < pageRolesDict.length(); i++) {
@@ -57,7 +57,7 @@ export class RolesDialogComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     private fillDisplayList(): void {
         for (let i = 0; i < this.toPrintDict.length(); i++) {

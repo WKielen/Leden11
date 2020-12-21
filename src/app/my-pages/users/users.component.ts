@@ -2,7 +2,7 @@ import { PasswordValidators } from './../users/password.validator';
 import { LidExtract } from '../../shared/components/select.lid.dropdown.component';
 import { Component, OnInit } from '@angular/core';
 import { LedenService } from '../../services/leden.service';
-import { CheckboxDictionairy } from '../../shared/components/checkbox.list.component';
+import { CheckboxDictionairy } from '../../shared/components/oldcheckbox.list.component';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MyErrorStateMatcher } from '../../shared/error-handling/Field.Error.State.Matcher';
 import { MatDialog } from '@angular/material/dialog';
@@ -42,7 +42,7 @@ export class UsersComponent extends ParentComponent implements OnInit {
     );
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     myCheckboxDictionairy: CheckboxDictionairy[] = [
         { 'Id': ROLES.BESTUUR, 'Value': 'Bestuur' },
@@ -87,7 +87,7 @@ export class UsersComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     onRoleClicked($event): void {
         // I don't why but I also get a MouseEvent here. I just ignore it.
@@ -98,7 +98,7 @@ export class UsersComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     onSaveRol(): void {
         if (this.lidRol) {
@@ -117,7 +117,7 @@ export class UsersComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     onShowRoles(): void {
         this.dialog.open(RolesDialogComponent, {
@@ -126,7 +126,7 @@ export class UsersComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     onSavePassword(): void {
         const updateRecord = { 'LidNr': this.lidPw.LidNr, 'ToegangsCode': this.password1.value };

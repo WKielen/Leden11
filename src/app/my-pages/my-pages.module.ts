@@ -26,7 +26,7 @@ import { TrainingOverzichtDialogComponent } from './../my-pages/trainingoverzich
 import { WebsiteDialogComponent } from './../my-pages/website/website.dialog';
 
 import { SelectLidDropdownComponent } from '../shared/components/select.lid.dropdown.component';
-import { CheckboxListComponent } from '../shared/components/checkbox.list.component';
+import { OldCheckboxListComponent } from '../shared/components/oldcheckbox.list.component';
 import { CustomMaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
