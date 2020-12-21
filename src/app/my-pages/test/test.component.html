@@ -1,26 +1,16 @@
 <mat-card>
-  <mat-card-header-spinner title="Kopje pagina"></mat-card-header-spinner>
-  <mat-card-content>
-    <mat-checkbox-list [checkboxDictionary]="myDictionairy" (click)="onRoleClicked($event)"></mat-checkbox-list>
+    <mat-card-header-spinner title="Kopje pagina" [progress]="progress"></mat-card-header-spinner>
 
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-header-spinner title="Kopje pagina" [progress]="progress"></mat-card-header-spinner>
-
-  <mat-card-content>
-    <app-a2hs></app-a2hs>
-    <mat-progress-bar [value]="progress" max="100" style="margin-top: 50px;"></mat-progress-bar>
-  </mat-card-content>
-  <mat-card-actions>
-    <button mat-raised-button holdable targetTime="10000" (holdTime)="holdHandler($event)" color="primary">Doe iets na
-      een
-      seconde</button>
-    <mat-waiting-button icon="edit" (holdTime)="holdHandler($event)" [myCallback]="theBoundCallback">
-    </mat-waiting-button>
-    <button mat-icon-button color="primary" holdable (holdTime)="holdHandler($event)">
-      <mat-icon aria-label="Done">done</mat-icon>
-    </button>
-  </mat-card-actions>
+    <mat-card-content>
+      <app-a2hs></app-a2hs>
+      <mat-progress-bar [value]="progress" max="100" style="margin-top: 50px;"></mat-progress-bar>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button holdable targetTime="10000" (holdTime)="holdHandler($event)" color="primary">Doe iets na een
+        seconde</button>
+        <mat-waiting-button icon="edit" (holdTime)="holdHandler($event)" [myCallback]="theBoundCallback"></mat-waiting-button>
+        <button mat-icon-button color="primary" holdable (holdTime)="holdHandler($event)">
+          <mat-icon aria-label="Done">done</mat-icon>
+      </button>
+    </mat-card-actions>
 </mat-card>
