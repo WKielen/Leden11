@@ -38,10 +38,10 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   columnsArchiveToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
   columnsRepeatingToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
 
-  filterOpenValues = { Voornaam: '' };
-  filterFininshedValues = { Voornaam: '' };
-  filterArchiveValues = { Voornaam: '' };
-  filterRepeatingValues = { Voornaam: '' };
+  filterOpenValues = { Voornaam: '', Status: '0'};
+  filterFininshedValues = { Voornaam: '', Status: '1' };
+  filterArchiveValues = { Voornaam: '', Status: '2' };
+  filterRepeatingValues = { Voornaam: '', Status: '9'  };
 
   dataSourceOpenActions = new MatTableDataSource<ActionItem>();
   dataSourceFinishedActions = new MatTableDataSource<ActionItem>();
@@ -72,22 +72,22 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   createFilters(): void {
     this.filterOpenValues.Voornaam = '';
     this.dataSourceOpenActions.data = this.actionList.values();
-    this.dataSourceOpenActions.filterPredicate = this.createOpenActionFilter();
+    this.dataSourceOpenActions.filterPredicate = this.createActionFilter();
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
 
     this.filterOpenValues.Voornaam = '';
     this.dataSourceFinishedActions.data = this.actionList.values();
-    this.dataSourceFinishedActions.filterPredicate = this.createFinishedActionFilter();
+    this.dataSourceFinishedActions.filterPredicate = this.createActionFilter();
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
 
     this.filterArchiveValues.Voornaam = '';
     this.dataSourceArchiveActions.data = this.actionList.values();
-    this.dataSourceArchiveActions.filterPredicate = this.createArchiveActionFilter();
+    this.dataSourceArchiveActions.filterPredicate = this.createActionFilter();
     this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
 
     this.filterRepeatingValues.Voornaam = '';
     this.dataSourceRepeatingActions.data = this.actionList.values();
-    this.dataSourceRepeatingActions.filterPredicate = this.createRepeatingActionFilter();
+    this.dataSourceRepeatingActions.filterPredicate = this.createActionFilter();
     this.dataSourceRepeatingActions.filter = JSON.stringify(this.filterRepeatingValues);
 
   }
@@ -420,36 +420,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / This filter is created at initialize of the page.
   /***************************************************************************************************/
-  private createOpenActionFilter(): (data: ActionItem, filter: string) => boolean {
+  private createActionFilter(): (data: ActionItem, filter: string) => boolean {
     let filterFunction = function (data: ActionItem, filter: string): boolean {
       let searchTerms = JSON.parse(filter);
-      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '0');
+      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == searchTerms.Status);
     }
     return filterFunction;
   }
-
-  private createFinishedActionFilter(): (data: ActionItem, filter: string) => boolean {
-    let filterFunction = function (data: ActionItem, filter: string): boolean {
-      let searchTerms = JSON.parse(filter);
-      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '1');
-    }
-    return filterFunction;
-  }
-
-  private createArchiveActionFilter(): (data: ActionItem, filter: string) => boolean {
-    let filterFunction = function (data: ActionItem, filter: string): boolean {
-      let searchTerms = JSON.parse(filter);
-      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '2');
-    }
-    return filterFunction;
-  }
-
-  private createRepeatingActionFilter(): (data: ActionItem, filter: string) => boolean {
-    let filterFunction = function (data: ActionItem, filter: string): boolean {
-      let searchTerms = JSON.parse(filter);
-      return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == '9');
-    }
-    return filterFunction;
-  }
-
 }
