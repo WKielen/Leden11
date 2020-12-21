@@ -7,11 +7,12 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { OnChanges, QueryList, ViewChildren } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
+import { BaseComponent } from '../base.component';
 
 @Component({
   selector: 'app-checkbox-list',
   template:
-  '<form>' +
+  '<form><small class="development" *ngIf="developmentMode">{{ me }}</small>' +
   '<div *ngFor="let item of myDictionairy">' +
     '<mat-checkbox #cb [checked]="item.isChecked" (change)="onCheckBoxChanged($event)" [id]="item.Id"  color="primary">' +
       '{{item.Value}}' +
@@ -19,7 +20,7 @@ import { MatCheckbox } from '@angular/material/checkbox';
   '</div>' +
  '</form>'
 })
-export class OldCheckboxListComponent implements OnChanges {
+export class OldCheckboxListComponent extends BaseComponent implements OnChanges {
 
   @Input('csString') csString: string;
   @Input('checkboxDictionairy') myDictionairy: CheckboxDictionairy[];
