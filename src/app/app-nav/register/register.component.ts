@@ -122,7 +122,6 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     }
   }
   cbDoneNewRegistration($event): void {
-    console.log('$event', $event);
     let toBeEdited: UserItem = this.registerList.get($event.Userid)
     toBeEdited.Activated = '1';
     this.updateRegister(toBeEdited);
@@ -191,7 +190,6 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   }
 
   updateRegistrationWithDialog(toBeEdited: UserItem): void {
-    console.log('toBeEdited', toBeEdited);
     this.dialog.open(RegistrationDialogComponent, {
       width: '500px',
       data: {

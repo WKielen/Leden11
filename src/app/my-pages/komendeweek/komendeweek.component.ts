@@ -1,25 +1,23 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { map } from 'rxjs/operators';
 import { AgendaItem, AgendaService } from 'src/app/services/agenda.service';
-import { ParentComponent } from 'src/app/shared/parent.component';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import * as moment from 'moment';
 import { ActionItem, ActionService } from 'src/app/services/action.service';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
   selector: 'app-komendeweek',
   templateUrl: './komendeweek.component.html',
   styleUrls: ['./komendeweek.component.scss']
 })
-export class KomendeWeekComponent extends ParentComponent implements OnInit {
+export class KomendeWeekComponent extends BaseComponent implements OnInit {
 
   constructor(
     private agendaService: AgendaService,
     private actionService: ActionService,
-    protected snackBar: MatSnackBar
   ) {
-    super(snackBar);
+    super();
   }
   dagen: Dictionary = new Dictionary([]);
 

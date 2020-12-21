@@ -2,11 +2,12 @@
 // use as: <app-select-lid-dropdown [leden-array]="ledenArray" (valueSelected)="onValueSelected($event)"></app-select-lid-dropdown>
 //
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { BaseComponent } from '../base.component';
 
 @Component({
   selector: 'mat-card-header-spinner',
   template: `
-  <mat-card-header>
+   <mat-card-header>
     <mat-card-title> {{ title }}</mat-card-title>
       <div style="flex: 1;"></div>
       <div class="alternative-theme">
@@ -22,14 +23,15 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
         </mat-spinner>
       </div>
     </mat-card-header>
-  `,
+    <small class="development" *ngIf="developmentMode">{{ me }}</small> 
+`,
   styles: ['mat-spinner { margin-top: 3px; margin-right: 20px; }',
     'mat-slide-toggle { margin-top: 8px; margin-right: 10px; }',
     '#toggleTitle { color: white; }'
   ]
 })
 
-export class CardHeaderSpinnerComponent {
+export class CardHeaderSpinnerComponent extends BaseComponent {
   @Input('progress') progress: number;
   @Input('title') title: string;
   @Input('toggleChecked') checked: boolean = true;

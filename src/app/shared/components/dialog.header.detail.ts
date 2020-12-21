@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { BaseComponent } from '../base.component';
 
 @Component({
   selector: 'mat-dialog-header-detail',
   template: `
-
   <h2 mat-dialog-title>{{ title }}
     <div id="left">
       <button *ngIf="showButtons" mat-icon-button color="white" (click)="onClickModify($event)">
@@ -20,6 +20,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
       </button>
     </div>
   </h2>
+  <small class="development" *ngIf="developmentMode">{{ me }}</small>
   `,
   styles: [
     'h2 { margin: 0px; }',
@@ -27,7 +28,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   ]
 })
 
-export class CardHeaderDetailComponent {
+export class CardHeaderDetailComponent extends BaseComponent{
 
   @Input('title') title: string;
   @Input('showButtons') showButtons: boolean = true;

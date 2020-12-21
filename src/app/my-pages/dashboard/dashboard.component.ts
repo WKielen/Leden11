@@ -1,18 +1,17 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { LedenItem, LedenItemExt, LedenService } from 'src/app/services/leden.service';
+import { LedenService } from 'src/app/services/leden.service';
 import * as moment from 'moment';
 import { formatDate } from '@angular/common';
 import { DateRoutines } from 'src/app/services/leden.service';
-import { ParentComponent } from 'src/app/shared/parent.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'src/app/services/auth.service';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent extends ParentComponent implements OnInit {
+export class DashboardComponent extends BaseComponent implements OnInit {
 
   private todayMoment = moment();
   private todayDate = moment().toDate();
@@ -57,10 +56,9 @@ export class DashboardComponent extends ParentComponent implements OnInit {
 
 
   constructor(
-    protected snackBar: MatSnackBar,
     public authService: AuthService,
     public ledenService: LedenService) {
-    super(snackBar)
+    super()
   }
 
   ngOnInit() {
