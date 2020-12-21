@@ -131,12 +131,13 @@ export class TypeValues {
     { Value: 'T', Label: 'Toernooi' },
     { Value: 'C', Label: 'Competitie' },
     { Value: 'V', Label: 'Vergadering' },
-    { Value: 'A', Label: 'Actie' },
   ];
   public static GetLabel(value: string): string {
     if (!value) {
       return '';
     }
+    if (value == 'A')
+      return 'Actie';
     return this.table.find(x => x.Value === value).Label;
   }
 }

@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/internal/Observable';
+import { map, retry, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
 import { Dictionary } from '../shared/modules/Dictionary';
 import { DataService } from './data.service';
@@ -14,89 +16,26 @@ export class ActionService extends DataService {
     super(environment.baseUrl + '/action', http);
   }
 
-  GetSome() {
+  /***************************************************************************************************
+  / Get all actions in the future
+  /***************************************************************************************************/
+  nextWeek$(): Observable<Array<ActionItem>> {
+    return this.http.get(environment.baseUrl + '/action/komendeweek') //getallfromnow
+      .pipe(
+        retry(3),
+        tap( // Log the result or error
+          data => console.log('Received: ', data),
+          error => console.log('Oeps: ', error)
+        ),
+        map(function (value) {
+          this.localdata = value;
+          this.localdata.forEach(element => {
 
-    let actions: Dictionary = new Dictionary([]);
-
-
-    let list:Array<ActionItem> = [];
-    let x = new ActionItem();
-    x.Id = "1";
-    x.StartDate = '2020-12-01';
-    x.TargetDate = '2020-12-02';
-    x.HolderName = 'Wim';
-    x.Title = 'Action1';
-    x.Status = "9";
-    x.Description = 'Beschrijving 1'
-    actions.add(x.Id, x);
-    list.push(x);
-
-    x = new ActionItem();
-    x.Id = "2";
-    x.Title = 'Action2';
-    x.StartDate = '2020-12-01';
-    x.HolderName = 'Wim';
-    x.TargetDate = '2020-12-03';
-    x.Description = 'Beschrijving 2\nTweede regel';
-    x.Status = "9";
-    list.push(x);
-    actions.add(x.Id, x);
-
-    x = new ActionItem();
-    x.Id = "3";
-    x.Title = 'Action3';
-    x.StartDate = '2020-12-01';
-    x.TargetDate = '2020-12-04';
-    x.Description = 'Beschrijving 3';
-    x.HolderName = 'Kees';
-    x.Status = "9";
-    list.push(x);
-    actions.add(x.Id, x);
-
-    x = new ActionItem();
-    x.Id = "4";
-    x.Title = 'Action4';
-    x.StartDate = '2020-12-01';
-    x.TargetDate = '2020-12-04';
-    x.Description = 'Beschrijving 3';
-    x.HolderName = 'Piet';
-    x.EndDate = '2020-12-01';
-    x.Status = "9";
-
-    list.push(x);
-    actions.add(x.Id, x);
-
-    x = new ActionItem();
-    x.Id = "5";
-    x.Title = 'Action5';
-    x.StartDate = '2020-12-01';
-    x.TargetDate = '2020-12-04';
-    x.Description = 'Beschrijving 3';
-    x.HolderName = 'Wim';
-    x.EndDate = '2020-12-01';
-    x.Status = "9";
-
-    list.push(x);
-    actions.add(x.Id, x);
-
-    x = new ActionItem();
-    x.Id = "6";
-    x.Title = 'Action6';
-    x.StartDate = '2020-12-01';
-    x.TargetDate = '2020-12-04';
-    x.Description = 'Beschrijving 3';
-    x.HolderName = 'Piet';
-    x.EndDate = '2020-12-01';
-    x.Status = "9";
-
-    list.push(x);
-    actions.add(x.Id, x);
-
-    return actions;
+          });
+          return this.localdata;
+        })
+      );
   }
-
-
-
 }
 
 
@@ -111,13 +50,3 @@ export class ActionItem {
   Status?: string = '';
 
 }
-
-// `Id` int(11) NOT NULL AUTO_INCREMENT,
-// `StartDate` date NOT NULL,
-// `TargetDate` date NOT NULL,
-// `EndDate` date NOT NULL,
-// `Title` mediumtext NOT NULL,
-// `Description` text NOT NULL,
-// `HolderName` tinytext NOT NULL,
-// `Status` tinyint(4) NOT NULL,
-// PRIMARY KEY (`Id`)

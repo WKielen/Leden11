@@ -5,6 +5,7 @@ import { AgendaItem, AgendaService } from 'src/app/services/agenda.service';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import * as moment from 'moment';
+import { ActionItem, ActionService } from 'src/app/services/action.service';
 
 @Component({
   selector: 'app-komendeweek',
@@ -15,6 +16,7 @@ export class KomendeWeekComponent extends ParentComponent implements OnInit {
 
   constructor(
     private agendaService: AgendaService,
+    private actionService: ActionService,
     protected snackBar: MatSnackBar
   ) {
     super(snackBar);
@@ -22,10 +24,8 @@ export class KomendeWeekComponent extends ParentComponent implements OnInit {
   dagen: Dictionary = new Dictionary([]);
 
   ngOnInit(): void {
-    const options = { weekday: 'long', month: 'short', day: 'numeric' };
     this.registerSubscription(
-      this.agendaService
-        .nextWeek$()
+      this.agendaService.nextWeek$()
         .pipe(
           map(function (value: AgendaItem[]) {
             let localdata: Array<AgendaItem> = [];
@@ -41,19 +41,58 @@ export class KomendeWeekComponent extends ParentComponent implements OnInit {
           })
         )
         .subscribe((agendaLijst: Array<AgendaItem>) => {
-          agendaLijst.forEach(element => {
-            let agendaDate: Date = moment(element.Datum).toDate();
-            let dagnaam: string = agendaDate.toLocaleDateString('nl-NL', options)
-            if (!this.dagen.containsKey(dagnaam)) {
-              this.dagen.add(dagnaam, []);
-            }
-            let dag: Array<AgendaItem> = this.dagen.get(dagnaam);
-            dag.push(element);
+          agendaLijst.forEach(agendaItem => {
+            this.addtoDagListIfThisWeek(agendaItem);
+          });
+        })
+    );
+
+    this.registerSubscription(
+      this.actionService
+        .nextWeek$()
+        .subscribe((actionLijst: Array<ActionItem>) => {
+          actionLijst.forEach(element => {
+
+            let ai: AgendaItem = new AgendaItem();
+            ai.Datum = element.StartDate
+            ai.EvenementNaam = element.Title;
+            ai.Toelichting = element.Description;
+            ai.ContactPersoon = element.HolderName;
+            ai.Type = "S";
+            this.addtoDagListIfThisWeek(ai);
+
+            ai = new AgendaItem();
+            ai.Datum = element.TargetDate
+            ai.EvenementNaam = element.Title;
+            ai.Toelichting = element.Description;
+            ai.ContactPersoon = element.HolderName;
+            ai.Type = "E";
+            this.addtoDagListIfThisWeek(ai);
+
           });
         })
     );
   }
 
+  addtoDagListIfThisWeek(agendaItem: AgendaItem): void {
+    let agendaDate: Date = moment(agendaItem.Datum).toDate();
+    const overEenWeek = moment().add(7, 'days').toDate();
+    if (agendaDate < moment().startOf("day").toDate() || overEenWeek <= agendaDate ) return;
+    let dagnaam: string = agendaDate.to_YYYY_MM_DD();
 
+    switch (agendaItem.Type) {
+      case 'T': agendaItem.Type = 'Toernooi'; break;
+      case 'C': agendaItem.Type = 'Competitie'; break;
+      case 'V': agendaItem.Type = 'Vergadering'; break;
+      case 'S': agendaItem.Type = 'Actie start datum'; break;
+      case 'E': agendaItem.Type = 'Actie uiterste datum'; break;
+    }
+
+    if (!this.dagen.containsKey(dagnaam)) {
+      this.dagen.addSorted(dagnaam, [])
+    }
+    let dag: Array<AgendaItem> = this.dagen.get(dagnaam);
+    dag.push(agendaItem);
+  }
 }
 
