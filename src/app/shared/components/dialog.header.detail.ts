@@ -6,13 +6,13 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 
   <h2 mat-dialog-title>{{ title }}
     <div id="left">
-      <button mat-icon-button color="white" (click)="onClickModify($event)">
+      <button *ngIf="showButtons" mat-icon-button color="white" (click)="onClickModify($event)">
         <mat-icon>edit</mat-icon>
       </button>
-      <button mat-icon-button color="white" (click)="onClickCopy($event)">
+      <button *ngIf="showButtons" mat-icon-button color="white" (click)="onClickCopy($event)">
         <mat-icon>content_copy</mat-icon>
       </button>
-      <button mat-icon-button color="warn" (click)="onClickDelete($event)">
+      <button *ngIf="showButtons" mat-icon-button color="warn" (click)="onClickDelete($event)">
         <mat-icon>delete</mat-icon>
       </button>
       <button mat-icon-button color="white" cdkFocusInitial mat-dialog-close>
@@ -28,9 +28,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 
 export class CardHeaderDetailComponent {
-  
+
   @Input('title') title: string;
-  
+  @Input('showButtons') showButtons: boolean = true;
+
   @Output('onClickModify') modify = new EventEmitter();
   @Output('onClickCopy') copy = new EventEmitter();
   @Output('onClickDelete') delete = new EventEmitter();

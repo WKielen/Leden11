@@ -10,14 +10,22 @@
         <input matInput placeholder="Actie Houder" formControlName="holdername" [formControl]="holdername">
     </mat-form-field>
     <mat-form-field>
-        <input matInput placeholder="Eind Datum" [matDatepicker]="picker" formControlName="targetdate"
+        <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Start datum" formControlName="startdate" [formControl]="startdate">
+            <input matEndDate placeholder="Uiterste Datum" formControlName="targetdate" [formControl]="targetdate">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+    </mat-form-field>
+    <!-- <mat-form-field>
+        <input matInput placeholder="Uiterste Datum" [matDatepicker]="picker" formControlName="targetdate"
             [formControl]="targetdate">
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    </mat-form-field> -->
     <mat-form-field class="mat-form-max-width">
-        <textarea matInput type="text" placeholder="Toelichting" formControlName="description" [formControl]="description"
-            matTextareaAutosize matAutosizeMinRows='5' ></textarea>
+        <textarea matInput type="text" placeholder="Toelichting" formControlName="description"
+            [formControl]="description" matTextareaAutosize matAutosizeMinRows='5'></textarea>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>

@@ -1,16 +1,17 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs';
+import { BaseComponent } from './base.component';
 
 @Component({
   template: '',
 })
-export class ParentComponent {
+export class ParentComponent extends BaseComponent {
 
-  private observableSubscriptions = [];
   constructor(
     protected snackBar: MatSnackBar,
-  ) { }
+  ) {
+    super();
+  }
 
   public showSnackBar(message: string, consolelog?: string) {
     this.snackBar.open(message, '', {
@@ -22,23 +23,4 @@ export class ParentComponent {
     }
   }
 
-/***************************************************************************************************
-/ When dealing with RxJs Observables and Subscriptions, it can easily happen, that you leak some memory. 
-/ That is because your component is destroyed, but the function you registered inside of the observable
-/ is not. That way, you not only leak memory but probably also encounter some odd behavior.
-/***************************************************************************************************/
-  public registerSubscription(subscription: Subscription): void {
-    this.observableSubscriptions.push(subscription);
-  }
-
-/***************************************************************************************************
-/ To prevent memory leajs, make sure to unsubscribe from your subscriptions, when the component is destroyed.
-/ One good place to do so, would be the ngOnDestroy lifecycle hook.
-/***************************************************************************************************/
-  ngOnDestroy() {
-    for (let subscription of this.observableSubscriptions) {
-      subscription.unsubscribe();
-      console.log('kill subscriptions', );
-    }
-  }
 }

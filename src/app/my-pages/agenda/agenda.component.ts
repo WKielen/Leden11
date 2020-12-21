@@ -14,6 +14,7 @@ import { NoChangesMadeError } from "src/app/shared/error-handling/no-changes-mad
 import { NotFoundError } from "src/app/shared/error-handling/not-found-error";
 import { addHolidaysToEvents, agendaToEvent, setEventProps } from "../agenda/event-utils";
 import { EventDropArg } from "@fullcalendar/interaction";
+import { ActionItem, ActionService } from "src/app/services/action.service";
 
 // TODO:Select Multiple dates into vakantie
 
@@ -27,6 +28,7 @@ export class AgendaComponent
   implements OnInit, OnDestroy, AfterViewChecked {
   constructor(
     private agendaService: AgendaService,
+    private actionService: ActionService,
     public authService: AuthService,
     public dialog: MatDialog,
     protected snackBar: MatSnackBar
@@ -35,6 +37,8 @@ export class AgendaComponent
   }
 
   private events: EventInput[] = [];
+  private actionList: Array<ActionItem> = [];
+
   private calendarApi: Calendar;
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
 
@@ -56,8 +60,48 @@ export class AgendaComponent
           this.calendarOptions.events = this.events;
         })
     );
+
+
+    let actions: EventInput[] = [];
+    this.registerSubscription(
+      this.actionService
+        .getAll$()
+        .subscribe((actionList: Array<ActionItem>) => {
+          actionList.forEach((item) => {
+            let action: EventInput = new Object();
+            action.title = item.Title;
+            action.start = item.StartDate;
+            action.end = item.StartDate;
+            action.id = action.title + action.start;
+            let agendaItem: AgendaItem = new AgendaItem();
+            agendaItem.Extra1 = '1';
+            agendaItem.Datum = item.StartDate;
+            agendaItem.Tijd = '';
+            agendaItem.EvenementNaam = item.Title;
+            agendaItem.Lokatie = '';
+            agendaItem.Type = 'A';
+            agendaItem.DoelGroep = 'S';
+            agendaItem.Toelichting = item.Description;
+            agendaItem.Inschrijven = '';
+            agendaItem.Inschrijfgeld = '';
+            agendaItem.BetaalMethode = '';
+            agendaItem.ContactPersoon = item.HolderName;
+            agendaItem.Vervoer = '';
+            agendaItem.VerzamelAfspraak = '';
+            agendaItem.Extra1 = '2';
+            action.extendedProps = { agendaItem: agendaItem };
+            actions.push(action);
+          });
+          this.events = this.events.concat(actions);
+
+        })
+    );
+
     // De vakanties toevoegen aan de events array
     this.events = this.events.concat(addHolidaysToEvents());
+
+
+
   }
 
   // Voor deze lifecycle hook is the calendar component nog niet geinitialiseerd.
@@ -125,7 +169,6 @@ export class AgendaComponent
     this.dialog.open(AgendaDetailDialogComponent, {
       width: '500px',
       data: {
-        method: "Wijzigen",
         data: clickInfo.event.extendedProps["agendaItem"],
       },
     })

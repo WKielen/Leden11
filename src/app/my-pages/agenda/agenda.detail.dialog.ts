@@ -15,7 +15,7 @@ export class AgendaDetailDialogComponent {
         public dialog: MatDialog,
     ) {
     }
-
+    public showButtons: boolean = this.data.data.Type != 'A';
     public organisatie: string = OrganisatieValues.GetLabel(this.data.data.Extra1);
     public doelGroep: string = DoelgroepValues.GetLabel(this.data.data.DoelGroep);
     public type: string = TypeValues.GetLabel(this.data.data.Type);
@@ -51,7 +51,7 @@ export class AgendaDetailDialogComponent {
             }
             else {
                 this.data.method = 'Cancel';
-                this.dialogRef.close(this.data);               
+                this.dialogRef.close(this.data);
             }
         });
     }
