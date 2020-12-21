@@ -8,12 +8,14 @@ import { CheckboxListComponent } from './checkbox.list.component';
 import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
 import { WaitingButtonComponent } from './waiting-button.component';
 import { HoldableModule } from '../directives/directives.module';
+import { Checkbox2ListComponent } from './checkbox2.list.component';
 
 @NgModule({
   declarations: [
     CardHeaderSpinnerComponent,
     A2hsComponent,
     CheckboxListComponent,
+    Checkbox2ListComponent,
     SelectLidDropdownComponent,
     CardHeaderDetailComponent,
     WaitingButtonComponent,
@@ -22,12 +24,12 @@ import { HoldableModule } from '../directives/directives.module';
     CommonModule,
     CustomMaterialModule,
     HoldableModule,
-
   ],
   exports: [
     CardHeaderSpinnerComponent,
     A2hsComponent,
     CheckboxListComponent,
+    Checkbox2ListComponent,
     SelectLidDropdownComponent,
     CardHeaderDetailComponent,
     WaitingButtonComponent,
