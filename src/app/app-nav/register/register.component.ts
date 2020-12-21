@@ -60,10 +60,10 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   createFilters(): void {
     this.dataSourceNewRegistrations.data = this.registerList.values();
-    this.dataSourceNewRegistrations.filterPredicate = this.createOpenRegisterFilter();
+    this.dataSourceNewRegistrations.filterPredicate = this.createRegisterFilter();
 
     this.dataSourceExistingRegistrations.data = this.registerList.values();
-    this.dataSourceExistingRegistrations.filterPredicate = this.createFinishedRegisterFilter();
+    this.dataSourceExistingRegistrations.filterPredicate = this.createRegisterFilter();
 
     this.refreshFilters();
   }
@@ -172,8 +172,6 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     this.showDetailDialog(this.dataSourceExistingRegistrations.filteredData[index]);
   }
 
-
-
   /***************************************************************************************************
   / 
   /***************************************************************************************************/
@@ -237,15 +235,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / This filter is created at initialize of the page.
   /***************************************************************************************************/
-  private createOpenRegisterFilter(): (data: UserItem, filter: string) => boolean {
-    let filterFunction = function (data: UserItem, filter: string): boolean {
-      let searchTerms = JSON.parse(filter);
-      return (data.Activated == searchTerms.Activated);
-    }
-    return filterFunction;
-  }
-
-  private createFinishedRegisterFilter(): (data: UserItem, filter: string) => boolean {
+  private createRegisterFilter(): (data: UserItem, filter: string) => boolean {
     let filterFunction = function (data: UserItem, filter: string): boolean {
       let searchTerms = JSON.parse(filter);
       return (data.Activated == searchTerms.Activated);

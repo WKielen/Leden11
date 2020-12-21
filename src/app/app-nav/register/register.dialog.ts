@@ -2,6 +2,8 @@ import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormValueToDutchDateString } from 'src/app/shared/modules/DateRoutines';
+import { CheckboxDictionairy } from 'src/app/shared/components/checkbox.list.component';
+import { ROLES } from 'src/app/shared/classes/Page-Role-Variables';
 
 
 @Component({
@@ -16,10 +18,24 @@ export class RegistrationDialogComponent implements OnInit {
             [Validators.required]
         ),
         name: new FormControl(),
-        email: new FormControl(),
+        email: new FormControl(
+            '',
+            [Validators.email]
+        ),
         password: new FormControl(),
         role: new FormControl(),
     });
+
+    myCheckboxDictionairy: CheckboxDictionairy[] = [
+        { 'Id': ROLES.BESTUUR, 'Value': 'Bestuur' },
+        { 'Id': ROLES.JC, 'Value': 'Jeugdcommissie' },
+        { 'Id': ROLES.TRAINER, 'Value': 'Trainer' },
+        { 'Id': ROLES.LEDENADMIN, 'Value': 'Ledenadministratie' },
+        { 'Id': ROLES.PENNINGMEESTER, 'Value': 'Penningmeester' },
+        { 'Id': ROLES.TEST, 'Value': 'Test pagina\'s' },
+        { 'Id': ROLES.ADMIN, 'Value': 'Admin' },
+    ];
+    stringWithRoles:string = 'BS';
 
 
     constructor(
@@ -48,6 +64,20 @@ export class RegistrationDialogComponent implements OnInit {
 
         this.dialogRef.close(this.data.data);
     }
+
+    /***************************************************************************************************
+    / 
+    /***************************************************************************************************/
+    onRoleClicked($event): void {
+        console.log('onRoleClicked', $event, this.stringWithRoles);
+        // // I don't why but I also get a MouseEvent here. I just ignore it.
+        // if (!this.lidRol || $event instanceof MouseEvent) {
+        //     return;
+        // }
+        // this.lidRol.Rol = $event.type;
+    }
+
+
 
     /***************************************************************************************************
     / Properties
