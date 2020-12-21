@@ -33,7 +33,7 @@
         (click)="onSubmit()">Login</button>
     <button mat-raised-button *ngIf="invalidLogin" color="warn" [disabled]='!loginForm.valid' (click)="onSubmit()">Fout, opnieuw</button>
 
-    <div *ngIf="testRegisterpage" fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+    <div *ngIf="developmentMode" fxFlex fxLayout="row" fxLayoutAlign="flex-end">
         <a mat-button (click)="onRegister()" color="primary">Register</a>
         <a mat-button (click)="onResetPassword()" color="primary">Reset password</a>
     </div>

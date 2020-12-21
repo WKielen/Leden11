@@ -1,11 +1,12 @@
 import { Component, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ROUTE } from 'src/app/shared/classes/Page-Role-Variables';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { RegisterDialogComponent } from '../register-dialog/register.dialog';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
     selector: 'app-signin-dialog',
@@ -13,7 +14,7 @@ import { RegisterDialogComponent } from '../register-dialog/register.dialog';
     styles: ['mat-form-field {width: 100%;}']
 
 })
-export class SignInDialogComponent {
+export class SignInDialogComponent extends BaseComponent{
 
     showPw = false;
     keepSignedIn: boolean;
@@ -39,9 +40,8 @@ export class SignInDialogComponent {
         public registerDialog: MatDialog,
 
     ) {
-        this.testRegisterpage = !environment.production;
+        super()
     }
-    public testRegisterpage: boolean;
 
     /***************************************************************************************************
     / 

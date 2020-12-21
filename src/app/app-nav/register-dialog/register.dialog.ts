@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { UserService } from 'src/app/services/user.service';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { AppError } from 'src/app/shared/error-handling/app-error';
@@ -51,10 +50,7 @@ export class RegisterDialogComponent {
         private mailService: MailService,
         public dialogRef: MatDialogRef<RegisterDialogComponent>,
     ) {
-        this.testRegisterpage = !environment.production;
     }
-    public testRegisterpage: boolean;
-
 
     /***************************************************************************************************
     / 

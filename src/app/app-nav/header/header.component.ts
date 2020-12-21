@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { environment } from 'src/environments/environment';
 import { ConfigDialogComponent } from 'src/app/app-nav/headerconfigdialog/config.dialog';
 import { NotificationDialogComponent } from 'src/app/app-nav/headernotificationdialog/notification.dialog';
 import { LogonData } from 'src/app/shared/classes/LogonData';
@@ -19,7 +18,6 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
   logonData: LogonData = new LogonData;
-  test = !environment.production;
 
   constructor(
     private router: Router,

@@ -81,10 +81,10 @@ export class MailDialogComponent extends ParentComponent {
 
         if (this.ckbTest) {
 
-            if (environment.production) {
-                this.output += 'To: ' + mailItem.To + '\r\n';
-            } else {
+            if (this.developmentMode) {
                 this.output += 'To: wim_kielen@hotmail.com\r\n';
+            } else {
+                this.output += 'To: ' + mailItem.To + '\r\n';
             }
 
             this.output += 'Subject: ' + mailItem.Subject + '\r\n';
@@ -94,7 +94,7 @@ export class MailDialogComponent extends ParentComponent {
             this.output += "-----------------------------------------------------------------------------------------\r\n";
         }
         else {
-            if (!environment.production) {
+            if (this.developmentMode) {
                 mailItem.ToName = mailItem.To;
                 mailItem.To = "wim_kielen@hotmail.com";
             }
