@@ -12,13 +12,13 @@ import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import { ParentComponent } from 'src/app/shared/parent.component';
-import { RegistrationDetailDialogComponent } from './register.detail.dialog';
-import { RegistrationDialogComponent } from './register.dialog';
+import { RegistrationDetailDialogComponent } from './registration.detail.dialog';
+import { RegistrationDialogComponent } from './registration.dialog';
 
 @Component({
-  selector: 'app-register',
-  templateUrl: './register.component.html',
-  styleUrls: ['./register.component.scss']
+  selector: 'app-registration',
+  templateUrl: './registration.component.html',
+  styleUrls: ['./registration.component.scss']
 })
 export class RegistrationComponent extends ParentComponent implements OnInit {
 
@@ -172,7 +172,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   }
 
   /***************************************************************************************************
-  / 
+  /
   /***************************************************************************************************/
   updateRegister(toBeEdited: UserItem): void {
     // console.log('updateRegister', toBeEdited);

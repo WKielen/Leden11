@@ -31,6 +31,7 @@ import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter, MAT_MOMENT_DATE_ADAPTER_OPT
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ParentComponent } from './shared/parent.component';
 import { BaseComponent } from './shared/base.component';
+import { WebsiteService } from './services/website.service';
 
 registerLocaleData(localeNl);
 
@@ -69,6 +70,7 @@ registerLocaleData(localeNl);
     MailService,
     TrainingService,
     UserService,
+    WebsiteService,
     NotificationService,
     {
       provide: HTTP_INTERCEPTORS,

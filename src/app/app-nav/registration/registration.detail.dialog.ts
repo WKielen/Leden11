@@ -3,7 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 
 @Component({
     selector: 'app-registration-detail-dialog',
-    templateUrl: './register.detail.dialog.html',
+    templateUrl: './registration.detail.dialog.html',
     styles: ['#table { tr { td { text-align: left; vertical-align: top; } } }  h2 { margin: 0px; } '],
 })
 export class RegistrationDetailDialogComponent {
