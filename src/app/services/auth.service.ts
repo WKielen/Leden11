@@ -65,7 +65,7 @@ export class AuthService {
     const jsonToken = this.jwtHelper.decodeToken(token);
     return jsonToken.lidnr;
   }
-  
+
   get fullName() {
     const token = localStorage.getItem('token');
     if (!this.token) {

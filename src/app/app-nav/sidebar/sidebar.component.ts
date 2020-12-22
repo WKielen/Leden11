@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ROUTE, PAGEROLES } from 'src/app/shared/classes/Page-Role-Variables';
 import { AuthService } from './../../services/auth.service';
 import { Router } from '@angular/router';
+import { BaseComponent } from 'src/app/shared/base.component';
+import { Page, Role, WebsiteService } from 'src/app/services/website.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -9,7 +10,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./sidebar.component.scss']
 })
 
-export class SidebarComponent implements OnInit {
+export class SidebarComponent extends BaseComponent implements OnInit {
 
   // We gebruiken de 'isHandset' om te bepalen of het een mobiel is. Als het een mobiel is dan
   // sluiten we het menu direct nadat er een menu-item is gekozen.
@@ -18,80 +19,46 @@ export class SidebarComponent implements OnInit {
   // Deze output wordt gebruikt om in de default component het menu te sluiten.
   @Output() displaySideBar: EventEmitter<any> = new EventEmitter();
 
-  // Mag de optie in het menu worden getoond?
-  showRouteLeden: boolean = false;
-  showRouteLedenmanager: boolean = false;
-  showRouteMail: boolean = false;
-  showRouteAgenda: boolean = false;
-  showRouteWebsite: boolean = false;
-  showRouteLadder: boolean = false;
-  showRouteMultiupdate: boolean = false;
-  showRouteDownload: boolean = false;
-  showRouteContrbedragen: boolean = false;
-  showRouteOudleden: boolean = false;
-  showRouteUsers: boolean = false;
-  showRouteSyncNttb: boolean = false;
-  showRouteTest: boolean = false;
-  showRouteTrainingDeelname: boolean = false;
-  showRouteTrainingOverzicht: boolean = false;
-  showRouteMasterz: boolean = false;
-  showRouteCompAdmin: boolean = false;
-  showRouteTodoList: boolean = false;
-  showRouteRegistration: boolean = false;
-
-  // De routes naar de pagina's
-  routeDashboard = ROUTE.dashboardPageRoute;
-  routeKomendeWeek = ROUTE.komendeweekPageRoute;
-  routeLeden = ROUTE.ledenPageRoute;
-  routeLedenmanager = ROUTE.ledenmanagerPageRoute;
-  routeMail = ROUTE.mailPageRoute;
-  routeAgenda = ROUTE.agendaPageRoute;
-  routeWebsite = ROUTE.websitePageRoute;
-  routeLadder = ROUTE.ladderPageRoute;
-  routeMultiupdate = ROUTE.multiupdatePageRoute;
-  routeDownload = ROUTE.downloadPageRoute;
-  routeContrbedragen = ROUTE.contrbedragenPageRoute;
-  routeOudleden = ROUTE.oudledenPageRoute;
-  routeUsers = ROUTE.usersPageRoute;
-  routeSyncNttb = ROUTE.syncnttbPageRoute;
-  routeTest = ROUTE.testPageRoute;
-  routeTrainingDeelname = ROUTE.trainingdeelnamePageRoute;
-  routeTrainingOverzicht = ROUTE.trainingoverzichtPageRoute;
-  routeMasterz = ROUTE.masterzPageRoute;
-  routeCompAdmin = ROUTE.compadminPageRoute;
-  routeTodoList = ROUTE.todolistPageRoute;
-  routeRegistration = ROUTE.registrationPageRoute;
-
   // Wordt gebruikt om de naam te tonen bovenaan het menu
-  // Wordt gebruikt om de naam te tonen bovenaan het menu
-  name = this.authService.fullName;
+  public name: string = this.authService.fullName;
+  public pages: Array<Page> = [];
+  public pagesToShow: Array<Page> = [];
+  public roles: Array<Role> = [];
 
   constructor(
     private authService: AuthService,
+    private websiteService: WebsiteService,
     private router: Router,
 
-  ) { }
+  ) { super() }
 
   ngOnInit() {
-    this.showRouteLeden = this.authService.showRoute(PAGEROLES.ledenPageRoles);
-    this.showRouteLedenmanager = this.authService.showRoute(PAGEROLES.ledenmanagerPageRoles);
-    this.showRouteMail = this.authService.showRoute(PAGEROLES.mailPageRoles);
-    this.showRouteAgenda = this.authService.showRoute(PAGEROLES.agendaPageRoles);
-    this.showRouteWebsite = this.authService.showRoute(PAGEROLES.websitePageRoles);
-    this.showRouteLadder = this.authService.showRoute(PAGEROLES.ladderPageRoles);
-    this.showRouteMultiupdate = this.authService.showRoute(PAGEROLES.multiupdatePageRoles);
-    this.showRouteDownload = this.authService.showRoute(PAGEROLES.downloadPageRoles);
-    this.showRouteContrbedragen = this.authService.showRoute(PAGEROLES.contrbedragenPageRoles);
-    this.showRouteOudleden = this.authService.showRoute(PAGEROLES.oudledenPageRoles);
-    this.showRouteUsers = this.authService.showRoute(PAGEROLES.usersPageRoles);
-    this.showRouteSyncNttb = this.authService.showRoute(PAGEROLES.syncnttbPageRoles);
-    this.showRouteTest = this.authService.showRoute(PAGEROLES.testPageRoles);
-    this.showRouteTrainingDeelname = this.authService.showRoute(PAGEROLES.trainingdeelnamePageRoles);
-    this.showRouteTrainingOverzicht = this.authService.showRoute(PAGEROLES.trainingdeelnamePageRoles);
-    this.showRouteMasterz = this.authService.showRoute(PAGEROLES.masterzPageRoles);
-    this.showRouteCompAdmin = this.authService.showRoute(PAGEROLES.testPageRoles);
-    this.showRouteTodoList = this.authService.showRoute(PAGEROLES.todolistPageRoles);
-    this.showRouteRegistration = this.authService.showRoute(PAGEROLES.registrationPageRoles);
+    /***************************************************************************************************
+    / Aan de hand van de rollen van de ingelogde gebruiker en de rollen die een pagina mogen zien, ga
+    / ik kijken welke pagina's deze gebruiker mag zien.
+    / Een * bij de pagina betekent dat alle gebruikers die pagina mogen zien.
+    /***************************************************************************************************/
+    this.pages = this.websiteService.getPages();
+    console.log('roles', this.authService.roles);
+    let rollenUser: string = this.authService.roles;
+
+    for (let i = 0; i < this.pages.length; i++) {
+      let displayThisOne: boolean = false;
+      const page = this.pages[i];
+      if (page.DisplayOnRoles == '*')
+        displayThisOne = true;
+      let roleListPage: Array<string> = page.DisplayOnRoles.split(',');
+      for (let j = 0; j < roleListPage.length; j++) {
+        if (rollenUser.includes(roleListPage[j])) {
+          displayThisOne = true;
+          break;
+        }
+      }
+      if (displayThisOne)
+        this.pagesToShow.push(this.pages[i])
+    }
+    // Okay, this.pagesToShow bevat alle pagina's die de gebruiker mag zien.
+
   }
   // Op de mobiel wordt het menu automatisch gesloten wanneer en een keuze is gemaakt.
   route(myRoute: string): void {

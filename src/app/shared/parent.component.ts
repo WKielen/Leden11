@@ -6,11 +6,13 @@ import { BaseComponent } from './base.component';
   template: '',
 })
 export class ParentComponent extends BaseComponent {
-
+  public isMobile: boolean = false;
   constructor(
     protected snackBar: MatSnackBar,
   ) {
     super();
+    let userAgent = navigator.userAgent.toLowerCase();
+    this.isMobile = /mobile/.test(userAgent);
   }
 
   public showSnackBar(message: string, consolelog?: string) {

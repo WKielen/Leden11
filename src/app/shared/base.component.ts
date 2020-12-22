@@ -10,11 +10,13 @@ export class BaseComponent {
   public me: string = '';
   public developmentMode: boolean = true;
 
+
   private observableSubscriptions = [];
   constructor(
   ) {
     this.me = this.constructor.name;
     this.developmentMode = !environment.production;
+
   }
 
   /***************************************************************************************************
