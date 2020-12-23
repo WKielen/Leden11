@@ -6,6 +6,7 @@ import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { MailDialogComponent } from './mail.dialog';
 import { ExternalMailApiRecord, MailItem } from 'src/app/services/mail.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
     selector: 'singlemail-dialog',
@@ -13,7 +14,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
     styleUrls: ['./singlemail.dialog.scss']
 
 })
-export class SingleMailDialogComponent implements OnInit {
+export class SingleMailDialogComponent extends BaseComponent implements OnInit {
 
     mailText: string = '';
     mailSubject: string = '';
@@ -77,7 +78,7 @@ export class SingleMailDialogComponent implements OnInit {
         public readTextFileService: ReadTextFileService,
         private dialog: MatDialog,
         @Inject(MAT_DIALOG_DATA) public singleMailInputDialog: SingleMail  // Dit is een interface
-    ) { }
+    ) { super() }
 
     ngOnInit(): void {
         this.readTextFileService.read(this.singleMailInputDialog.TemplatePathandName)

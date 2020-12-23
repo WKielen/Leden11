@@ -1,8 +1,11 @@
+import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
+import { SingleMail, SingleMailDialogComponent } from 'src/app/my-pages/mail/singlemail.dialog';
 import { AuthService } from 'src/app/services/auth.service';
+import { LedenItem } from 'src/app/services/leden.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { UserItem, UserService } from 'src/app/services/user.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
@@ -125,7 +128,23 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     let toBeEdited: UserItem = this.registerList.get($event.Userid)
     toBeEdited.Activated = '1';
     this.updateRegister(toBeEdited);
+    this.onMail(toBeEdited);
   }
+
+  onMail(toBEedited: UserItem): void {
+    let lid = new LedenItem();
+    lid.Achternaam = toBEedited.Name;
+    lid.Email1 = toBEedited.Email;
+
+    let data = new SingleMail();
+    data.TemplatePathandName = 'templates/template_bevestiging_nieuwe_gebruiker.html';
+    data.Subject = "Bevestiging gebruiker TTVN app";
+    data.Lid = lid;
+    this.dialog.open(SingleMailDialogComponent, {
+        data: data,
+        disableClose: true
+    })
+}
 
 
   onEditNewRegistation(index: number): void {
