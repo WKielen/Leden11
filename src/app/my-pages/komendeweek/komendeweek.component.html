@@ -7,8 +7,8 @@
             <div id="datum">{{ dagen.keys()[i] | date:'EEEE dd-MM-yyyy' }}</div>
             <div class="internalcardcontent" *ngFor="let item of dagen.getIndex(i); index as j" id='id{{j}}'>
                 <div id="evenementnaam">{{ dagen.getIndex(i)[j].EvenementNaam }} ({{ dagen.getIndex(i)[j].Type }})</div>
-                <div *ngIf="dagen.getIndex(i)[j].Tijd">Aanvang: {{dagen.getIndex(i)[j].Tijd }}</div>
-                <div [innerHTML]="dagen.getIndex(i)[j].Toelichting"></div>
+                <div id="aanvang"*ngIf="dagen.getIndex(i)[j].Tijd">Aanvang: {{dagen.getIndex(i)[j].Tijd }}</div>
+                <div id="toelichting"[innerHTML]="dagen.getIndex(i)[j].Toelichting"></div>
             </div>
         </div>
         <div *ngIf="dagen.length() == 0">
