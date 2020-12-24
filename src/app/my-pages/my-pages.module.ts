@@ -20,7 +20,6 @@ import { AgendaDetailDialogComponent } from './../my-pages/agenda/agenda.detail.
 import { LedenDialogComponent } from './../my-pages/ledenmanager/ledenmanager.dialog';
 import { LedenDeleteDialogComponent } from './../my-pages/ledenmanager/ledendelete.dialog';
 import { MailDialogComponent } from './../my-pages/mail/mail.dialog';
-import { OldRolesDialogComponent } from './../my-pages/users/roles.dialog';
 import { SingleMailDialogComponent } from './../my-pages/mail/singlemail.dialog';
 import { TrainingOverzichtDialogComponent } from './../my-pages/trainingoverzicht/trainingoverzicht.dialog';
 import { WebsiteDialogComponent } from './../my-pages/website/website.dialog';
@@ -79,7 +78,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     LedenDialogComponent,
     LedenDeleteDialogComponent,
     MailDialogComponent,
-    OldRolesDialogComponent,
     SingleMailDialogComponent,
     TrainingOverzichtDialogComponent,
     WebsiteDialogComponent,

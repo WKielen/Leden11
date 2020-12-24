@@ -84,9 +84,7 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
   /
   /***************************************************************************************************/
   onShowRoles() {
-    this.dialog.open(RolesDialogComponent, {
-      data: ''
-  })
+    this.dialog.open(RolesDialogComponent)
   }
 
   /***************************************************************************************************

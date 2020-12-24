@@ -1,7 +1,5 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
-import { CheckboxDictionairy } from 'src/app/shared/components/oldcheckbox.list.component';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { Page, Role, WebsiteService } from 'src/app/services/website.service';
 
@@ -13,8 +11,6 @@ import { Page, Role, WebsiteService } from 'src/app/services/website.service';
 export class RolesDialogComponent extends BaseComponent implements OnInit {
 
     constructor(
-        public dialogRef: MatDialogRef<RolesDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public myCheckboxDictionairy:CheckboxDictionairy[],
         public websiteService: WebsiteService
     ) { super() }
 

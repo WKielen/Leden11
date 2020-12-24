@@ -12,8 +12,8 @@ import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-e
 import { ROLES } from 'src/app/shared/classes/Page-Role-Variables';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { ParentComponent } from 'src/app/shared/parent.component';
-import { OldRolesDialogComponent } from './roles.dialog';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
+import { RolesDialogComponent } from 'src/app/app-nav/registration/roles.dialog';
 
 @Component({
     selector: 'app-users-page',
@@ -120,9 +120,7 @@ export class UsersComponent extends ParentComponent implements OnInit {
     /
     /***************************************************************************************************/
     onShowRoles(): void {
-        this.dialog.open(OldRolesDialogComponent, {
-            data: this.myCheckboxDictionairy
-        })
+        this.dialog.open(RolesDialogComponent)
     }
 
     /***************************************************************************************************
