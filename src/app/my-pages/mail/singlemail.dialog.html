@@ -1,8 +1,9 @@
 <h2 mat-dialog-title>Mail</h2>
+<small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-card-content>
     <div class="internalcard">
         <form>
-            <mat-form-field>
+            <mat-form-field class="mat-form-max-width">
                 <mat-label>Onderwerp:</mat-label>
                 <input matInput type="text" placeholder="Onderwerp" [(ngModel)]="mailSubject" [ngModelOptions]="{standalone: true}">
             </mat-form-field>
