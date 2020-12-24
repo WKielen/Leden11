@@ -26,6 +26,7 @@ import { SharedComponentsModule } from '../shared/components/component.module';
 import { RegistrationDetailDialogComponent } from './registration/registration.detail.dialog';
 import { RegistrationDialogComponent } from './registration/registration.dialog';
 import { RolesDialogComponent } from './registration/roles.dialog';
+import { ResetPasswordDialogComponent } from './resetpassword-dialog/password.reset.dialog';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { RolesDialogComponent } from './registration/roles.dialog';
     RegistrationDetailDialogComponent,
     RegistrationDialogComponent,
     RolesDialogComponent,
+    ResetPasswordDialogComponent,
   ],
   imports: [
     CommonModule,

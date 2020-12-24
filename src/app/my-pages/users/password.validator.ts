@@ -10,19 +10,5 @@ export class PasswordValidators {
         }
         return null;
     }
-    // static passwordsShouldMatch2(control: AbstractControl) {
-    //     const formGroup = control.parent;
-    //     if (!formGroup) {
-    //         return null;
-    //     }
-
-    //     const pw1 = formGroup.get('password1');
-    //     const pw2 = formGroup.get('password2');
-
-    //     if (pw1 && pw2 && pw1.value !== pw2.value) {
-    //         return { passwordsShouldMatch2: true };
-    //     }
-    //     return null;
-    // }
 
 }

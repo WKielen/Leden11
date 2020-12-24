@@ -1,4 +1,6 @@
 <h2 mat-dialog-title>Details</h2>
+<small class="development" *ngIf="developmentMode">{{ me }}</small>
+
 <mat-dialog-content>
   <h2>{{data.data.Userid}}</h2>
   <table id="table">

@@ -5,6 +5,7 @@ import { UserService } from 'src/app/services/user.service';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { MailItem, MailService } from 'src/app/services/mail.service';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
     selector: 'app-register-dialog',
@@ -17,10 +18,10 @@ import { MailItem, MailService } from 'src/app/services/mail.service';
     providers: [{ provide: 'param', useValue: 'progress' }]
 })
 
-// De provider is om door een param door te geven aan de MailService. 
+// De provider is om door een param door te geven aan de MailService.
 // Dit lukt nog niet.
 
-export class RegisterDialogComponent {
+export class RegisterDialogComponent extends BaseComponent {
 
     showPw: boolean = false;
     responseText: string = '';
@@ -49,19 +50,19 @@ export class RegisterDialogComponent {
         private userService: UserService,
         private mailService: MailService,
         public dialogRef: MatDialogRef<RegisterDialogComponent>,
-    ) {
+    ) { super()
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
-    async onSubmit() {
+    onSubmit() {
         const credentials = { "Userid": this.userid.value, "Password": this.password.value, "Email": this.email.value, "Name": this.naam.value };
 
         this.userService.register$(credentials)
             .subscribe(addResult => {
                 if (addResult.hasOwnProperty('Key')) {
-                    this.responseText = 'Registratie gelukt';
+                    this.responseText = 'Registratie gelukt. \nNa goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je aanloggen.';
                     this.boxColor = "#85e085";
                     this.sendMail(credentials);
                 } else {

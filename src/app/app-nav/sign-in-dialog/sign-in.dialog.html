@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>Inloggen</h2>
+<small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-dialog-content [formGroup]="loginForm" novalidate>
 
     <mat-form-field>
@@ -34,7 +35,7 @@
     <button mat-raised-button *ngIf="invalidLogin" color="warn" [disabled]='!loginForm.valid' (click)="onSubmit()">Fout, opnieuw</button>
 
     <div *ngIf="developmentMode" fxFlex fxLayout="row" fxLayoutAlign="flex-end">
-        <a mat-button (click)="onRegister()" color="primary">Register</a>
+        <a mat-button (click)="onRegister()" color="primary">Registreer</a>
         <a mat-button (click)="onResetPassword()" color="primary">Reset password</a>
     </div>
 </mat-dialog-actions>

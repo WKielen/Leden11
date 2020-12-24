@@ -1,4 +1,5 @@
 <h2 mat-dialog-title>Registeren nieuwe gebruiker</h2>
+<small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-dialog-content [formGroup]="registerForm" novalidate>
     <!-- 1 -->
     <mat-form-field>
@@ -9,7 +10,7 @@
     </mat-form-field>
     <!-- 2 -->
     <mat-form-field>
-        <input matInput placeholder="Email" formControlName="email" [formControl]="email">
+        <input matInput placeholder="Email" formControlName="email" [formControl]="email" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$">
         <mat-error *ngIf="email.hasError('email')">
             Onjuist email adres
         </mat-error>
@@ -37,8 +38,6 @@
             Wachtwoord is verplicht
         </mat-error>
     </mat-form-field>
-    Na goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je
-    aanloggen.
 </mat-dialog-content>
 <mat-card-content *ngIf="responseText">
     <div class="internalcard"  [style.backgroundColor]="boxColor">
