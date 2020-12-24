@@ -1,14 +1,16 @@
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ICheckboxDictionaryItem } from 'src/app/shared/components/checkbox.list.component';
 import { Role, WebsiteService } from 'src/app/services/website.service';
 import { BaseComponent } from 'src/app/shared/base.component';
+import { RolesDialogComponent } from './roles.dialog';
 
 
 @Component({
   selector: 'app-registration-dialog',
   templateUrl: './registration.dialog.html',
+  styles: ['#right { display: flex; justify-content: flex-end; }']
 })
 
 export class RegistrationDialogComponent extends BaseComponent implements OnInit {
@@ -32,6 +34,8 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
   constructor(
     public dialogRef: MatDialogRef<RegistrationDialogComponent>,
     public websiteService: WebsiteService,
+    public dialog: MatDialog,
+
     @Inject(MAT_DIALOG_DATA) public data,
   ) { super()
   }
@@ -76,8 +80,14 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
     if ($event instanceof MouseEvent) return;
     this.myCheckboxDictionairy[$event.RowNr].Value = $event.Value;
   }
-
-
+  /***************************************************************************************************
+  /
+  /***************************************************************************************************/
+  onShowRoles() {
+    this.dialog.open(RolesDialogComponent, {
+      data: ''
+  })
+  }
 
   /***************************************************************************************************
   / Properties

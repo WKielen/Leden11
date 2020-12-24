@@ -3,18 +3,19 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { PAGEROLES } from 'src/app/shared/classes/Page-Role-Variables';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import { CheckboxDictionairy } from 'src/app/shared/components/oldcheckbox.list.component';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 
 @Component({
     selector: 'app-roles-dialog',
     templateUrl: './roles.dialog.html',
 })
-export class RolesDialogComponent implements OnInit {
+export class OldRolesDialogComponent extends BaseComponent implements OnInit {
 
     constructor(
-        public dialogRef: MatDialogRef<RolesDialogComponent>,
+        public dialogRef: MatDialogRef<OldRolesDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public myCheckboxDictionairy:CheckboxDictionairy[]
-    ) { }
+    ) { super() }
 
     toPrintDict: Dictionary = new Dictionary([]);
     rolesList: Section[] = [];

@@ -25,4 +25,8 @@
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [disabled]='!actionItemForm.valid' (click)="onSubmit()">Save</button>
   <button mat-raised-button type="button" color="accent" mat-dialog-close>Cancel</button>
+  <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+    <button mat-raised-button color="accent" style="flex: 0 0 auto;" (click)="onShowRoles()">Info Rollen</button>
+</div>
+
 </mat-dialog-actions>

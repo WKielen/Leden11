@@ -43,18 +43,31 @@
 
   <mat-card style="flex-basis: 30%;">
     <mat-card-header>
-      <mat-card-title>Download Agenda</mat-card-title>
+      <mat-card-title>Download Actielijst</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      Met onderstaande knoppen kan je de agenda downloaden. In de download zijn de velden gescheiden door een
+      Met onderstaande knoppen kan je de actie en besluitenlijst downloaden. In de download zijn de velden gescheiden door een
       punt-komma.
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="onClickAgendaLijst()">Download</button>
+      <button mat-raised-button color="primary" (click)="onClickActionList()">Download</button>
     </mat-card-actions>
   </mat-card>
 
-  <mat-card style="flex-basis: 30%;">
+  <div style="flex-basis: 30%;">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Download Agenda</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        Met onderstaande knoppen kan je de agenda downloaden. In de download zijn de velden gescheiden door een
+        punt-komma.
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-raised-button color="primary" (click)="onClickAgendaLijst()">Download</button>
+      </mat-card-actions>
+    </mat-card>
+  <mat-card>
     <mat-card-header>
       <mat-card-title>Upload Agenda</mat-card-title>
     </mat-card-header>
@@ -76,5 +89,5 @@
       <button mat-raised-button color="primary" (click)="onClickAgendaImport()">Uploaden</button>
     </mat-card-actions>
   </mat-card>
-
+  </div>
 </div>

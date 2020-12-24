@@ -10,6 +10,8 @@ import { ParentComponent } from 'src/app/shared/parent.component';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { ReadTextFileService } from 'src/app/services/readtextfile.service';
 import { CheckImportedAgenda, AddImportedAgendaToDB } from 'src/app/shared/modules/AgendaRoutines';
+import { ActionItem, ActionService } from 'src/app/services/action.service';
+import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
     selector: 'app-download-page',
@@ -45,8 +47,10 @@ export class DownloadComponent extends ParentComponent implements OnInit {
 
     constructor(private ledenService: LedenService,
         private agendaService: AgendaService,
+        private actionService: ActionService,
         public readTextFileService: ReadTextFileService,
         protected snackBar: MatSnackBar,
+        private clipboard: Clipboard,
     ) {
         super(snackBar)
     }
@@ -181,15 +185,15 @@ export class DownloadComponent extends ParentComponent implements OnInit {
     }
 
     //***************************************************************************************************/
-    //                                                                                                  */  
+    //                                                                                                  */
     //       Agenda functions
-    //                                                                                                  */  
+    //                                                                                                  */
     //***************************************************************************************************/
 
     /***************************************************************************************************
     / Exporteer de agenda
     /***************************************************************************************************/
-    formats = [moment.ISO_8601, 'DD-MM-YYYY', 'D-MM-YYYY', 'DD-M-YYYY', 'D-M-YYYY'];  // 
+    formats = [moment.ISO_8601, 'DD-MM-YYYY', 'D-MM-YYYY', 'DD-M-YYYY', 'D-M-YYYY'];  //
 
     async onClickAgendaLijst(): Promise<void> {
         let agendaArray = await this.readAgendaLijst();
@@ -248,6 +252,100 @@ export class DownloadComponent extends ParentComponent implements OnInit {
             });
         // -------------------------------------------------------- :o)
     }
+
+   //***************************************************************************************************/
+    //                                                                                                  */
+    //       Action functions
+    //                                                                                                  */
+    //***************************************************************************************************/
+
+    /***************************************************************************************************
+    / Exporteer de agenda
+    /***************************************************************************************************/
+
+    async onClickActionList(): Promise<void> {
+        let actionArray = <Array<ActionItem>> await this.readActionLijst();
+
+        let content = '';
+        content += "Openstaande acties"
+        content += '\nStart Datum\tEind Datum\tDoor\tBeschrijving\tToelichting'
+
+        actionArray.forEach(actionItem => {
+          if (actionItem.Status == '0') {
+            content += '\n'+ actionItem.StartDate;
+            content += '\t'+ actionItem.TargetDate;
+            content += '\t'+ actionItem.HolderName;
+            content += '\t'+ actionItem.Title;
+            content += '\t'+ actionItem.Description;
+          }
+        });
+
+
+        content += "\n\nHerhalende acties"
+        content += '\nStart Datum\tEind Datum\tDoor\tBeschrijving\tToelichting'
+
+        actionArray.forEach(actionItem => {
+          if (actionItem.Status == '9') {
+            content += '\n'+ actionItem.StartDate;
+            content += '\t'+ actionItem.TargetDate;
+            content += '\t'+ actionItem.HolderName;
+            content += '\t'+ actionItem.Title;
+            content += '\t'+ actionItem.Description;
+          }
+        });
+
+        content += "\n\nBesluiten lijst"
+        content += '\nDatum\tBesluit\tToelichting'
+
+        actionArray.forEach(actionItem => {
+          if (actionItem.Status == '8') {
+            content += '\n'+ actionItem.StartDate;
+            content += '\t'+ actionItem.Title;
+            content += '\t'+ actionItem.Description;
+          }
+        });
+
+        content += "\n\nAfgesloten acties"
+        content += '\nStart Datum\tEind Datum\tDoor\tBeschrijving\tToelichting'
+
+        actionArray.forEach(actionItem => {
+          if (actionItem.Status == '1') {
+            content += '\n'+ actionItem.StartDate;
+            content += '\t'+ actionItem.TargetDate;
+            content += '\t'+ actionItem.HolderName;
+            content += '\t'+ actionItem.Title;
+            content += '\t'+ actionItem.Description;
+          }
+        });
+        this.clipboard.copy(content)
+        let dynamicDownload = new DynamicDownload();
+        let fileName ="TTVN Actielijst " + new Date().to_YYYY_MM_DD();
+        dynamicDownload.dynamicDownloadTxt(content, fileName, 'txt');
+    }
+
+    /***************************************************************************************************
+    / De call wordt SYNC gedaan omdat anders het output betand al wordt gemaakt terwijl de input er nog niet is
+    /***************************************************************************************************/
+    readActionLijst(): Promise<Object> {
+        // -------------------------------------------------------- :o)
+        return this.actionService.getAll$()
+            .toPromise()
+            .then(response => {
+                return response
+            });
+        // -------------------------------------------------------- :o)
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     /***************************************************************************************************
     / Kies een lid voor het aanmaken van een VCard

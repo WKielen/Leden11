@@ -25,6 +25,7 @@ import { HoldableModule } from '../shared/directives/directives.module';
 import { SharedComponentsModule } from '../shared/components/component.module';
 import { RegistrationDetailDialogComponent } from './registration/registration.detail.dialog';
 import { RegistrationDialogComponent } from './registration/registration.dialog';
+import { RolesDialogComponent } from './registration/roles.dialog';
 
 @NgModule({
   declarations: [
@@ -42,7 +43,8 @@ import { RegistrationDialogComponent } from './registration/registration.dialog'
     RegisterDialogComponent,
     RegistrationComponent,
     RegistrationDetailDialogComponent,
-    RegistrationDialogComponent
+    RegistrationDialogComponent,
+    RolesDialogComponent,
   ],
   imports: [
     CommonModule,

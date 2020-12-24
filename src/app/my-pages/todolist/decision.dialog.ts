@@ -1,40 +1,38 @@
 import { Component, Inject, OnInit, Input } from '@angular/core';
-// import { DateAdapter } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormValueToDutchDateString } from 'src/app/shared/modules/DateRoutines';
 import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
-    selector: 'app-action-dialog',
-    templateUrl: './todolist.dialog.html',
+    selector: 'app-decision-dialog',
+    templateUrl: './decision.dialog.html',
 })
 
-export class TodoListDialogComponent extends BaseComponent implements OnInit {
+export class DecisionDialogComponent extends BaseComponent implements OnInit {
     actionItemForm = new FormGroup({
         title: new FormControl(
             '',
             [Validators.required]
         ),
-        startdate: new FormControl(),
-        targetdate: new FormControl(),
+        startdate: new FormControl(
+          '',
+          [Validators.required]
+      ),
         description: new FormControl(),
-        holdername: new FormControl(),
     });
     public thisIsADecision: boolean = false;
 
     constructor(
-        public dialogRef: MatDialogRef<TodoListDialogComponent>,
+        public dialogRef: MatDialogRef<DecisionDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data,
-    ) { super ()
+    ) { super()
     }
 
     ngOnInit(): void {
         this.title.setValue(this.data.data.Title);
         this.startdate.setValue(this.data.data.StartDate);
-        this.targetdate.setValue(this.data.data.TargetDate);
         this.description.setValue(this.data.data.Description);
-        this.holdername.setValue(this.data.data.HolderName);
     }
 
     /***************************************************************************************************
@@ -42,10 +40,8 @@ export class TodoListDialogComponent extends BaseComponent implements OnInit {
     /***************************************************************************************************/
     onSubmit(): void {
         this.data.data.Title = this.title.value;
-        this.data.data.TargetDate = FormValueToDutchDateString(this.targetdate.value);
         this.data.data.StartDate = FormValueToDutchDateString(this.startdate.value);
         this.data.data.Description = this.description.value;
-        this.data.data.HolderName = this.holdername.value;
         this.dialogRef.close(this.data.data);
     }
 
@@ -58,13 +54,8 @@ export class TodoListDialogComponent extends BaseComponent implements OnInit {
     get startdate() {
         return this.actionItemForm.get('startdate');
     }
-    get targetdate() {
-        return this.actionItemForm.get('targetdate');
-    }
     get description() {
         return this.actionItemForm.get('description');
-    }
-    get holdername() {
-        return this.actionItemForm.get('holdername');
+
     }
 }

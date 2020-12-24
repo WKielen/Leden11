@@ -18,7 +18,7 @@
       <td>Opvoer:</td>
       <td>{{ data.data.StartDate }}</td>
     </tr>
-    <tr *ngIf="data.data.TargetDate">
+    <tr *ngIf="data.data.TargetDate && data.data.TargetDate != '0000-00-00' ">
       <td>Voor:</td>
       <td>{{ data.data.TargetDate }}</td>
     </tr>

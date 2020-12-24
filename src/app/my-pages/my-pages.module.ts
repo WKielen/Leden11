@@ -20,7 +20,7 @@ import { AgendaDetailDialogComponent } from './../my-pages/agenda/agenda.detail.
 import { LedenDialogComponent } from './../my-pages/ledenmanager/ledenmanager.dialog';
 import { LedenDeleteDialogComponent } from './../my-pages/ledenmanager/ledendelete.dialog';
 import { MailDialogComponent } from './../my-pages/mail/mail.dialog';
-import { RolesDialogComponent } from './../my-pages/users/roles.dialog';
+import { OldRolesDialogComponent } from './../my-pages/users/roles.dialog';
 import { SingleMailDialogComponent } from './../my-pages/mail/singlemail.dialog';
 import { TrainingOverzichtDialogComponent } from './../my-pages/trainingoverzicht/trainingoverzicht.dialog';
 import { WebsiteDialogComponent } from './../my-pages/website/website.dialog';
@@ -48,6 +48,7 @@ import { HoldableModule } from '../shared/directives/directives.module';
 import { TodolistComponent } from './todolist/todolist.component';
 import { TodoListDetailDialogComponent } from './todolist/todolist.detail.dialog';
 import { TodoListDialogComponent } from './todolist/todolist.dialog';
+import { DecisionDialogComponent } from './todolist/decision.dialog';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -78,10 +79,11 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     LedenDialogComponent,
     LedenDeleteDialogComponent,
     MailDialogComponent,
-    RolesDialogComponent,
+    OldRolesDialogComponent,
     SingleMailDialogComponent,
     TrainingOverzichtDialogComponent,
     WebsiteDialogComponent,
+    DecisionDialogComponent,
 
     MasterzComponent,
     KomendeWeekComponent,

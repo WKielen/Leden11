@@ -15,6 +15,7 @@ import { ParentComponent } from 'src/app/shared/parent.component';
 import { TodoListDetailDialogComponent } from './todolist.detail.dialog';
 import { TodoListDialogComponent } from './todolist.dialog';
 import * as moment from 'moment';
+import { DecisionDialogComponent } from './decision.dialog';
 
 @Component({
   selector: 'app-todolist',
@@ -29,6 +30,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   finishedActionSpinner = 0;
   archivedActionSpinner = 0;
   repeatingActionSpinner = 0;
+  decisionSpinner = 0;
 
   headerToggleChecked: boolean = false;
   actionList: Dictionary = new Dictionary([]);
@@ -37,16 +39,19 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   columnsFinishedToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
   columnsArchiveToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
   columnsRepeatingToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
+  columnsDecisionsToDisplay: string[] = ['Title', 'StartDate', 'actions2'];
 
-  filterOpenValues = { Voornaam: '', Status: '0'};
+  filterOpenValues = { Voornaam: '', Status: '0' };
   filterFininshedValues = { Voornaam: '', Status: '1' };
   filterArchiveValues = { Voornaam: '', Status: '2' };
-  filterRepeatingValues = { Voornaam: '', Status: '9'  };
+  filterDecisionValues = { Voornaam: '', Status: '8' };
+  filterRepeatingValues = { Voornaam: '', Status: '9' };
 
   dataSourceOpenActions = new MatTableDataSource<ActionItem>();
   dataSourceFinishedActions = new MatTableDataSource<ActionItem>();
   dataSourceArchiveActions = new MatTableDataSource<ActionItem>();
   dataSourceRepeatingActions = new MatTableDataSource<ActionItem>();
+  dataSourceDecisions = new MatTableDataSource<ActionItem>();
 
   constructor(private actionService: ActionService,
     protected notificationService: NotificationService,
@@ -90,6 +95,10 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     this.dataSourceRepeatingActions.filterPredicate = this.createActionFilter();
     this.dataSourceRepeatingActions.filter = JSON.stringify(this.filterRepeatingValues);
 
+    this.filterDecisionValues.Voornaam = '';
+    this.dataSourceDecisions.data = this.actionList.values();
+    this.dataSourceDecisions.filterPredicate = this.createActionFilter();
+    this.dataSourceDecisions.filter = JSON.stringify(this.filterDecisionValues);
   }
 
   refreshFilters(): void {
@@ -97,6 +106,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
     this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
     this.dataSourceRepeatingActions.filter = JSON.stringify(this.filterRepeatingValues);
+    this.dataSourceDecisions.filter = JSON.stringify(this.filterDecisionValues);
   }
 
   triggerCallback: boolean = false;
@@ -115,9 +125,13 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     this.addAction(toBeAdded);
   }
 
-  addAction(toBeAdded: ActionItem): void {
-    // let tmp;
-    this.dialog.open(TodoListDialogComponent, {
+  addAction(toBeAdded: ActionItem, component?): void {
+    if (!component) {
+      console.log('addAction', component);
+      component = TodoListDialogComponent;
+    }
+
+    this.dialog.open(component, {
       data: { 'method': 'Toevoegen', 'data': toBeAdded },
       disableClose: true
     })
@@ -164,22 +178,25 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
   updateAction(toBeEdited: ActionItem): void {
-    // console.log('updateAction', toBeEdited);
-    let sub = this.actionService.update$(toBeEdited)
-      .subscribe(data => {
-        this.refreshFilters();
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-      },
-        (error: AppError) => {
-          if (error instanceof NoChangesMadeError) {
-            this.showSnackBar(SnackbarTexts.NoChanges);
-          } else { throw error; }
-        });
-    this.registerSubscription(sub);
+    this.registerSubscription(
+      this.actionService.update$(toBeEdited)
+        .subscribe(data => {
+          this.refreshFilters();
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+        },
+          (error: AppError) => {
+            if (error instanceof NoChangesMadeError) {
+              this.showSnackBar(SnackbarTexts.NoChanges);
+            } else { throw error; }
+          })
+    );
   }
 
-  updateActionWithDialog(toBeEdited: ActionItem): void {
-    this.dialog.open(TodoListDialogComponent, {
+  updateActionWithDialog(toBeEdited: ActionItem, component?): void {
+    if (!component)
+      component = TodoListDialogComponent;
+
+    this.dialog.open(component, {
       width: '500px',
       data: {
         method: "Wijzigen",
@@ -322,18 +339,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   onEditArchived(index: number): void {
     let toBeEdited: ActionItem = this.dataSourceArchiveActions.filteredData[index];
-
-    this.dialog.open(TodoListDialogComponent, {
-      width: '500px',
-      data: {
-        method: "Wijzigen",
-        data: toBeEdited,
-      },
-    })
-      .afterClosed()
-      .subscribe(result => {
-        // this.storeResults(clickInfo.event, result);
-      });
+    this.updateActionWithDialog(toBeEdited);
   }
 
 
@@ -374,6 +380,43 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
 
+  /***************************************************************************************************
+  / Decision Table Add Knop
+  /***************************************************************************************************/
+  onAddDecision(): void {
+    const toBeAdded = new ActionItem();
+    toBeAdded.StartDate = new Date().to_YYYY_MM_DD();
+    toBeAdded.Status = '8';
+    this.addAction(toBeAdded, DecisionDialogComponent);
+  }
+
+  /***************************************************************************************************
+  / Decision Table Edit Knop
+  /***************************************************************************************************/
+  onEditDecision(index: number): void {
+    let toBeEdited: ActionItem = this.dataSourceDecisions.filteredData[index];
+    console.log('onEditDecision', toBeEdited)
+    this.updateActionWithDialog(toBeEdited, DecisionDialogComponent);
+  }
+
+  /***************************************************************************************************
+  / Decision Table Delete Knop
+  / De actie zelf gaat via het event uit de header onHoldAction
+  /***************************************************************************************************/
+  onDeleteDecision($event, index: number): void {
+    this.decisionSpinner = $event;
+    if ($event == 0) {  // first time call
+      this.setCallBackParameters(index, this.dataSourceDecisions, this.deleteAction); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
+      // console.log('set call back', index );
+    }
+  }
+
+  /***************************************************************************************************
+  / Decision Table Dubbel Klik op regels geeft details
+  /***************************************************************************************************/
+  onDblclickDecision($event, index: number): void {
+    this.showDetailDialog(this.dataSourceDecisions.filteredData[index]);
+  }
 
 
 
