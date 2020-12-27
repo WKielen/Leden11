@@ -4,7 +4,7 @@
 
         <mat-form-field>
             <input matInput type="text" placeholder="Email adres" formControlName="ElecPostAddress"
-                [formControl]="ElecPostAddress">
+                [formControl]="ElecPostAddress" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$">
             <mat-error *ngIf="ElecPostAddress.hasError('email') && !ElecPostAddress.hasError('required')">
                 Vul een geldig email adres in
             </mat-error>

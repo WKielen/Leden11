@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
+import { UserItem, UserService } from 'src/app/services/user.service';
 import { MailItem, MailService } from 'src/app/services/mail.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { passwordMatchValidator } from './passwordValidator';
@@ -27,11 +27,14 @@ export class ResetPasswordDialogComponent extends BaseComponent {
   boxColor: string = '#85e085';
 
   registerForm = new FormGroup({
+    userid: new FormControl(
+      '',
+      [Validators.required]
+    ),
     password1: new FormControl(
       '',
       [Validators.required, Validators.minLength(6)]
     ),
-
     password2: new FormControl(
       '',
       [Validators.required]
@@ -53,8 +56,21 @@ export class ResetPasswordDialogComponent extends BaseComponent {
       this.password2.setErrors(null);
   }
 
-  onChangePassword() {
+   onChangePassword() {
+    let user = new UserItem();
+    let updateObject = { 'Id': '1', 'Password': user.Password }
+
+  
+  
     this.responseText = "Je ontvangt een mail met een link. Als je op deze link klikt dan wordt je nieuwe password geactiveerd."
+
+
+    // nu moeten we dit password opslaan en bij de userid en gebruiker deactiveren
+    
+    // De email moet een link bevatten die een webservice aanroept. 
+    // als de call goed gaat dan moet er een de userid gepakt worden en het passoword worden vervanngen
+    /* console.log('hash', hash, x) */
+    // de gebruiker wordt nu doorgelinkt naar de login pagina. of een pagina waarin staat dat de login is gelukt
   }
 
   sendMail(credentials: Object) {
@@ -72,12 +88,16 @@ export class ResetPasswordDialogComponent extends BaseComponent {
   / Properties
   /***************************************************************************************************/
 
+  get userid  () {
+    return this.registerForm.get('userid');
+  }
   get password1() {
     return this.registerForm.get('password1');
   }
   get password2() {
     return this.registerForm.get('password2');
   }
+
 }
 
 const toCharCodes = (arr: Uint8Array) => {
@@ -85,21 +105,6 @@ const toCharCodes = (arr: Uint8Array) => {
   return arr.map(x => validChars.charCodeAt(x % validChars.length));
 }
 
-const sha256 = (message: string) => {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(message);
-  return window.crypto.subtle.digest('SHA-256', data);
-}
-
-const bufferToBase64UrlEncoded = (input: ArrayBuffer) => {
-  const bytes = new Uint8Array(input);
-  return urlEncodeBase64(window.btoa(String.fromCharCode(...bytes)));
-}
-
-const urlEncodeBase64 = (input: string) => {
-  const chars = { '+': '-', '/': '_', '=': '' };
-  return input.replace(/[\+\/=]/g, m => chars[m]);
-}
 
 
 

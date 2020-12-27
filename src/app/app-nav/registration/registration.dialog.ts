@@ -5,6 +5,7 @@ import { ICheckboxDictionaryItem } from 'src/app/shared/components/checkbox.list
 import { Role, WebsiteService } from 'src/app/services/website.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { RolesDialogComponent } from './roles.dialog';
+import { Md5 } from 'ts-md5';
 
 
 @Component({
@@ -52,7 +53,6 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
     this.userid.setValue(this.data.data.Userid);
     this.name.setValue(this.data.data.Name);
     this.email.setValue(this.data.data.Email);
-    this.password.setValue(this.data.data.Password);
   }
 
   /***************************************************************************************************
@@ -62,8 +62,11 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
     this.data.data.Userid = this.userid.value;
     this.data.data.Name = this.name.value;
     this.data.data.Email = this.email.value;
-    this.data.data.Password = this.password.value;
     this.data.data.Role = '';
+
+    if (this.password.value) {
+      this.data.data.Password = Md5.hashStr(this.password.value); 
+    }
 
     let rollen:Array<string> = [];
     for (let i = 0; i < this.myCheckboxDictionairy.length; i++) {

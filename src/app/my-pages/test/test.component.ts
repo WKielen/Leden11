@@ -40,20 +40,6 @@ export class TestComponent
   }
 
   onClick() {
-    const credentials = { 'database': 'ttest'};
-    this.userService.register$(credentials)
-      .subscribe(result => {
-        if (result) {
-      this.showSnackBar("OK", '');
-          
-        } else {
-        //   this.registerForm = true;
-        }
-    },
-    err => {
-    //   this.registerForm = true;
-    });
-
 
   }
 

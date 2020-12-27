@@ -1,4 +1,3 @@
-import { listLazyRoutes } from '@angular/compiler/src/aot/lazy_routes';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -29,7 +28,6 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
 
   newRegistrationSpinner = 0;
   existingRegistrationSpinner = 0;
-
   headerToggleChecked: boolean = false;
   registerList: Dictionary = new Dictionary([]);
   columnsNewToDisplay: string[] = ['Name', 'Userid', 'Email', 'actions3'];
@@ -89,7 +87,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / New Registrations
   /***************************************************************************************************/
-  onAddRegistration(): void {
+  onAddRegistration() {
     const toBeAdded = new UserItem();
     toBeAdded.Activated = '0';
 
@@ -101,10 +99,9 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
       .afterClosed()  // returns an observable
       .subscribe(result => {
         if (result) {  // in case of cancel the result will be false
+
           let sub = this.registerService.create$(result)
             .subscribe(addResult => {
-              this.showSnackBar(SnackbarTexts.SuccessNewRecord);
-              this.registerList.add(result.Userid, result);
               this.dataSourceNewRegistrations.filter = JSON.stringify({ Activated: '0' });
             },
               (error: AppError) => {
@@ -157,7 +154,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     this.newRegistrationSpinner = $event;
     if ($event == 0) {  // first time call
       this.setCallBackParameters(index, this.dataSourceNewRegistrations, this.cbDeleteNewRegistation); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
-    }
+      }
   }
   cbDeleteNewRegistation($event): void {
     // console.log('in call back', $event );
@@ -194,6 +191,8 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /
   /***************************************************************************************************/
   updateRegister(toBeEdited: UserItem): void {
+    // await toBeEdited.setPwToHashPw(toBeEdited.Password);
+
     // console.log('updateRegister', toBeEdited);
     let sub = this.registerService.update$(toBeEdited)
       .subscribe(data => {

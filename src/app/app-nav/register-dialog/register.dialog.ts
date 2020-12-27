@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UserService } from 'src/app/services/user.service';
+import { UserItem, UserService } from 'src/app/services/user.service';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { MailItem, MailService } from 'src/app/services/mail.service';
@@ -56,15 +56,19 @@ export class RegisterDialogComponent extends BaseComponent {
     /***************************************************************************************************
     /
     /***************************************************************************************************/
-    onSubmit() {
-        const credentials = { "Userid": this.userid.value, "Password": this.password.value, "Email": this.email.value, "Name": this.naam.value };
+    async onSubmit() {
+        let user = new UserItem();
+        user.Userid = this.userid.value;
+        user.Email = this.email.value;
+        user.Name = this.naam.value;
+        user.Password = this.password.value;
 
-        this.userService.register$(credentials)
+        this.userService.register$(user)
             .subscribe(addResult => {
                 if (addResult.hasOwnProperty('Key')) {
                     this.responseText = 'Registratie gelukt. \nNa goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je aanloggen.';
                     this.boxColor = "#85e085";
-                    this.sendMail(credentials);
+                    this.sendMail(user);
                 } else {
                     this.responseText = addResult;
                 }
@@ -110,12 +114,6 @@ export class RegisterDialogComponent extends BaseComponent {
 const toCharCodes = (arr: Uint8Array) => {
     const validChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
     return arr.map(x => validChars.charCodeAt(x % validChars.length));
-}
-
-const sha256 = (message: string) => {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(message);
-    return window.crypto.subtle.digest('SHA-256', data);
 }
 
 const bufferToBase64UrlEncoded = (input: ArrayBuffer) => {
