@@ -19,7 +19,7 @@ export class LedenService extends DataService {
   /***************************************************************************************************
   / Geeft alle leden terug exclusief opgezegde leden. Als the INCLIBAN param op true staat komen ook
   / de IBAN's mee. Dit is alleen voor de penningmeester
-  / Tevens worden er enkele velden aan het record toegevoegd. Deze moeten bij de update weer worden 
+  / Tevens worden er enkele velden aan het record toegevoegd. Deze moeten bij de update weer worden
   / verwijderd.
   /***************************************************************************************************/
   getActiveMembers$(inclIBAN?: boolean): Observable<Array<LedenItemExt>> {
@@ -156,7 +156,17 @@ export class LedenService extends DataService {
       );
   }
 
-
+  // Dit verwijderen nadat we op productie over zijn.
+  convert$(): Observable<Object> {
+    return this.http.get(environment.baseUrl + '/lid/convert')
+      .pipe(
+        retry(3),
+        tap(
+          data => console.log('Received: ', data),
+          error => console.log('Oeps: ', error)
+        ),
+      );
+  }
 
   // return [{
   //   name: 'Asia',
@@ -226,7 +236,7 @@ export class LedenItem {
 
 
   /***************************************************************************************************
-  / We ontvangen meestal objects via een interface. Dit betekent dat de methods niet mee komen. 
+  / We ontvangen meestal objects via een interface. Dit betekent dat de methods niet mee komen.
   / Je kan dan wel een een object maken met Object.Assign. Hierdoor zijn de methods weer beschikbaar.
   / Omdat dit overal dan moet gebeuren, lijkt me dat veel overhead. Daarom maak in de method Static.
   /***************************************************************************************************
@@ -290,7 +300,7 @@ export class LedenItemExt extends LedenItem {
 }
 
 /***************************************************************************************************
-/ 
+/
 /***************************************************************************************************/
 export class LidTypeValues {
   public static readonly STANDAARD = 'N';
@@ -325,7 +335,7 @@ export class LidTypeValues {
 }
 
 /***************************************************************************************************
-/ 
+/
 /***************************************************************************************************/
 export class BetaalWijzeValues {
   public static readonly INCASSO = 'I';
@@ -348,7 +358,7 @@ export class BetaalWijzeValues {
 }
 
 /***************************************************************************************************
-/ 
+/
 /***************************************************************************************************/
 export class DateRoutines {
 
@@ -374,7 +384,7 @@ export class DateRoutines {
   }
 
   /***************************************************************************************************
-  / 
+  /
   /***************************************************************************************************/
   private static BondsLeeftijd(birthdate: Date): number {
     const todayMoment = moment();
@@ -399,7 +409,7 @@ export class DateRoutines {
   // }
 
   /***************************************************************************************************
-  / 
+  /
   /***************************************************************************************************/
   public static LeeftijdCategorie(birthdate: Date): string {
     const yearsOld = this.BondsLeeftijd(birthdate);
@@ -431,7 +441,7 @@ export class DateRoutines {
   }
 
   /***************************************************************************************************
-  / 
+  /
   /***************************************************************************************************/
   public static LeeftijdCategorieBond(birthdate: Date): string {
     const yearsOld = this.BondsLeeftijd(birthdate);
