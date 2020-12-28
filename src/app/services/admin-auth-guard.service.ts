@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
-import { ROUTE } from '../shared/classes/Page-Role-Variables';
 import { AuthService } from './auth.service';
+import { ROUTE } from './website.service';
 
 @Injectable({
   providedIn: 'root'

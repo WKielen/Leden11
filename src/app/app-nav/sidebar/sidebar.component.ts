@@ -20,7 +20,7 @@ export class SidebarComponent extends BaseComponent implements OnInit {
   @Output() displaySideBar: EventEmitter<any> = new EventEmitter();
 
   // Wordt gebruikt om de naam te tonen bovenaan het menu
-  public name: string = this.authService.fullName;
+  public name: string = this.authService.firstname;
   public pages: Array<Page> = [];
   public pagesToShow: Array<Page> = [];
   public roles: Array<Role> = [];

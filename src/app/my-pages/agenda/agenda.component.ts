@@ -14,7 +14,7 @@ import { NoChangesMadeError } from "src/app/shared/error-handling/no-changes-mad
 import { NotFoundError } from "src/app/shared/error-handling/not-found-error";
 import { addHolidaysToEvents, agendaToEvent, setEventProps } from "../agenda/event-utils";
 import { EventDropArg } from "@fullcalendar/interaction";
-import { ActionItem, ActionService } from "src/app/services/action.service";
+import { ActionItem, ActionService, ACTIONSTATUS } from "src/app/services/action.service";
 
 // TODO:Select Multiple dates into vakantie
 
@@ -68,6 +68,9 @@ export class AgendaComponent
         .getAll$()
         .subscribe((actionList: Array<ActionItem>) => {
           actionList.forEach((item) => {
+            if (item.Status != ACTIONSTATUS.OPEN && item.Status != ACTIONSTATUS.REPEATING)
+              return;
+
             let action: EventInput = new Object();
             action.title = item.Title;
             action.start = item.StartDate;

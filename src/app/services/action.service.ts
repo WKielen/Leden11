@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { map, retry, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
-import { Dictionary } from '../shared/modules/Dictionary';
 import { DataService } from './data.service';
 
 @Injectable({
@@ -48,5 +47,12 @@ export class ActionItem {
   Description?: string = '';
   HolderName?: string = '';
   Status?: string = '';
-
 }
+
+export const ACTIONSTATUS = {
+  OPEN: '0',
+  CLOSED: '1',
+  ARCHIVED: '2',
+  DECISION: '8',
+  REPEATING: '9',
+};

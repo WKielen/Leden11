@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { ROUTE } from 'src/app/shared/classes/Page-Role-Variables';
 import { environment } from 'src/environments/environment';
 import { AuthService } from 'src/app/services/auth.service';
 import { RegisterDialogComponent } from '../register-dialog/register.dialog';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { ResetPasswordDialogComponent } from '../resetpassword-dialog/password.reset.dialog';
+import { ROUTE } from 'src/app/services/website.service';
 
 @Component({
   selector: 'app-signin-dialog',

@@ -9,11 +9,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AppError } from '../../shared/error-handling/app-error';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
-import { ROLES } from 'src/app/shared/classes/Page-Role-Variables';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 import { RolesDialogComponent } from 'src/app/app-nav/registration/roles.dialog';
+import { ROLES } from 'src/app/services/website.service';
 
 @Component({
     selector: 'app-users-page',

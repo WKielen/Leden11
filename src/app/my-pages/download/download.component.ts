@@ -10,7 +10,7 @@ import { ParentComponent } from 'src/app/shared/parent.component';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { ReadTextFileService } from 'src/app/services/readtextfile.service';
 import { CheckImportedAgenda, AddImportedAgendaToDB } from 'src/app/shared/modules/AgendaRoutines';
-import { ActionItem, ActionService } from 'src/app/services/action.service';
+import { ActionItem, ActionService, ACTIONSTATUS } from 'src/app/services/action.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -271,7 +271,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         content += '\nStart Datum\tEind Datum\tDoor\tBeschrijving\tToelichting'
 
         actionArray.forEach(actionItem => {
-          if (actionItem.Status == '0') {
+          if (actionItem.Status == ACTIONSTATUS.OPEN) {
             content += '\n'+ actionItem.StartDate;
             content += '\t'+ actionItem.TargetDate;
             content += '\t'+ actionItem.HolderName;
@@ -285,7 +285,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         content += '\nStart Datum\tEind Datum\tDoor\tBeschrijving\tToelichting'
 
         actionArray.forEach(actionItem => {
-          if (actionItem.Status == '9') {
+          if (actionItem.Status == ACTIONSTATUS.REPEATING) {
             content += '\n'+ actionItem.StartDate;
             content += '\t'+ actionItem.TargetDate;
             content += '\t'+ actionItem.HolderName;
@@ -298,7 +298,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         content += '\nDatum\tBesluit\tToelichting'
 
         actionArray.forEach(actionItem => {
-          if (actionItem.Status == '8') {
+          if (actionItem.Status == ACTIONSTATUS.DECISION) {
             content += '\n'+ actionItem.StartDate;
             content += '\t'+ actionItem.Title;
             content += '\t'+ actionItem.Description;
@@ -309,7 +309,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         content += '\nStart Datum\tEind Datum\tDoor\tBeschrijving\tToelichting'
 
         actionArray.forEach(actionItem => {
-          if (actionItem.Status == '1') {
+          if (actionItem.Status == ACTIONSTATUS.CLOSED) {
             content += '\n'+ actionItem.StartDate;
             content += '\t'+ actionItem.TargetDate;
             content += '\t'+ actionItem.HolderName;
@@ -335,16 +335,6 @@ export class DownloadComponent extends ParentComponent implements OnInit {
             });
         // -------------------------------------------------------- :o)
     }
-
-
-
-
-
-
-
-
-
-
 
 
     /***************************************************************************************************

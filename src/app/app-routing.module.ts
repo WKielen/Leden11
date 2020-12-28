@@ -14,7 +14,6 @@ import { MultiUpdateComponent } from './my-pages/multi-update/multi-update.compo
 import { ContrBedragenComponent } from './my-pages/contr-bedragen/contr-bedragen.component';
 import { WebsiteComponent } from './my-pages/website/website.component';
 import { LadderComponent } from './my-pages/ladder/ladder.component';
-import { PAGEROLES, ROUTE } from 'src/app/shared/classes/Page-Role-Variables';
 import { SyncNttbComponent } from './my-pages/syncnttb/syncnttb.component';
 import { TrainingDeelnameComponent } from './my-pages/trainingdeelname/trainingdeelname.component';
 import { TrainingOverzichtComponent } from './my-pages/trainingoverzicht/trainingoverzicht.component';
@@ -25,6 +24,7 @@ import { MasterzComponent } from './my-pages/masterz/masterz.component';
 import { KomendeWeekComponent } from './my-pages/komendeweek/komendeweek.component';
 import { TodolistComponent } from './my-pages/todolist/todolist.component';
 import { RegistrationComponent } from './app-nav/registration/registration.component';
+import { ROUTE, PAGEROLES } from './services/website.service';
 
 const routes: Routes = [
   { path: ROUTE.loginPageRoute, component: LoginComponent },
@@ -45,7 +45,7 @@ const routes: Routes = [
       { path: ROUTE.downloadPageRoute, component: DownloadComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.downloadPageRoles } },
       { path: ROUTE.oudledenPageRoute, component: OudLedenComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.oudledenPageRoles } },
       { path: ROUTE.contrbedragenPageRoute, component: ContrBedragenComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.contrbedragenPageRoles } },
-      { path: ROUTE.usersPageRoute, component: UsersComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.usersPageRoles } },
+      // { path: ROUTE.usersPageRoute, component: UsersComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.usersPageRoles } },
       { path: ROUTE.ladderPageRoute, component: LadderComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.ladderPageRoles } },
       { path: ROUTE.syncnttbPageRoute, component: SyncNttbComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.syncnttbPageRoles } },
       { path: ROUTE.trainingdeelnamePageRoute, component: TrainingDeelnameComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.trainingdeelnamePageRoles } },

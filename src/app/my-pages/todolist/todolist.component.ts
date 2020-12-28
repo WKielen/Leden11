@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActionItem, ActionService } from 'src/app/services/action.service';
+import { ActionItem, ActionService, ACTIONSTATUS } from 'src/app/services/action.service';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
@@ -41,11 +41,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   columnsRepeatingToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
   columnsDecisionsToDisplay: string[] = ['Title', 'StartDate', 'actions2'];
 
-  filterOpenValues = { Voornaam: '', Status: '0' };
-  filterFininshedValues = { Voornaam: '', Status: '1' };
-  filterArchiveValues = { Voornaam: '', Status: '2' };
-  filterDecisionValues = { Voornaam: '', Status: '8' };
-  filterRepeatingValues = { Voornaam: '', Status: '9' };
+  filterOpenValues = { Voornaam: '', Status: ACTIONSTATUS.OPEN };
+  filterFininshedValues = { Voornaam: '', Status: ACTIONSTATUS.CLOSED };
+  filterArchiveValues = { Voornaam: '', Status: ACTIONSTATUS.ARCHIVED };
+  filterDecisionValues = { Voornaam: '', Status: ACTIONSTATUS.DECISION };
+  filterRepeatingValues = { Voornaam: '', Status: ACTIONSTATUS.REPEATING };
 
   dataSourceOpenActions = new MatTableDataSource<ActionItem>();
   dataSourceFinishedActions = new MatTableDataSource<ActionItem>();
@@ -121,7 +121,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onAddOpenAction(): void {
     const toBeAdded = new ActionItem();
     toBeAdded.StartDate = new Date().to_YYYY_MM_DD();
-    toBeAdded.Status = '0';
+    toBeAdded.Status = ACTIONSTATUS.OPEN;
     this.addAction(toBeAdded);
   }
 
@@ -172,7 +172,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   cbDoneOpenAction($event): void {
     let toBeEdited: ActionItem = this.actionList.get($event.Id)
-    toBeEdited.Status = '1';
+    toBeEdited.Status = ACTIONSTATUS.CLOSED;
     toBeEdited.EndDate = '2020-01-01';
     this.updateAction(toBeEdited);
   }
@@ -234,7 +234,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   cbDeleteOpenAction($event): void {
     // console.log('in call back', $event );
     let toBeEdited: ActionItem = this.actionList.get($event.Id)
-    toBeEdited.Status = '2';
+    toBeEdited.Status = ACTIONSTATUS.ARCHIVED;
     this.updateAction(toBeEdited);
   }
 
@@ -265,7 +265,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
   cbDeleteFinishedAction($event): void {
     let toBeDeleted: ActionItem = this.actionList.get($event.Id)
-    toBeDeleted.Status = '2';
+    toBeDeleted.Status = ACTIONSTATUS.ARCHIVED;
     this.updateAction(toBeDeleted);
   }
 
@@ -282,7 +282,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onAddRepeatingAction(): void {
     const toBeAdded = new ActionItem();
     toBeAdded.StartDate = new Date().to_YYYY_MM_DD();
-    toBeAdded.Status = '9';
+    toBeAdded.Status = ACTIONSTATUS.REPEATING;
     this.addAction(toBeAdded);
   }
 
@@ -386,7 +386,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onAddDecision(): void {
     const toBeAdded = new ActionItem();
     toBeAdded.StartDate = new Date().to_YYYY_MM_DD();
-    toBeAdded.Status = '8';
+    toBeAdded.Status = ACTIONSTATUS.DECISION;
     this.addAction(toBeAdded, DecisionDialogComponent);
   }
 
@@ -417,9 +417,6 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onDblclickDecision($event, index: number): void {
     this.showDetailDialog(this.dataSourceDecisions.filteredData[index]);
   }
-
-
-
 
 
   onSliderChanged($event): void {

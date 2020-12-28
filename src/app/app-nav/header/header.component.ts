@@ -6,7 +6,7 @@ import { ConfigDialogComponent } from 'src/app/app-nav/headerconfigdialog/config
 import { NotificationDialogComponent } from 'src/app/app-nav/headernotificationdialog/notification.dialog';
 import { LogonData } from 'src/app/shared/classes/LogonData';
 import { A2hsSafariHow2 } from 'src/app/shared/components/a2hs-ios-safari-how2/a2hs-ios-safari-how2';
-import { ROUTE } from 'src/app/shared/classes/Page-Role-Variables';
+import { ROUTE } from 'src/app/services/website.service';
 
 @Component({
   selector: 'app-header',
@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit() {
     this.logonData.IsLoggedOn = this.authService.isLoggedIn();
-    this.logonData.Name = this.authService.fullName;
+    this.logonData.Name = this.authService.firstname;
     this.logonData.UserId = this.authService.userId;
   }
 

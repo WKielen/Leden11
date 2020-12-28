@@ -3,7 +3,7 @@ import { map } from 'rxjs/operators';
 import { AgendaItem, AgendaService } from 'src/app/services/agenda.service';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import * as moment from 'moment';
-import { ActionItem, ActionService } from 'src/app/services/action.service';
+import { ActionItem, ActionService, ACTIONSTATUS } from 'src/app/services/action.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
@@ -50,7 +50,8 @@ export class KomendeWeekComponent extends BaseComponent implements OnInit {
         .nextWeek$()
         .subscribe((actionLijst: Array<ActionItem>) => {
           actionLijst.forEach(element => {
-
+            if (element.Status != ACTIONSTATUS.OPEN && element.Status != ACTIONSTATUS.REPEATING) 
+              return;
             let ai: AgendaItem = new AgendaItem();
             ai.Datum = element.StartDate
             ai.EvenementNaam = element.Title;
