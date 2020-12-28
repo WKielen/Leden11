@@ -28,6 +28,19 @@ export class UserService extends DataService {
       );
   }
 
+  storeNewPassword$(credentials: UserItem) {
+    credentials.ProposedPassword = <string>Md5.hashStr(credentials.ProposedPassword);
+    return this.http.post<string>(environment.baseUrl + '/user/storenewpassword', credentials)
+      .pipe(
+        map(response => {
+          return response;
+        }),
+        catchError(this.errorHandler)
+      );
+  }
+
+
+
   delete$(userid) {
     return this.http.delete(this.url + '/Delete?Userid=' + '"' + userid + '"')
       .pipe(
@@ -51,6 +64,8 @@ export class UserItem {
   Email?: string = '';
   Name?: string = '';
   Role?: string = '';
+  ProposedPassword?: string = '';
+  ChangePasswordToken?: string = '';
   Activated?: string = '';
 
   // public async setPwToHashPw(pw: string) {

@@ -5,6 +5,11 @@ import { UserItem, UserService } from 'src/app/services/user.service';
 import { MailItem, MailService } from 'src/app/services/mail.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { passwordMatchValidator } from './passwordValidator';
+import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
+import { ParentComponent } from 'src/app/shared/parent.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppError } from 'src/app/shared/error-handling/app-error';
+import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 
 @Component({
   selector: 'app-password-reset-dialog',
@@ -20,7 +25,7 @@ import { passwordMatchValidator } from './passwordValidator';
 // De provider is om door een param door te geven aan de MailService.
 // Dit lukt nog niet.
 
-export class ResetPasswordDialogComponent extends BaseComponent {
+export class ResetPasswordDialogComponent extends ParentComponent {
 
   showPw: boolean = false;
   responseText: string = '';
@@ -38,15 +43,19 @@ export class ResetPasswordDialogComponent extends BaseComponent {
     password2: new FormControl(
       '',
       [Validators.required]
-    )}, {validators: passwordMatchValidator}
-    );
+    )
+  }, { validators: passwordMatchValidator }
+  );
 
   constructor(
     private userService: UserService,
     private mailService: MailService,
+    protected snackBar: MatSnackBar,
+
     public dialogRef: MatDialogRef<ResetPasswordDialogComponent>,
   ) {
-    super()
+    super(snackBar)
+
   }
 
   onPasswordInput() {
@@ -56,17 +65,31 @@ export class ResetPasswordDialogComponent extends BaseComponent {
       this.password2.setErrors(null);
   }
 
-   onChangePassword() {
+  onChangePassword() {
     let user = new UserItem();
-    let updateObject = { 'Id': '1', 'Password': user.Password }
+    user.Userid = this.userid.value;
+    user.ProposedPassword = this.password1.value;
+    user.ChangePasswordToken = 'xyz';
 
-  
-  
-    this.responseText = "Je ontvangt een mail met een link. Als je op deze link klikt dan wordt je nieuwe password geactiveerd."
+    this.registerSubscription(
+      this.userService.storeNewPassword$(user)
+        .subscribe(data => {
+          this.responseText = "Je ontvangt een mail met een link. Als je op deze link klikt dan wordt je nieuwe password geactiveerd."
+        },
+          (error: AppError) => {
+            if (error instanceof NoChangesMadeError) {
+              this.showSnackBar(SnackbarTexts.NoChanges);
+            } else { throw error; }
+          })
+    );
+
+
+
+
 
 
     // nu moeten we dit password opslaan en bij de userid en gebruiker deactiveren
-    
+
     // De email moet een link bevatten die een webservice aanroept. 
     // als de call goed gaat dan moet er een de userid gepakt worden en het passoword worden vervanngen
     /* console.log('hash', hash, x) */
@@ -88,7 +111,7 @@ export class ResetPasswordDialogComponent extends BaseComponent {
   / Properties
   /***************************************************************************************************/
 
-  get userid  () {
+  get userid() {
     return this.registerForm.get('userid');
   }
   get password1() {

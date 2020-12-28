@@ -191,9 +191,6 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /
   /***************************************************************************************************/
   updateRegister(toBeEdited: UserItem): void {
-    // await toBeEdited.setPwToHashPw(toBeEdited.Password);
-
-    // console.log('updateRegister', toBeEdited);
     let sub = this.registerService.update$(toBeEdited)
       .subscribe(data => {
         this.refreshFilters();
