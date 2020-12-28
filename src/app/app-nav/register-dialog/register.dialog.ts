@@ -25,7 +25,7 @@ export class RegisterDialogComponent extends BaseComponent {
 
   showPw: boolean = false;
   responseText: string = '';
-  boxColor: string = '#85e085';
+  error: boolean = false;
 
   registerForm = new FormGroup({
     firstname: new FormControl(
@@ -72,7 +72,7 @@ export class RegisterDialogComponent extends BaseComponent {
       .subscribe(addResult => {
         if (addResult.hasOwnProperty('Key')) {
           this.responseText = 'Registratie gelukt. \nNa goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je aanloggen.';
-          this.boxColor = "#85e085";
+          this.error = false;
           this.sendMail(user);
         } else {
           this.responseText = addResult;
@@ -81,7 +81,7 @@ export class RegisterDialogComponent extends BaseComponent {
         (error: AppError) => {
           if (error instanceof DuplicateKeyError) {
             this.responseText = "Deze gebruiker bestaat al";
-            this.boxColor = "#ff6666";
+            this.error = true;
           } else { throw error; }
         }
       );

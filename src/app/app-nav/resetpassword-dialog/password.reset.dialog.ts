@@ -26,7 +26,7 @@ export class ResetPasswordDialogComponent extends BaseComponent {
 
   showPw: boolean = false;
   responseText: string = '';
-  boxColor: string = '#85e085';
+  error: boolean = false;
 
   registerForm = new FormGroup({
     userid: new FormControl(
@@ -60,12 +60,12 @@ export class ResetPasswordDialogComponent extends BaseComponent {
     this.registerSubscription(
       this.userService.storeNewPassword$(user)
         .subscribe(data => {
-          this.boxColor = '#85e085';
+          this.error = false;
           this.sendMail(user);
           this.responseText = "Je ontvangt een mail met een link. Als je op deze link klikt dan wordt je nieuwe password geactiveerd."
         },
           (error: AppError) => {
-            this.boxColor = "#ff6666";
+            this.error = true;
             if (error instanceof NoChangesMadeError) {
               this.responseText = "Je hebt dit verzoek al een keer gestuurd."
             } else if (error instanceof NotFoundError) {
@@ -75,21 +75,11 @@ export class ResetPasswordDialogComponent extends BaseComponent {
             }
           })
     );
-
-
-    // nu moeten we dit password opslaan en bij de userid en gebruiker deactiveren
-
-    // De email moet een link bevatten die een webservice aanroept.
-    // als de call goed gaat dan moet er een de userid gepakt worden en het passoword worden vervanngen
-    /* console.log('hash', hash, x) */
-    // de gebruiker wordt nu doorgelinkt naar de login pagina. of een pagina waarin staat dat de login is gelukt
   }
 
   sendMail(credentials: UserItem) {
     let sub = this.userService.readUserData$(credentials.Userid)
       .subscribe(data => {
-        let email = data['Email'];
-
         let mailItems: Array<MailItem> = [];
         let mailItem: MailItem = new MailItem();
         mailItem.To = data['Email'];

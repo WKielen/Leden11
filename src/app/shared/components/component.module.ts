@@ -9,6 +9,7 @@ import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
 import { WaitingButtonComponent } from './waiting-button.component';
 import { HoldableModule } from '../directives/directives.module';
 import { CheckboxListComponent } from './checkbox.list.component';
+import { DialogMessageBoxComponent } from './dialog.message.box';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { CheckboxListComponent } from './checkbox.list.component';
     CardHeaderDetailComponent,
     WaitingButtonComponent,
     CheckboxListComponent,
+    DialogMessageBoxComponent,
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,7 @@ import { CheckboxListComponent } from './checkbox.list.component';
     CardHeaderDetailComponent,
     WaitingButtonComponent,
     CheckboxListComponent,
+    DialogMessageBoxComponent,
   ]
 })
 export class SharedComponentsModule { }

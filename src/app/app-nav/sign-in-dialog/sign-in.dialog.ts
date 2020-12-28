@@ -23,14 +23,12 @@ export class SignInDialogComponent extends BaseComponent {
 
   showPw = false;
   keepSignedIn: boolean;
-  // invalidLogin: boolean;
   responseText: string = '';
-  boxColor: string = '#85e085';
 
   loginForm = new FormGroup({
     userid: new FormControl(
       '',
-      [Validators.required, Validators.minLength(7), Validators.maxLength(7)]
+      [Validators.required] //, Validators.minLength(7), Validators.maxLength(7)]
     ),
     password: new FormControl(
       '',
@@ -65,13 +63,11 @@ export class SignInDialogComponent extends BaseComponent {
           this.router.navigate([returnUrl || ROUTE.dashboardPageRoute]);
           this.dialogRef.close(true);
         } else {
-          this.responseText = "De combinatie van Userid en Wachtwoord bestaan niet";
-          this.boxColor = "#ff6666";
+          this.responseText = "De combinatie van Userid en Wachtwoord bestaat niet";
         }
       },
         err => {
-          this.responseText = "De combinatie van Userid en Wachtwoord bestaan niet";
-          this.boxColor = "#ff6666";
+          this.responseText = "De combinatie van Userid en Wachtwoord bestaat niet";
         });
 
   }

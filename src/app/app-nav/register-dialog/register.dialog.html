@@ -46,14 +46,7 @@
         </mat-error>
     </mat-form-field>
 </mat-dialog-content>
-<mat-card-content *ngIf="responseText">
-    <div class="internalcard"  [style.backgroundColor]="boxColor">
-        <div class="internalcardcontent">
-            {{ responseText }}
-        </div>
-    </div>
-</mat-card-content>
-
+<mat-dialog-message-box [message]="responseText" [error]="error"></mat-dialog-message-box>
 <mat-dialog-actions>
     <button mat-raised-button color="primary" [disabled]='!registerForm.valid' (click)="onSubmit()">Registreer</button>
     <button mat-raised-button color="accent" mat-dialog-close >Cancel</button>
