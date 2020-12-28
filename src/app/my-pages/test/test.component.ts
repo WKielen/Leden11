@@ -4,6 +4,7 @@ import { LedenItem, LedenService } from "src/app/services/leden.service";
 import { MailService } from "src/app/services/mail.service";
 import { UserItem, UserService } from "src/app/services/user.service";
 import { ParentComponent } from "src/app/shared/parent.component";
+import { Md5 } from "ts-md5";
 
 @Component({
   selector: "app-test",
@@ -40,12 +41,12 @@ export class TestComponent
             if (lid.Rol != '') {
               let user = new UserItem();
               user.Userid = lid.BondsNr;
-              user.Password = lid.ToegangsCode;
               user.Email = lid.Email1;
               user.FirstName = lid.Voornaam;
               user.LastName = lid.Achternaam;
               user.Role = lid.Rol;
               user.Activated = '1';
+              user.Password = <string>Md5.hashStr(lid.ToegangsCode);
 
               if (lid.Tussenvoegsel != '') {
                 user.LastName = lid.Tussenvoegsel + ' ' + user.LastName;

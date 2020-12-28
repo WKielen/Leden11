@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs/operators';
+import { Md5 } from 'ts-md5';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,9 @@ export class AuthService {
 
   login$(credentials) {
     let localData;
-    return this.http.post<string>(environment.loginUrl, credentials)
+    // return this.http.post<string>(environment.loginUrl, credentials)
+    credentials.password = <string>Md5.hashStr(credentials.password);
+    return this.http.post<string>('https://www.ttvn.nl/api/signin', credentials)
       .pipe(
         map(response => {
           localData = response;
