@@ -12,14 +12,20 @@ import { ResetPasswordDialogComponent } from '../resetpassword-dialog/password.r
 @Component({
   selector: 'app-signin-dialog',
   templateUrl: './sign-in.dialog.html',
-  styles: ['mat-form-field {width: 100%;}']
+  styles: ['mat-form-field {width: 100%; }',
+    `.internalcard {border: 1px solid rgba(0, 0, 0, 0.03); box-shadow: 2px 5px 5px lightgrey;
+                margin: 15px; border-radius: 5px;}`,
+    '.internalcardcontent { margin: 10px 10px 10px 20px;'
+  ],
 
 })
 export class SignInDialogComponent extends BaseComponent {
 
   showPw = false;
   keepSignedIn: boolean;
-  invalidLogin: boolean;
+  // invalidLogin: boolean;
+  responseText: string = '';
+  boxColor: string = '#85e085';
 
   loginForm = new FormGroup({
     userid: new FormControl(
@@ -59,11 +65,13 @@ export class SignInDialogComponent extends BaseComponent {
           this.router.navigate([returnUrl || ROUTE.dashboardPageRoute]);
           this.dialogRef.close(true);
         } else {
-          this.invalidLogin = true;
+          this.responseText = "De combinatie van Userid en Wachtwoord bestaan niet";
+          this.boxColor = "#ff6666";
         }
       },
         err => {
-          this.invalidLogin = true;
+          this.responseText = "De combinatie van Userid en Wachtwoord bestaan niet";
+          this.boxColor = "#ff6666";
         });
 
   }

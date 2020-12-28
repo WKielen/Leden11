@@ -1,15 +1,14 @@
 <h2 mat-dialog-title>Inloggen</h2>
-<small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-dialog-content [formGroup]="loginForm" novalidate>
 
     <mat-form-field>
         <!-- hieronder de formControlName zoals in de formgroup is beschreven -->
-        <input matInput placeholder="Bondsnummer" formControlName="userid" [formControl]="userid">
-        <mat-error *ngIf="userid.hasError('minlength') || userid.hasError('maxlength')">
+        <input matInput placeholder="Userid" formControlName="userid" [formControl]="userid">
+        <!-- <mat-error *ngIf="userid.hasError('minlength') || userid.hasError('maxlength')">
             Bondsnummer exact 7 numeriek zijn
-        </mat-error>
+        </mat-error> -->
         <mat-error *ngIf="userid.hasError('required')">
-            Bondsnummer is verplicht
+            Userid is verplicht
         </mat-error>
     </mat-form-field>
 
@@ -28,11 +27,15 @@
         Hou me ingelogd (max 30 dagen)
     </mat-checkbox>
 </mat-dialog-content>
-
+<mat-card-content *ngIf="responseText">
+  <div class="internalcard"  [style.backgroundColor]="boxColor">
+      <div class="internalcardcontent">
+          {{ responseText }}
+      </div>
+  </div>
+</mat-card-content>
 <mat-dialog-actions>
-    <button mat-raised-button *ngIf="!invalidLogin" color="primary" [disabled]='!loginForm.valid'
-        (click)="onSubmit()">Login</button>
-    <button mat-raised-button *ngIf="invalidLogin" color="warn" [disabled]='!loginForm.valid' (click)="onSubmit()">Fout, opnieuw</button>
+    <button mat-raised-button color="primary" [disabled]='!loginForm.valid' (click)="onSubmit()">Login</button>
 
     <div *ngIf="developmentMode" fxFlex fxLayout="row" fxLayoutAlign="flex-end">
         <a mat-button (click)="onRegister()" color="primary">Registreer</a>
