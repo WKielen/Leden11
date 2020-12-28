@@ -30,8 +30,8 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   existingRegistrationSpinner = 0;
   headerToggleChecked: boolean = false;
   registerList: Dictionary = new Dictionary([]);
-  columnsNewToDisplay: string[] = ['Name', 'Userid', 'Email', 'actions3'];
-  columnsExistingToDisplay: string[] = ['Name', 'Userid', 'Email', 'actions2'];
+  columnsNewToDisplay: string[] = ['FirstName', 'LastName','Userid', 'Email', 'actions3'];
+  columnsExistingToDisplay: string[] = ['FirstName', 'LastName','Userid', 'Email', 'actions2'];
 
   dataSourceNewRegistrations = new MatTableDataSource<UserItem>();
   dataSourceExistingRegistrations = new MatTableDataSource<UserItem>();
@@ -130,7 +130,8 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
 
   onMail(toBEedited: UserItem): void {
     let lid = new LedenItem();
-    lid.Achternaam = toBEedited.Name;
+    lid.Achternaam = toBEedited.LastName;
+    lid.Voornaam = toBEedited.FirstName
     lid.Email1 = toBEedited.Email;
 
     let data = new SingleMail();

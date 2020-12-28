@@ -20,7 +20,8 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
       '',
       [Validators.required]
     ),
-    name: new FormControl(),
+    firstname: new FormControl(),
+    lastname: new FormControl(),
     email: new FormControl(
       '',
       [Validators.email]
@@ -51,7 +52,8 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
     });
 
     this.userid.setValue(this.data.data.Userid);
-    this.name.setValue(this.data.data.Name);
+    this.firstname.setValue(this.data.data.FirstName);
+    this.lastname.setValue(this.data.data.LastName);
     this.email.setValue(this.data.data.Email);
   }
 
@@ -60,12 +62,13 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
   /***************************************************************************************************/
   onSubmit(): void {
     this.data.data.Userid = this.userid.value;
-    this.data.data.Name = this.name.value;
+    this.data.data.FirstName = this.firstname.value;
+    this.data.data.LastName = this.lastname.value;
     this.data.data.Email = this.email.value;
     this.data.data.Role = '';
 
     if (this.password.value) {
-      this.data.data.Password = Md5.hashStr(this.password.value); 
+      this.data.data.Password = Md5.hashStr(this.password.value);
     }
 
     let rollen:Array<string> = [];
@@ -96,8 +99,11 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
   get userid() {
     return this.actionItemForm.get('userid');
   }
-  get name() {
-    return this.actionItemForm.get('name');
+  get firstname() {
+    return this.actionItemForm.get('firstname');
+  }
+  get lastname() {
+    return this.actionItemForm.get('lastname');
   }
   get email() {
     return this.actionItemForm.get('email');

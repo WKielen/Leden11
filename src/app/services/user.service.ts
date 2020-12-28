@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
 import { tap, map, retry, catchError } from 'rxjs/operators';
-import {Md5} from 'ts-md5/dist/md5';
+import { Md5 } from 'ts-md5/dist/md5';
 
 @Injectable({
   providedIn: 'root'
@@ -39,7 +39,22 @@ export class UserService extends DataService {
       );
   }
 
-
+  /***************************************************************************************************
+  / Returns email from user
+  /***************************************************************************************************/
+  readUserData$(Id: string) {
+    return this.http.get(environment.baseUrl + "/user/get?Id=" + Id + "")
+      .pipe(
+        map(response => {
+          return response;
+        }),
+        tap(
+          data => console.log('Received: ', data),
+          error => console.log('Oeps: ', error)
+        ),
+        catchError(this.errorHandler)
+      );
+  }
 
   delete$(userid) {
     return this.http.delete(this.url + '/Delete?Userid=' + '"' + userid + '"')
@@ -56,13 +71,14 @@ export class UserService extends DataService {
 
 }
 /***************************************************************************************************
-/ 
+/
 /***************************************************************************************************/
 export class UserItem {
   Userid?: string = '';
   Password?: string = '';
   Email?: string = '';
-  Name?: string = '';
+  FirstName?: string = '';
+  LastName?: string = '';
   Role?: string = '';
   ProposedPassword?: string = '';
   ChangePasswordToken?: string = '';
