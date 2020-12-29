@@ -6,7 +6,7 @@ import { SingleMail, SingleMailDialogComponent } from 'src/app/my-pages/mail/sin
 import { AuthService } from 'src/app/services/auth.service';
 import { LedenItem } from 'src/app/services/leden.service';
 import { NotificationService } from 'src/app/services/notification.service';
-import { UserItem, UserService } from 'src/app/services/user.service';
+import { ACTIVATIONSTATUS, UserItem, UserService } from 'src/app/services/user.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
@@ -70,8 +70,8 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   }
 
   refreshFilters(): void {
-    this.dataSourceNewRegistrations.filter = JSON.stringify({ Activated: '0' });
-    this.dataSourceExistingRegistrations.filter = JSON.stringify({ Activated: '1' });
+    this.dataSourceNewRegistrations.filter = JSON.stringify({ Activated: ACTIVATIONSTATUS.NEW });
+    this.dataSourceExistingRegistrations.filter = JSON.stringify({ Activated: ACTIVATIONSTATUS.ACTIVATED });
   }
 
 
@@ -89,7 +89,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   onAddRegistration() {
     const toBeAdded = new UserItem();
-    toBeAdded.Activated = '0';
+    toBeAdded.Activated = ACTIVATIONSTATUS.NEW;
 
     // let tmp;
     this.dialog.open(RegistrationDialogComponent, {
@@ -102,7 +102,9 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
 
           let sub = this.registerService.create$(result)
             .subscribe(addResult => {
-              this.dataSourceNewRegistrations.filter = JSON.stringify({ Activated: '0' });
+              this.registerList.add(result.Userid, result);
+              this.refreshFilters();
+              this.showSnackBar(SnackbarTexts.SuccessNewRecord);
             },
               (error: AppError) => {
                 if (error instanceof DuplicateKeyError) {
@@ -123,7 +125,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   }
   cbDoneNewRegistration($event): void {
     let toBeEdited: UserItem = this.registerList.get($event.Userid)
-    toBeEdited.Activated = '1';
+    toBeEdited.Activated = ACTIVATIONSTATUS.ACTIVATED;
     this.updateRegister(toBeEdited);
     this.onMail(toBeEdited);
   }

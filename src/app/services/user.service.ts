@@ -89,3 +89,7 @@ export class UserItem {
   // }
 }
 
+export const ACTIVATIONSTATUS = {
+  NEW: '0',
+  ACTIVATED: '1',
+};
