@@ -47,6 +47,7 @@ export class ActionItem {
   Description?: string = '';
   HolderName?: string = '';
   Status?: string = '';
+  Role?: string = '';
 }
 
 export const ACTIONSTATUS = {

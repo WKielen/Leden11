@@ -16,6 +16,7 @@ import { TodoListDetailDialogComponent } from './todolist.detail.dialog';
 import { TodoListDialogComponent } from './todolist.dialog';
 import * as moment from 'moment';
 import { DecisionDialogComponent } from './decision.dialog';
+import { ROLES } from 'src/app/services/website.service';
 
 @Component({
   selector: 'app-todolist',
@@ -25,6 +26,8 @@ import { DecisionDialogComponent } from './decision.dialog';
 export class TodolistComponent extends ParentComponent implements OnInit {
 
   public theBoundCallback: Function;
+  public amIBestuur: boolean = this.authService.isRole(ROLES.BESTUUR);
+  toggleTitle2: string = '';
 
   openActionSpinner = 0;
   finishedActionSpinner = 0;
@@ -41,11 +44,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   columnsRepeatingToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
   columnsDecisionsToDisplay: string[] = ['Title', 'StartDate', 'actions2'];
 
-  filterOpenValues = { Voornaam: '', Status: ACTIONSTATUS.OPEN };
-  filterFininshedValues = { Voornaam: '', Status: ACTIONSTATUS.CLOSED };
-  filterArchiveValues = { Voornaam: '', Status: ACTIONSTATUS.ARCHIVED };
-  filterDecisionValues = { Voornaam: '', Status: ACTIONSTATUS.DECISION };
-  filterRepeatingValues = { Voornaam: '', Status: ACTIONSTATUS.REPEATING };
+  filterOpenValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.OPEN };
+  filterFininshedValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.CLOSED };
+  filterArchiveValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.ARCHIVED };
+  filterDecisionValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.DECISION };
+  filterRepeatingValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.REPEATING };
 
   dataSourceOpenActions = new MatTableDataSource<ActionItem>();
   dataSourceFinishedActions = new MatTableDataSource<ActionItem>();
@@ -71,6 +74,9 @@ export class TodolistComponent extends ParentComponent implements OnInit {
       });
     this.registerSubscription(sub);
 
+    if (this.amIBestuur) {
+      this.toggleTitle2 = "Alleen bestuur"
+    }
     // this.actionService.GetSome().values().forEach(element => {this.actionList.add(element.Id, element); });
   }
 
@@ -121,6 +127,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onAddOpenAction(): void {
     const toBeAdded = new ActionItem();
     toBeAdded.StartDate = new Date().to_YYYY_MM_DD();
+    toBeAdded.TargetDate = new Date().to_YYYY_MM_DD();
     toBeAdded.Status = ACTIONSTATUS.OPEN;
     this.addAction(toBeAdded);
   }
@@ -282,6 +289,7 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   onAddRepeatingAction(): void {
     const toBeAdded = new ActionItem();
     toBeAdded.StartDate = new Date().to_YYYY_MM_DD();
+    toBeAdded.TargetDate = new Date().to_YYYY_MM_DD();
     toBeAdded.Status = ACTIONSTATUS.REPEATING;
     this.addAction(toBeAdded);
   }
@@ -420,31 +428,38 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
 
   onSliderChanged($event): void {
-    if ($event.checked) {
-      this.filterOpenValues.Voornaam = this.authService.firstname;
-    } else {
-      this.filterOpenValues.Voornaam = '';
-    }
+    this.filterOpenValues.Voornaam = $event.checked ? this.authService.firstname : '';
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
   }
-
+  onSliderChanged2($event): void {
+    this.filterOpenValues.ShowOnlyBestuur = $event.checked;
+    this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
+  }
   onSliderFinishedChanged($event): void {
-    if ($event.checked) {
-      this.filterFininshedValues.Voornaam = this.authService.firstname;
-    } else {
-      this.filterFininshedValues.Voornaam = '';
-    }
+    this.filterFininshedValues.Voornaam = $event.checked ? this.authService.firstname : '';
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
   }
-
+  onSliderFinishedChanged2($event): void {
+    this.filterFininshedValues.ShowOnlyBestuur = $event.checked;
+    this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
+  }
   onSliderRepeatingChanged($event): void {
-    if ($event.checked) {
-      this.filterRepeatingValues.Voornaam = this.authService.firstname;
-    } else {
-      this.filterRepeatingValues.Voornaam = '';
-    }
+    this.filterRepeatingValues.Voornaam = $event.checked ? this.authService.firstname : '';
     this.dataSourceRepeatingActions.filter = JSON.stringify(this.filterRepeatingValues);
   }
+  onSliderRepeatingChanged2($event): void {
+    this.filterRepeatingValues.ShowOnlyBestuur = $event.checked;
+    this.dataSourceRepeatingActions.filter = JSON.stringify(this.filterRepeatingValues);
+  }
+  onSliderDecisionChanged($event): void {
+    this.filterDecisionValues.ShowOnlyBestuur = $event.checked;
+    this.dataSourceDecisions.filter = JSON.stringify(this.filterDecisionValues);
+  }
+  onSliderArchivedChanged($event): void {
+    this.filterArchiveValues.ShowOnlyBestuur = $event.checked;
+    this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
+  }
+
   /***************************************************************************************************
   / Show the detail dialog
   /***************************************************************************************************/
@@ -463,6 +478,13 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   private createActionFilter(): (data: ActionItem, filter: string) => boolean {
     let filterFunction = function (data: ActionItem, filter: string): boolean {
       let searchTerms = JSON.parse(filter);
+      // console.log('createActionFilter', data, filter);
+
+      if (searchTerms.ShowOnlyBestuur && data.Role.indexOf(ROLES.BESTUUR) == -1) {
+        return false;
+      }
+
+
       return ((data.HolderName == searchTerms.Voornaam || searchTerms.Voornaam == '') && data.Status == searchTerms.Status);
     }
     return filterFunction;

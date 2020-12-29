@@ -13,8 +13,14 @@ import { BaseComponent } from '../base.component';
       <div class="alternative-theme">
         <mat-slide-toggle *ngIf="toggleTitle" color="primary" (change)="onToggleClicked($event)"
                                               labelPosition="before" [checked]="checked">
-          <div id="toggleTitle">
+          <div class="toggleTitle">
             {{ toggleTitle }}
+         </div>
+        </mat-slide-toggle>
+        <mat-slide-toggle *ngIf="toggleTitle2" color="primary" (change)="onToggleClicked2($event)"
+                                              labelPosition="before" [checked]="checked2">
+          <div class="toggleTitle">
+            {{ toggleTitle2 }}
          </div>
         </mat-slide-toggle>
       </div>
@@ -23,11 +29,11 @@ import { BaseComponent } from '../base.component';
         </mat-spinner>
       </div>
     </mat-card-header>
-    <small class="development" *ngIf="developmentMode">{{ me }}</small> 
+    <small class="development" *ngIf="developmentMode">{{ me }}</small>
 `,
   styles: ['mat-spinner { margin-top: 3px; margin-right: 20px; }',
     'mat-slide-toggle { margin-top: 8px; margin-right: 10px; }',
-    '#toggleTitle { color: white; }'
+    '.toggleTitle { color: white; }'
   ]
 })
 
@@ -38,11 +44,19 @@ export class CardHeaderSpinnerComponent extends BaseComponent {
   @Input('toggleTitle') toggleTitle: string;
   @Output('onSliderChanged') slided = new EventEmitter();
 
+  @Input('title2') title2: string;
+  @Input('toggleChecked2') checked2: boolean = true;
+  @Input('toggleTitle2') toggleTitle2: string;
+  @Output('onSliderChanged2') slided2 = new EventEmitter();
+
   get Value() {
     return (this.progress / 10) * 1.4;
   }
 
   onToggleClicked($event) {
     this.slided.emit($event);
+  }
+  onToggleClicked2($event) {
+    this.slided2.emit($event);
   }
 }

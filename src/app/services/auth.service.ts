@@ -102,6 +102,11 @@ export class AuthService {
     return jsonToken.role;
   }
 
+  isRole(role: string): boolean {
+    return this.roles.indexOf(role) !== -1
+  }
+
+
   get token() {
     return localStorage.getItem('token');
   }

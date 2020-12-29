@@ -39,7 +39,6 @@ export class SidebarComponent extends BaseComponent implements OnInit {
     / Een * bij de pagina betekent dat alle gebruikers die pagina mogen zien.
     /***************************************************************************************************/
     this.pages = this.websiteService.getPages();
-    console.log('roles', this.authService.roles);
     let rollenUser: string = this.authService.roles;
 
     for (let i = 0; i < this.pages.length; i++) {

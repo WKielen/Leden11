@@ -7,7 +7,7 @@ import { NotificationDialogComponent } from 'src/app/app-nav/headernotificationd
 import { LogonData } from 'src/app/shared/classes/LogonData';
 import { A2hsSafariHow2 } from 'src/app/shared/components/a2hs-ios-safari-how2/a2hs-ios-safari-how2';
 import { ROUTE } from 'src/app/services/website.service';
-
+import { version } from '../../../../package.json';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -18,6 +18,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
   logonData: LogonData = new LogonData;
+  public version: string = version;
 
   constructor(
     private router: Router,
@@ -32,7 +33,7 @@ export class HeaderComponent implements OnInit {
     this.logonData.UserId = this.authService.userId;
   }
 
-  // Toggle de sidebar via de DOM. 
+  // Toggle de sidebar via de DOM.
   toggleSideBar() {
     this.toggleSideBarForMe.emit();
     setTimeout(() => {
@@ -51,7 +52,7 @@ export class HeaderComponent implements OnInit {
 
   onConfig(): void {
     this.configDialog.open(ConfigDialogComponent, {
-      // panelClass: 'custom-dialog-container', width: '800px', 
+      // panelClass: 'custom-dialog-container', width: '800px',
       data: {}
     })
   }
