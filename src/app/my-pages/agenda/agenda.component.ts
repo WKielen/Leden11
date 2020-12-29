@@ -65,7 +65,7 @@ export class AgendaComponent
     let actions: EventInput[] = [];
     this.registerSubscription(
       this.actionService
-        .getAll$()
+        .getAllActions$()
         .subscribe((actionList: Array<ActionItem>) => {
           actionList.forEach((item) => {
             if (item.Status != ACTIONSTATUS.OPEN && item.Status != ACTIONSTATUS.REPEATING)

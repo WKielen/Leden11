@@ -65,18 +65,22 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let sub = this.actionService.getAll$()
-      .subscribe((data: Array<ActionItem>) => {
-        data.forEach((item) => {
-          this.actionList.add(item.Id, item);
-        });
-        this.createFilters();
-      });
-    this.registerSubscription(sub);
+
+    this.registerSubscription(
+      this.actionService.getAllActions$()
+        .subscribe((data: Array<ActionItem>) => {
+          data.forEach((item) => {
+            this.actionList.add(item.Id, item);
+          });
+          this.createFilters();
+        })
+    );
 
     if (this.amIBestuur) {
       this.toggleTitle2 = "Alleen bestuur"
     }
+
+
     // this.actionService.GetSome().values().forEach(element => {this.actionList.add(element.Id, element); });
   }
 
