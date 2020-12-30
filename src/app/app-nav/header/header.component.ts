@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, VERSION } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
   logonData: LogonData = new LogonData;
-  public version: string = version;
+  public version: string = version + '/' + VERSION.full;
 
   constructor(
     private router: Router,

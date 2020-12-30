@@ -19,7 +19,7 @@ npm install --save xlsx
 npm install --save angular-iban         // werkt niet meer
 npm install --save highcharts-angular
 npm install --save highcharts
-
+npm install --save ts-md5
 
 assets kopieren
 inhoud environment files kopieren
@@ -192,3 +192,16 @@ Data.services.ts --> @Directive toegevoegd
 
 
 
+
+Spacer:
+
+.example-spacer {
+  flex: 1 1 auto;
+}
+
+
+<mat-toolbar-row>
+  <span>Second Line</span>
+  <span class="example-spacer"></span>
+  <mat-icon class="example-icon" aria-hidden="false" aria-label="Example user verified icon">verified_user</mat-icon>
+</mat-toolbar-row>
