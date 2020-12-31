@@ -5,7 +5,6 @@ import { DashboardComponent } from './my-pages/dashboard/dashboard.component';
 import { LedenComponent } from './my-pages/leden/leden.component';
 import { LedenManagerComponent } from './my-pages/ledenmanager/ledenmanager.component';
 import { AgendaComponent } from './my-pages/agenda/agenda.component';
-import { UsersComponent } from './my-pages/users/users.component';
 import { OudLedenComponent } from './my-pages/oud-leden/oud-leden.component';
 import { DownloadComponent } from './my-pages/download/download.component';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
@@ -45,7 +44,6 @@ const routes: Routes = [
       { path: ROUTE.downloadPageRoute, component: DownloadComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.downloadPageRoles } },
       { path: ROUTE.oudledenPageRoute, component: OudLedenComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.oudledenPageRoles } },
       { path: ROUTE.contrbedragenPageRoute, component: ContrBedragenComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.contrbedragenPageRoles } },
-      // { path: ROUTE.usersPageRoute, component: UsersComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.usersPageRoles } },
       { path: ROUTE.ladderPageRoute, component: LadderComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.ladderPageRoles } },
       { path: ROUTE.syncnttbPageRoute, component: SyncNttbComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.syncnttbPageRoles } },
       { path: ROUTE.trainingdeelnamePageRoute, component: TrainingDeelnameComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.trainingdeelnamePageRoles } },

@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { map } from 'rxjs/operators';
 import { Md5 } from 'ts-md5';
+import { ROLES } from './website.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,8 +31,17 @@ export class AuthService {
         map(response => {
           localData = response;
           if (localData && localData.Token) {
+
+            // We kunnen alleen inloggen als er een rol is. Ingebouwd omdat ik andere rollen wil gebruiken voor de jeugdapp. 
+            const localRoles = this.jwtHelper.decodeToken(localData.Token).role;
+            if (localRoles.indexOf(ROLES.BESTUUR) === -1 && localRoles.indexOf(ROLES.JC) === -1 && localRoles.indexOf(ROLES.TRAINER) === -1 && 
+            localRoles.indexOf(ROLES.LEDENADMIN) === -1 && localRoles.indexOf(ROLES.PENNINGMEESTER) === -1 && localRoles.indexOf(ROLES.ADMIN) === -1 && 
+            localRoles.indexOf(ROLES.TEST) === -1 ) return false;
+
+
             localStorage.removeItem('token');
             localStorage.setItem('token', localData.Token);
+
             return true;
           }
           return false;
@@ -93,6 +103,7 @@ export class AuthService {
     return jsonToken.firstname;
   }
 
+  // property roles
   get roles() {
     const token = localStorage.getItem('token');
     if (!this.token) {

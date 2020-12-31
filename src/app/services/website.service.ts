@@ -19,9 +19,10 @@ export class WebsiteService extends DataService {
     roles.push({ 'Id': '1', 'DisplayValue': 'Jeugdcommissie', 'Code': ROLES.JC });
     roles.push({ 'Id': '2', 'DisplayValue': 'Trainer', 'Code': ROLES.TRAINER });
     roles.push({ 'Id': '6', 'DisplayValue': 'Ledenadministratie', 'Code': ROLES.LEDENADMIN });
+    roles.push({ 'Id': '8', 'DisplayValue': 'Jeugd-app', 'Code': ROLES.JEUGD });
     roles.push({ 'Id': '7', 'DisplayValue': 'Penningmeester', 'Code': ROLES.PENNINGMEESTER });
-    roles.push({ 'Id': '4', 'DisplayValue': 'Test pagina\'s', 'Code': ROLES.TEST });
     roles.push({ 'Id': '5', 'DisplayValue': 'Admin', 'Code': ROLES.ADMIN });
+    roles.push({ 'Id': '4', 'DisplayValue': 'Test pagina\'s', 'Code': ROLES.TEST });
     return roles;
   }
 
@@ -73,6 +74,8 @@ export const ROLES = {
   PENNINGMEESTER: 'PM',
   ADMIN: 'AD',
   TEST: 'TE',
+  SENIOR: 'SE',
+  JEUGD: 'JE',
 };
 
 export const PAGEROLES = {
