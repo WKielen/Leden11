@@ -1,5 +1,5 @@
 import { PasswordValidators } from './../users/password.validator';
-import { LidExtract } from '../../shared/components/select.lid.dropdown.component';
+// import { LidExtract } from '../../shared/components/select.lid.dropdown.component';
 import { Component, OnInit } from '@angular/core';
 import { LedenService } from '../../services/leden.service';
 import { CheckboxDictionairy } from '../../shared/components/oldcheckbox.list.component';
@@ -22,8 +22,8 @@ import { ROLES } from 'src/app/services/website.service';
 
 export class UsersComponent extends ParentComponent implements OnInit {
     ledenArray;
-    lidRol: LidExtract;
-    lidPw: LidExtract;
+    lidRol//: LidExtract;
+    lidPw//: LidExtract;
     response = null;
     csString = null;
 

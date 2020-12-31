@@ -83,10 +83,7 @@ export class UserItem {
   ProposedPassword?: string = '';
   ChangePasswordToken?: string = '';
   Activated?: string = '';
-
-  // public async setPwToHashPw(pw: string) {
-  //   this.Password = await hashPasswordFunction(pw);
-  // }
+  LidNr?: string = '';
 }
 
 export const ACTIVATIONSTATUS = {

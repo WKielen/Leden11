@@ -24,14 +24,26 @@ export class TestComponent
     super(snackBar);
   }
   public theBoundCallback: Function;
-
+  
+  selected = '' ;
+  ledenLijst: Array<LedenItem> = [];
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
   /***************************************************************************************************/
   ngOnInit() {
     this.theBoundCallback = this.dezeGraag.bind(this, "actionItem");
     this.userService.getAll$().subscribe();
+    this.ledenService.getActiveMembers$().subscribe(data => {
+      this.ledenLijst = data;
+      this.selected = '23';
+    });
   }
+
+  onUserSelectedRole($event) {
+    console.log('in test', $event);
+    this.selected = $event
+  }
+
 
   onConvertGebruikers() {
     this.registerSubscription(

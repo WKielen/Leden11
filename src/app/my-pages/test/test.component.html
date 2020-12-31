@@ -1,4 +1,14 @@
 <mat-card>
+  <mat-card-header-spinner title="Kopje pagina"></mat-card-header-spinner>
+  <mat-card-content>
+    <app-select-lid-dropdown [leden-array]="ledenLijst" [default-value]="selected" (valueSelected)="onUserSelectedRole($event)">
+    </app-select-lid-dropdown>
+    <p>You selected: {{selected}}</p>
+  </mat-card-content>
+</mat-card>
+
+
+<mat-card>
     <mat-card-header-spinner title="Kopje pagina" [progress]="progress"></mat-card-header-spinner>
 
     <mat-card-content>

@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 export class BaseComponent {
 
   public me: string = '';
-  public developmentMode: boolean = true;
+  public developmentMode: boolean = false;
 
 
   private observableSubscriptions = [];

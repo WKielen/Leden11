@@ -93,6 +93,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
 
     // let tmp;
     this.dialog.open(RegistrationDialogComponent, {
+      width: '500px',
       data: { 'method': 'Toevoegen', 'data': toBeAdded },
       disableClose: true
     })
