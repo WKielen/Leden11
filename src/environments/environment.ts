@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   baseUrl: 'https://www.ttvn.nl/api',
-  loginUrl: 'https://www.ttvn.nl/api/login',
+  loginUrl: 'https://www.ttvn.nl/api/signin',
   databaseName: 'ttest',
 
   // De mail url wijst naar mijn rasp pi. waar een python flask server draait. Deze handelt de mail requests af. Tevens notifications requests.

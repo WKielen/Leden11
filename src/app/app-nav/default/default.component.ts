@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { AuthService } from 'src/app/services/auth.service';
 
 /*
            Nobody said it was easy
@@ -24,7 +23,6 @@ export class DefaultComponent implements OnInit {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private authService: AuthService,
   ) { }
 
   ngOnInit() {
@@ -46,16 +44,4 @@ export class DefaultComponent implements OnInit {
   sideBarSetVisibilty($event) {
     this.sideBarOpen = $event;
   }
-
-  // logonStatus($event) {
-  //   this.logonData = $event;
-  //   this.sideBarSetVisibilty(this.logonData.ShouldDisplayMenu);
-  // }
-  
-  // setUserInfo(): void {
-  //   this.logonData.IsLoggedOn = this.authService.isLoggedIn();
-  //   this.logonData.Name = this.authService.fullName;
-  //   this.logonData.UserId = this.authService.userId;
-  // }
-
 }

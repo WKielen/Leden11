@@ -29,8 +29,7 @@ const routes: Routes = [
   { path: ROUTE.loginPageRoute, component: LoginComponent },
   { path: ROUTE.offlinePageRoute, component: OfflineComponent },
   {
-    path: '',
-    component: DefaultComponent,canActivate: [AuthGuard],
+    path: '', component: DefaultComponent,canActivate: [AuthGuard],
     children: [
       { path: '', component: DashboardComponent},
       { path: ROUTE.notAllowedPageRoute, component: NotallowedComponent  },
