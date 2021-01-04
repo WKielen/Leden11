@@ -35,20 +35,5 @@ export class AppComponent {
     });
     // A2HS - END
 
-
-// Dit is de oude code.
-    // swUpdate.available.subscribe(event => {
-    //   if (confirm("Er is een nieuwe versie beschikbaar. Deze nieuwe versie laden?")) {
-    //     window.location.reload();
-    //   }
-    // });
-    // console.log('environment', environment);
-
-    // if (navigator.onLine) {
-    //   console.log('You are online');
-    // } else {
-    //   console.log('You are offline');
-    // }
-
   }
 }
