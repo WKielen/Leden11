@@ -48,9 +48,15 @@ export class KomendeWeekComponent extends BaseComponent implements OnInit {
     this.registerSubscription(
       this.actionService
         .nextWeek$()
+        .pipe(
+          map(function (value: ActionItem[]) {
+            let localdata: Array<AgendaItem> = value ? value : [];
+            return localdata;
+          })
+        )
         .subscribe((actionLijst: Array<ActionItem>) => {
           actionLijst.forEach(element => {
-            if (element.Status != ACTIONSTATUS.OPEN && element.Status != ACTIONSTATUS.REPEATING) 
+            if (element.Status != ACTIONSTATUS.OPEN && element.Status != ACTIONSTATUS.REPEATING)
               return;
             let ai: AgendaItem = new AgendaItem();
             ai.Datum = element.StartDate
@@ -76,7 +82,7 @@ export class KomendeWeekComponent extends BaseComponent implements OnInit {
   addtoDagListIfThisWeek(agendaItem: AgendaItem): void {
     let agendaDate: Date = moment(agendaItem.Datum).toDate();
     const overEenWeek = moment().add(7, 'days').toDate();
-    if (agendaDate < moment().startOf("day").toDate() || overEenWeek <= agendaDate ) return;
+    if (agendaDate < moment().startOf("day").toDate() || overEenWeek <= agendaDate) return;
     let dagnaam: string = agendaDate.to_YYYY_MM_DD();
 
     switch (agendaItem.Type) {

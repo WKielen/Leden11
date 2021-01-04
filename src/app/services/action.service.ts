@@ -40,22 +40,15 @@ export class ActionService extends DataService {
   /***************************************************************************************************
   / Get all actions in the future
   /***************************************************************************************************/
-  nextWeek$(): Observable<Array<ActionItem>> {
+  nextWeek$() {
     return this.http.get(environment.baseUrl + '/action/komendeweek') //getallfromnow
-      .pipe(
-        retry(3),
-        tap( // Log the result or error
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
-        map(function (value) {
-          this.localdata = value;
-          this.localdata.forEach(element => {
-
-          });
-          return this.localdata;
-        })
-      );
+    .pipe(
+      retry(3),
+      tap(
+        data => console.log('Received: ', data),
+        error => console.log('Oeps: ', error)
+      ),
+    );
   }
 }
 
