@@ -44,6 +44,7 @@ export class LedenService extends DataService {
             element.LeeftijdCategorie = DateRoutines.LeeftijdCategorie(element.GeboorteDatum);
             element.LeeftijdCategorieWithSex = DateRoutines.LeeftijdCategorieWithSex(element);
             element.Leeftijd = DateRoutines.Age(element.GeboorteDatum);
+            element.Trainingsgroepen = element.ExtraA ? element.ExtraA.split(',') : [];
 
             if (element.LidType === '0') { element.LidType = ''; }
             if (element.BetaalWijze === '0') { element.BetaalWijze = ''; }
@@ -63,6 +64,8 @@ export class LedenService extends DataService {
     delete element['LeeftijdCategorie'];
     delete element['LeeftijdCategorieWithSex'];
     delete element['Leeftijd'];
+    element['ExtraA'] = element['Trainingsgroepen'].join();
+    delete element['Trainingsgroepen'];
     return super.update$(element);
   }
 
@@ -101,14 +104,7 @@ export class LedenService extends DataService {
     return this.getActiveMembers$(false)
       .pipe(
         map(function (value: LedenItemExt[]) {
-          let newList: LedenItemExt[] = [];
-          value.forEach(element => {
-            if ((element.LeeftijdCategorieWithSex.substring(0, 1) == 'J') ||
-              (element.LeeftijdCategorieBond == 'Senior1')) {
-              newList.push(element);
-            }
-          });
-          return newList;
+          return value.filter(isJeugdlidFilter());
         })
       )
   }
@@ -167,24 +163,20 @@ export class LedenService extends DataService {
         ),
       );
   }
-
-  // return [{
-  //   name: 'Asia',
-  //   data: [502, 635, 809, 947, 1402, 3634, 5268]
-  // }, {
-  //   name: 'Africa',
-  //   data: [106, 107, 111, 133, 221, 767, 1766]
-  // }, {
-  //   name: 'Europe',
-  //   data: [163, 203, 276, 408, 547, 729, 628]
-  // }, {
-  //   name: 'America',
-  //   data: [18, 31, 54, 156, 339, 818, 1201]
-  // }, {
-  //   name: 'Oceania',
-  //   data: [2, 2, 2, 6, 13, 30, 46]
-  // }];
 }
+
+
+/***************************************************************************************************
+/ Het filter om de goede agendaItems te selecteren. Dit is de techniek als je params wil meegeven
+/***************************************************************************************************/
+function isJeugdlidFilter() {
+  return function (item: LedenItemExt) {
+    if (item.LeeftijdCategorieWithSex.substring(0, 1) === LidTypeValues.YOUTH) return true;
+    if (item.LeeftijdCategorieBond === 'Senior1') return true;
+    return false;
+  }
+}
+
 
 /***************************************************************************************************
 / De methods zijn static omdat the methods via een interface niet worden doorgegeven
@@ -232,7 +224,7 @@ export class LedenItem {
   VrijwilligersKorting?: string = '';
   Rol?: string = '';
   ToegangsCode?: string = '';
-
+  ExtraA?: string = '';
 
 
   /***************************************************************************************************
@@ -297,6 +289,8 @@ export class LedenItemExt extends LedenItem {
   LeeftijdCategorieWithSex?: string = '';
   Leeftijd?: number = 0;
   VolledigeNaam?: string = '';
+  Trainingsgroepen?: Array<string> = [];
+
 }
 
 /***************************************************************************************************

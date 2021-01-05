@@ -26,6 +26,7 @@ import { MatSliderModule } from '@angular/material/slider';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatChipsModule } from '@angular/material/chips';
 
 @NgModule({
    exports: [
@@ -53,8 +54,9 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
     MatTooltipModule,
     MatDividerModule,
     MatTabsModule,
-    MatProgressSpinnerModule, 
+    MatProgressSpinnerModule,
     MatSlideToggleModule,
+    MatChipsModule,
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ],
 })
