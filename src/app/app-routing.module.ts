@@ -25,6 +25,7 @@ import { KomendeWeekComponent } from './my-pages/komendeweek/komendeweek.compone
 import { TodolistComponent } from './my-pages/todolist/todolist.component';
 import { RegistrationComponent } from './app-nav/registration/registration.component';
 import { ROUTE, PAGEROLES } from './services/website.service';
+import { TrainingGroupsComponent } from './my-pages/trainingsgroep/trainingsgroep.component';
 
 const routes: Routes = [
   { path: ROUTE.loginPageRoute, component: LoginComponent },
@@ -50,6 +51,8 @@ const routes: Routes = [
       { path: ROUTE.syncnttbPageRoute, component: SyncNttbComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.syncnttbPageRoles } },
       { path: ROUTE.trainingdeelnamePageRoute, component: TrainingDeelnameComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.trainingdeelnamePageRoles } },
       { path: ROUTE.trainingoverzichtPageRoute, component: TrainingOverzichtComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.trainingdeelnamePageRoles } },
+      { path: ROUTE.traininggroupPageRoute, component: TrainingGroupsComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.traininggroupsPageRoles } },
+
       { path: ROUTE.masterzPageRoute, component: MasterzComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.masterzPageRoles } },
       { path: ROUTE.todolistPageRoute, component: TodolistComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.todolistPageRoles } },
       { path: ROUTE.registrationPageRoute, component: RegistrationComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.registrationPageRoles } },

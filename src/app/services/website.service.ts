@@ -45,6 +45,7 @@ export class WebsiteService extends DataService {
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Sync NTTB', 'DisplayOnRoles': PAGEROLES.syncnttbPageRoles.join(), 'Url': ROUTE.syncnttbPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Deelname training', 'DisplayOnRoles': PAGEROLES.trainingdeelnamePageRoles.join(), 'Url': ROUTE.trainingdeelnamePageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Training overzicht', 'DisplayOnRoles': PAGEROLES.trainingdeelnamePageRoles.join(), 'Url': ROUTE.trainingoverzichtPageRoute });
+    pages.push({ 'Id': '0', 'MenuDisplayValue': 'Trainingsgroepen', 'DisplayOnRoles': PAGEROLES.traininggroupsPageRoles.join(), 'Url': ROUTE.traininggroupPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Masterz spelregels', 'DisplayOnRoles': PAGEROLES.masterzPageRoles.join(), 'Url': ROUTE.masterzPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Test', 'DisplayOnRoles': PAGEROLES.testPageRoles.join(), 'Url': ROUTE.testPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Comp Admin', 'DisplayOnRoles': PAGEROLES.testPageRoles.join(), 'Url': ROUTE.compadminPageRoute });
@@ -93,6 +94,7 @@ export const PAGEROLES = {
   masterzPageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN, ROLES.BESTUUR,],
   todolistPageRoles: [ROLES.TEST],
   registrationPageRoles: [ROLES.ADMIN],
+  traininggroupsPageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN]
 };
 
 export const ROUTE = {
@@ -121,4 +123,5 @@ export const ROUTE = {
   compadminPageRoute: 'compadmin',
   todolistPageRoute: 'todo',
   registrationPageRoute: 'registration',
+  traininggroupPageRoute: 'traininggroups',
 };
