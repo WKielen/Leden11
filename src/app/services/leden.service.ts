@@ -44,8 +44,8 @@ export class LedenService extends DataService {
             element.LeeftijdCategorie = DateRoutines.LeeftijdCategorie(element.GeboorteDatum);
             element.LeeftijdCategorieWithSex = DateRoutines.LeeftijdCategorieWithSex(element);
             element.Leeftijd = DateRoutines.Age(element.GeboorteDatum);
+            if (element.ExtraA == '_ExtraA') element.ExtraA = '';
             element.Trainingsgroepen = element.ExtraA ? element.ExtraA.split(',') : [];
-
             if (element.LidType === '0') { element.LidType = ''; }
             if (element.BetaalWijze === '0') { element.BetaalWijze = ''; }
           });

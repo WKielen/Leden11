@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { SelectionModel } from '@angular/cdk/collections';
-import { LedenService, LedenItem, LedenItemExt } from '../../services/leden.service';
+import { LedenService, LedenItemExt } from '../../services/leden.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { TrainingstijdItem, TrainingstijdService } from 'src/app/services/trainingstijd.service';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
+import { CountingValues } from 'src/app/shared/modules/CountingValues';
 
 @Component({
   selector: 'app-trainingsgroep',
@@ -19,10 +19,10 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
   predefinedDisplayColumns: string[] = ['Naam', 'Ma1', 'Ma2', 'Di1', 'Di2', 'Wo1', 'Wo2', 'Do1', 'Do2', 'Vr1', 'Vr2', 'Za1', 'Za2', 'Zo1', 'Zo2'];
   displayedColumns: string[] = ['Naam'];
   dataSource = new MatTableDataSource<trainingsgroepLine>();
-  selection = new SelectionModel<LedenItem>(true, []); //used for checkboxes
   fabButtons = [];  // dit zijn de buttons op het scherm
-  fabIcons = [{ icon: 'save' }];
+  fabIcons = [{ icon: 'save' }, { icon: 'cloud_download' }];
   trainingsTijden: Array<TrainingstijdItem> = [];
+  categories = new CountingValues([]);
 
   constructor(
     protected ledenService: LedenService,
@@ -58,22 +58,35 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
             });
             lid.Trainingsgroepen.forEach(tijdstip => {
               tmp[tijdstip] = true;
+              this.categories.Increment(tijdstip);
             });
             tmp.Dirty = false;
             tmp.LidNr = lid.LidNr;
             this.dataSource.data.push(tmp);
           });
-          console.log('this.dataSource.data', this.dataSource.data);
           this.table.renderRows();
         }));
   }
 
   onCheckboxChange(event, row, column, rowindex, colindex): void {
+    if (event.checked)
+      this.categories.Increment(column);
+    else
+      this.categories.Decrement(column);
     row[column] = event.checked;
     row.Dirty = true;
   }
 
   onFabClick(event, buttonNbr): void {
+    switch(buttonNbr) {
+      case 0: this.onFabClickSave(event);
+              break;
+      case 1: this.onFabClickDownload(event);
+              break;
+    }
+  }
+
+  onFabClickSave(event): void {
     try {
       this.dataSource.data.forEach(element => {
         if (element.Dirty) {
@@ -100,12 +113,17 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
     catch (e) {
       this.showSnackBar(SnackbarTexts.UpdateError, '');
     }
-    this.dataSource.data.forEach(element => {
-      if (element.Dirty) {
-        console.log('ditry', element);
-      }
-    });
+    // this.dataSource.data.forEach(element => {
+    //   if (element.Dirty) {
+    //     console.log('ditry', element);
+    //   }
+    // });
   }
+  onFabClickDownload(event): void {
+    this.showSnackBar('Nog niet gedaan', '');
+  }
+
+
 }
 
 export interface trainingsgroepLine {
