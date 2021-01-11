@@ -22,7 +22,7 @@ export class Dictionary {
   }
 
   add(key: string, value: any) {
-    this[key] = value;
+    // this[key] = value;
     this._keys.push(key);
     this._values.push(value);
   }
@@ -30,7 +30,7 @@ export class Dictionary {
     var index = this._keys.indexOf(key, 0);
     this._keys.splice(index, 1);
     this._values.splice(index, 1);
-    delete this[key];
+    // delete this[key];
   }
   get(key: string) {
     const index = this._keys.indexOf(key, 0);
