@@ -8,8 +8,9 @@ Accept: application/json
 Database: ttest
 
 {
-    "Userid": "Kielen",
-    "Password": "pww",
-    "Email": "wim@kielen.nl",
-    "Name": "Wim Kielen"
+    "Userid": "Kielen1",
+    "Password": "3e84930f9e2769d6d71df43be7923c20",
+    "Email": "wim_kielen@hotmail.com",
+    "FirstName": "Wim",
+    "LastName": "Kielen"
 }
