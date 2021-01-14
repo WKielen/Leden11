@@ -4,7 +4,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserItem, UserService } from 'src/app/services/user.service';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { AppError } from 'src/app/shared/error-handling/app-error';
-import { MailItem, MailService } from 'src/app/services/mail.service';
+import { MailService } from 'src/app/services/mail.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
@@ -68,19 +68,11 @@ export class RegisterDialogComponent extends BaseComponent {
     user.LastName = this.lastname.value;
     user.Password = this.password.value;
 
-    let myObject = {"Userid": "Kielen2",
-    "Password": "3e84930f9e2769d6d71df43be7923c20",
-    "Email": "wim_kielen@hotmail.com",
-    "FirstName": "Wim",
-    "LastName": "Kielen"}
-
-
-    this.userService.register$(myObject)
+    this.userService.register$(user)
       .subscribe(addResult => {
         if (addResult.hasOwnProperty('Key')) {
           this.responseText = 'Registratie gelukt. \nNa goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je aanloggen.';
           this.error = false;
-          this.sendMail(user);
         } else {
           this.responseText = addResult;
         }
@@ -92,20 +84,6 @@ export class RegisterDialogComponent extends BaseComponent {
           } else { throw error; }
         }
       );
-
-  }
-
-  sendMail(credentials: UserItem) {
-    let mailItems: Array<MailItem> = [];
-    let mailItem: MailItem = new MailItem();
-    mailItem.To = 'secretaris@ttvn.nl';
-    mailItem.ToName = 'Secretaris - TTVN';
-    mailItem.Subject = "Aanmelding gebruiker TTVN app";
-    mailItem.Message = "Naam   : " + credentials.FirstName + " " + credentials.FirstName + "<br>" +
-                       "Userid : " + credentials.Userid + "<br>" +
-                       "Email  : " + credentials.Email
-    mailItems.push(mailItem);
-    this.mailService.mail$(mailItems).subscribe();
   }
 
   /***************************************************************************************************
@@ -127,5 +105,3 @@ export class RegisterDialogComponent extends BaseComponent {
     return this.registerForm.get('password');
   }
 }
-
-

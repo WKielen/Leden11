@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserItem, UserService } from 'src/app/services/user.service';
-import { MailItem, MailService } from 'src/app/services/mail.service';
+import { MailService } from 'src/app/services/mail.service';
 import { passwordMatchValidator } from './passwordValidator';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
@@ -55,8 +55,6 @@ export class ResetPasswordDialogComponent extends BaseComponent {
     let user = new UserItem();
     user.Userid = this.userid.value;
     user.ProposedPassword = this.password1.value;
-    user.ChangePasswordToken = this.makeRandom(30);
-    console.log('token', user.ChangePasswordToken);
     this.registerSubscription(
       this.userService.storeNewPassword$(user)
         .subscribe(data => {
@@ -84,20 +82,6 @@ export class ResetPasswordDialogComponent extends BaseComponent {
       this.password2.setErrors([{ 'passwordMismatch': true }]);
     else
       this.password2.setErrors(null);
-  }
-
-  /***************************************************************************************************
-  /
-  /***************************************************************************************************/
-  makeRandom(lengthOfCode: number, possible?: string): string {
-    if (!possible)
-      // possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890,./;'[]\=-)(*&^%$#@!~";
-      possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
-    let text = "";
-    for (let i = 0; i < lengthOfCode; i++) {
-      text += possible.charAt(Math.floor(Math.random() * possible.length));
-    }
-    return text;
   }
 
   /***************************************************************************************************

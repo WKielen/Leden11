@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, AfterViewChecked } from "@angu
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "src/app/services/auth.service";
 import { ParentComponent } from "src/app/shared/parent.component";
-import { Calendar, CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventDropArg, EventInput, FullCalendarComponent } from "@fullcalendar/angular";
+import { Calendar, CalendarOptions, DateSelectArg, EventApi, EventClickArg, EventInput, FullCalendarComponent } from "@fullcalendar/angular";
 import { AgendaItem, AgendaService } from "src/app/services/agenda.service";
 import { MatDialog } from "@angular/material/dialog";
 import { AgendaDialogComponent } from "../agenda/agenda.dialog";
@@ -14,6 +14,7 @@ import { NoChangesMadeError } from "src/app/shared/error-handling/no-changes-mad
 import { NotFoundError } from "src/app/shared/error-handling/not-found-error";
 import { addHolidaysToEvents, agendaToEvent, setEventProps } from "../agenda/event-utils";
 import { ActionItem, ActionService, ACTIONSTATUS } from "src/app/services/action.service";
+import { EventDropArg } from "@fullcalendar/interaction";
 
 // TODO:Select Multiple dates into vakantie
 
