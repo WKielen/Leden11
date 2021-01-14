@@ -38,7 +38,7 @@
     "highcharts": "^8.2.2",
     "highcharts-angular": "^2.8.2",
     "iban": "0.0.14",
-    "jqwidgets-ng": "^9.0.0",
+    "leden-lib": "file:../Leden-lib/dist/leden-lib",
     "moment": "^2.29.1",
     "ng-pwa-tools": "0.0.15",
     "rxjs": "~6.6.3",

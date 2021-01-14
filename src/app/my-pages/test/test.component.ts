@@ -5,6 +5,8 @@ import { MailService } from "src/app/services/mail.service";
 import { UserItem, UserService } from "src/app/services/user.service";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { Md5 } from "ts-md5";
+import { LedenLibComponent } from 'leden-lib';
+import { myclass } from 'leden-lib';
 
 @Component({
   selector: "app-test",
@@ -24,9 +26,10 @@ export class TestComponent
     super(snackBar);
   }
   public theBoundCallback: Function;
-  
+
   selected = '' ;
   ledenLijst: Array<LedenItem> = [];
+
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
   /***************************************************************************************************/
@@ -37,6 +40,11 @@ export class TestComponent
       this.ledenLijst = data;
       this.selected = '23';
     });
+    // let y: DictionaryModule = new DictionaryModule();
+    let y2: myclass = new myclass();
+    // let x: LedenLibModule = new LedenLibModule();
+    console.log('x', y2);
+    y2.x();
   }
 
   onUserSelectedRole($event) {

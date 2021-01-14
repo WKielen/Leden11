@@ -61,7 +61,6 @@ export class ResetPasswordDialogComponent extends BaseComponent {
       this.userService.storeNewPassword$(user)
         .subscribe(data => {
           this.error = false;
-          this.sendMail(user);
           this.responseText = "Je ontvangt een mail met een link. Als je op deze link klikt dan wordt je nieuwe password geactiveerd."
         },
           (error: AppError) => {
@@ -75,34 +74,6 @@ export class ResetPasswordDialogComponent extends BaseComponent {
             }
           })
     );
-  }
-
-  sendMail(credentials: UserItem) {
-    let sub = this.userService.readUserData$(credentials.Userid)
-      .subscribe(data => {
-        let mailItems: Array<MailItem> = [];
-        let mailItem: MailItem = new MailItem();
-        mailItem.To = data['Email'];
-        mailItem.ToName = data['FirstName'];
-        mailItem.Subject = "Reset password TTVN app";
-        mailItem.Message = 'Beste '+ mailItem.ToName + `,<br><br>
-        Je hebt op de TTVN site een nieuw password aangevraagd. Klik op onderstaande link om je
-        nieuwe password te activeren. Na de activatie wordt je naar de login pagina van de app
-        geleidt. \nAls je geen nieuw password hebt aangevraagd, moet je deze mail negeren.<br>
-        <a href="https://www.ttvn.nl/api/user/reset?Id=` + credentials.ChangePasswordToken + `">Klik deze link om je nieuwe password te activeren</a><br>
-        <br>
-        Met vriendelijke groet,<br>
-        Webmaster TTVN`;
-
-        mailItems.push(mailItem);
-        this.mailService.mail$(mailItems).subscribe();
-      },
-        (error: AppError) => {
-          console.log("error", error);
-        }
-      )
-    this.registerSubscription(sub);
-
   }
 
   /***************************************************************************************************

@@ -68,7 +68,14 @@ export class RegisterDialogComponent extends BaseComponent {
     user.LastName = this.lastname.value;
     user.Password = this.password.value;
 
-    this.userService.register$(user)
+    let myObject = {"Userid": "Kielen2",
+    "Password": "3e84930f9e2769d6d71df43be7923c20",
+    "Email": "wim_kielen@hotmail.com",
+    "FirstName": "Wim",
+    "LastName": "Kielen"}
+
+
+    this.userService.register$(myObject)
       .subscribe(addResult => {
         if (addResult.hasOwnProperty('Key')) {
           this.responseText = 'Registratie gelukt. \nNa goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je aanloggen.';
