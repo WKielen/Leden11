@@ -31,7 +31,7 @@
 <mat-dialog-actions>
     <button mat-raised-button color="primary" [disabled]='!loginForm.valid' (click)="onSubmit()">Login</button>
 
-    <div *ngIf="developmentMode" fxFlex fxLayout="row" fxLayoutAlign="flex-end">
+    <div fxFlex fxLayout="row" fxLayoutAlign="flex-end">
         <a mat-button (click)="onRegister()" color="primary">Registreer</a>
         <a mat-button (click)="onResetPassword()" color="primary">Reset password</a>
     </div>

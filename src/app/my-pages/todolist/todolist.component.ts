@@ -69,9 +69,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
     this.registerSubscription(
       this.actionService.getAllActions$()
         .subscribe((data: Array<ActionItem>) => {
-          data.forEach((item) => {
-            this.actionList.add(item.Id, item);
-          });
+          if (data) {
+            data.forEach((item) => {
+              this.actionList.add(item.Id, item);
+            });
+          }
           this.createFilters();
         })
     );
