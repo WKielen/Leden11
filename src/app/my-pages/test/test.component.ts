@@ -1,16 +1,18 @@
 import { Component, OnInit, OnDestroy, Inject, Optional } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LedenItem, LedenService } from "src/app/services/leden.service";
 import { MailService } from "src/app/services/mail.service";
 import { UserItem, UserService } from "src/app/services/user.service";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { Md5 } from "ts-md5";
+import { DetailDialogComponent } from "./common.detail.dialog";
 
 @Component({
   selector: "app-test",
   templateUrl: "./test.component.html",
   styleUrls: ["./test.component.scss"],
-  providers: [{ provide: 'param', useValue: 'progress' }]
+  // providers: [{ provide: 'param', useValue: 'progress' }]
 })
 export class TestComponent
   extends ParentComponent
@@ -20,6 +22,8 @@ export class TestComponent
     protected userService: UserService,
     public mailService: MailService,
     public ledenService: LedenService,
+    public dialog: MatDialog,
+
   ) {
     super(snackBar);
   }
@@ -45,35 +49,17 @@ export class TestComponent
     console.log('in test', $event);
     this.selected = $event
   }
-
-
-  onConvertGebruikers() {
-    this.registerSubscription(
-      this.ledenService.convert$()
-        .subscribe((data: Array<LedenItem>) => {
-          data.forEach((lid) => {
-            if (lid.Rol != '') {
-              let user = new UserItem();
-              user.Userid = lid.BondsNr;
-              user.Email = lid.Email1;
-              user.FirstName = lid.Voornaam;
-              user.LastName = lid.Achternaam;
-              user.Role = lid.Rol;
-              user.Activated = '1';
-              user.Password = <string>Md5.hashStr(lid.ToegangsCode);
-
-              if (lid.Tussenvoegsel != '') {
-                user.LastName = lid.Tussenvoegsel + ' ' + user.LastName;
-              }
-              console.log('user', user);
-              this.userService.create$(user).subscribe();
-
-            } // if
-          })  // foreach
-        })  // subscribe
-    ) // registerSubscription
-
-
+  onTest() {
+    this.dialog
+      .open(DetailDialogComponent, {
+        data: { method: "Toevoegen", data: {} },
+      })
+      .afterClosed() // returns an observable
+      .subscribe((result) => {
+        if (result) {
+          // this.storeResults(null, { 'method': 'Toevoegen', 'data': result });
+        }
+      });
   }
 
 
