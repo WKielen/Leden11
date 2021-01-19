@@ -39,7 +39,7 @@ export class MyTel {
     public area: string,
     public exchange: string,
     public subscriber: string
-  ) {}
+  ) { }
 }
 
 /** Custom `MatFormFieldControl` for telephone number input. */
@@ -60,13 +60,18 @@ export class MultiChipSelectComponent
   @ViewChild('exchange') exchangeInput: HTMLInputElement;
   @ViewChild('subscriber') subscriberInput: HTMLInputElement;
 
+  chips: any = [
+    { name: 'chip1', selected: false, datum: 'datum1' },
+    { name: 'chip2', selected: true, datum: 'datum2' },
+    { name: 'chip3', selected: false, datum: 'datum3' }
+  ];
   parts: FormGroup;
   stateChanges = new Subject<void>();
   focused = false;
   controlType = 'mat-multi-chip-select';
   id = `mat-multi-chip-select-${MultiChipSelectComponent.nextId++}`;
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange = (_: any) => { };
+  onTouched = () => { };
 
   get empty() {
     const {
