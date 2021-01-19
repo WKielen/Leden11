@@ -11,13 +11,20 @@ import { DetailDialogComponent } from './common.detail.dialog';
 import { TempComponent } from './temp/temp.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { WidgetWrapperComponent } from './widget-wrapper/widget-wrapper.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormFieldCustomControlExample, MyTelInput } from './telephone/telephone.field.component';
+import { FormFieldCustomControlExample2, MultiChipSelectComponent } from './multi-chip-control/multi.chip.component';
 
 @NgModule({
   declarations: [
     TestComponent,
     DetailDialogComponent,
     TempComponent,
-    WidgetWrapperComponent
+    WidgetWrapperComponent,
+    FormFieldCustomControlExample,
+    FormFieldCustomControlExample2,
+    MyTelInput,
+    MultiChipSelectComponent,
   ],
   imports: [
     RouterModule.forChild([
@@ -31,11 +38,17 @@ import { WidgetWrapperComponent } from './widget-wrapper/widget-wrapper.componen
     MatProgressBarModule,
     HoldableModule,
     SharedComponentsModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   exports: [
     TestComponent,
     DetailDialogComponent,
-    TempComponent
+    TempComponent,
+    FormFieldCustomControlExample,
+    FormFieldCustomControlExample2,
+    MyTelInput,
+    MultiChipSelectComponent,
   ]
 })
 

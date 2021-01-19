@@ -1,3 +1,35 @@
+
+<form [formGroup]="testForm" novalidate>
+  <mat-form-field class="mat-form-max-width">
+    <input matInput type="text" placeholder="Veld1" [formControl]="Field1">
+    <mat-error *ngIf="Field1.hasError('required')">
+        Veld is verplicht
+    </mat-error>
+</mat-form-field>
+
+<mat-form-field class="mat-form-max-width">
+  <input matInput type="text" placeholder="Veld2" [formControl]="Field2">
+  <mat-error *ngIf="Field2.hasError('required')">
+      Veld is verplicht
+  </mat-error>
+</mat-form-field>
+
+
+<mat-form-field appearance="fill">
+  <mat-label>Phone number</mat-label>
+  <example-tel-input formControlName="tel" required></example-tel-input>
+  <mat-icon matSuffix>phone</mat-icon>
+  <mat-hint>Include area code</mat-hint>
+</mat-form-field>
+
+
+<button mat-raised-button class="mat-card-actions" color="primary" type="button"
+(click)="onTestClick()" [disabled]='!testForm.valid'>Doe iets met test</button>
+
+
+</form>
+
+
 <mat-card>
   <mat-card-header-spinner title="Kopje pagina"></mat-card-header-spinner>
   <mat-card-content>

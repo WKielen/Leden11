@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, Inject, Optional } from "@angular/core";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { LedenItem, LedenService } from "src/app/services/leden.service";
@@ -7,6 +8,7 @@ import { UserItem, UserService } from "src/app/services/user.service";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { Md5 } from "ts-md5";
 import { DetailDialogComponent } from "./common.detail.dialog";
+import { MyTel } from "./telephone/telephone.field.component";
 
 @Component({
   selector: "app-test",
@@ -29,8 +31,25 @@ export class TestComponent
   }
   public theBoundCallback: Function;
 
-  selected = '' ;
+  selected = '';
   ledenLijst: Array<LedenItem> = [];
+
+  testForm = new FormGroup({
+    Field1: new FormControl(
+      'waarde 1',
+      [Validators.required]
+    ),
+    Field2: new FormControl(
+      'Waarde 2',
+      [Validators.required]
+    ),
+    tel: new FormControl(
+      new MyTel('123', '233', '1234'),
+      [Validators.required]
+    ),
+  });
+
+
 
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
@@ -44,6 +63,12 @@ export class TestComponent
     });
     // let y: DictionaryModule = new DictionaryModule();
   }
+
+  onTestClick() {
+    console.log('TestCompoment --> onTestClick', );
+  }
+
+
 
   onUserSelectedRole($event) {
     console.log('in test', $event);
@@ -62,7 +87,15 @@ export class TestComponent
       });
   }
 
-
+  get Field1() {
+    return this.testForm.get('Field1');
+  }
+  get Field2() {
+    return this.testForm.get('Field2');
+  }
+  get tel() {
+    return this.testForm.get('tel');
+  }
 
 
 
