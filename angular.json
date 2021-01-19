@@ -21,7 +21,8 @@
                  "xlsx",
                  "export-to-csv",
                  "highcharts",
-                 "iban"
+                 "iban",
+                 "url"
               ],
             "outputPath": "dist/Leden",
             "index": "src/index.html",
