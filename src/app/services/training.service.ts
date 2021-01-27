@@ -20,7 +20,8 @@ export class TrainingService extends DataService {
   / Haal de trainingsdeelname van 1 specifieke dag op
   /***************************************************************************************************/
   public getDate$(TrainingDate: Date): Observable<TrainingDag> {
-    return this.http.get(environment.baseUrl + '/training/get?Datum=' + "'" + TrainingDate.to_YYYY_MM_DD()  + "'"  )
+    // return this.http.get(environment.baseUrl + '/training/get?Datum=' + "'" + TrainingDate.to_YYYY_MM_DD()  + "'"  )
+    return this.http.get(environment.baseUrl + '/training/get?Datum='  + TrainingDate.to_YYYY_MM_DD()  )
     .pipe(
       retry(1),
       map(data => {
@@ -68,7 +69,7 @@ export class TrainingService extends DataService {
   / Haal alle trainingsdeelname vanaf specifieke dag op
   /***************************************************************************************************/
   public getFromDate$(TrainingDate: Date): Observable<Object> {
-    return this.http.get(environment.baseUrl + '/training/getfromdate?Datum=' + "'" + TrainingDate.to_YYYY_MM_DD()  + "'"  )
+    return this.http.get(environment.baseUrl + '/training/getfromdate?Datum=' + TrainingDate.to_YYYY_MM_DD() )
     .pipe(
       retry(3),
       tap( // Log the result or error
