@@ -88,27 +88,27 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
   createFilters(): void {
     this.filterOpenValues.Voornaam = '';
-    this.dataSourceOpenActions.data = this.actionList.values();
+    this.dataSourceOpenActions.data = this.actionList.values;
     this.dataSourceOpenActions.filterPredicate = this.createActionFilter();
     this.dataSourceOpenActions.filter = JSON.stringify(this.filterOpenValues);
 
     this.filterOpenValues.Voornaam = '';
-    this.dataSourceFinishedActions.data = this.actionList.values();
+    this.dataSourceFinishedActions.data = this.actionList.values;
     this.dataSourceFinishedActions.filterPredicate = this.createActionFilter();
     this.dataSourceFinishedActions.filter = JSON.stringify(this.filterFininshedValues);
 
     this.filterArchiveValues.Voornaam = '';
-    this.dataSourceArchiveActions.data = this.actionList.values();
+    this.dataSourceArchiveActions.data = this.actionList.values;
     this.dataSourceArchiveActions.filterPredicate = this.createActionFilter();
     this.dataSourceArchiveActions.filter = JSON.stringify(this.filterArchiveValues);
 
     this.filterRepeatingValues.Voornaam = '';
-    this.dataSourceRepeatingActions.data = this.actionList.values();
+    this.dataSourceRepeatingActions.data = this.actionList.values;
     this.dataSourceRepeatingActions.filterPredicate = this.createActionFilter();
     this.dataSourceRepeatingActions.filter = JSON.stringify(this.filterRepeatingValues);
 
     this.filterDecisionValues.Voornaam = '';
-    this.dataSourceDecisions.data = this.actionList.values();
+    this.dataSourceDecisions.data = this.actionList.values;
     this.dataSourceDecisions.filterPredicate = this.createActionFilter();
     this.dataSourceDecisions.filter = JSON.stringify(this.filterDecisionValues);
   }

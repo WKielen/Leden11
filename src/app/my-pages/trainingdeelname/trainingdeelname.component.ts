@@ -14,8 +14,12 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
+import { TrainingstijdItem, TrainingstijdService } from 'src/app/services/trainingstijd.service';
+import { Observable, forkJoin, of } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import * as moment from 'moment';
 import { Moment } from 'moment';
-
+import { Dictionary } from 'src/app/shared/modules/Dictionary';
 @Component({
   selector: 'app-trainingdeelname',
   templateUrl: './trainingdeelname.component.html',
@@ -26,21 +30,24 @@ import { Moment } from 'moment';
 })
 export class TrainingDeelnameComponent extends ParentComponent implements OnInit {
 
-  @ViewChild(MatTable, {static: false}) table: MatTable<any>;
-  @ViewChild('picker', {static: false}) picker: MatDatepicker<any>;
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  @ViewChild('picker', { static: false }) picker: MatDatepicker<any>;
 
   public displayedColumns: string[] = ['actions1', 'Naam'];
-  public dataSource = new MatTableDataSource<LedenItemTableRow>();
+  public dataSource = [];
   public fabButtons = [];  // dit zijn de buttons op het scherm
   public fabIcons = [{ icon: 'save' }, { icon: 'event' }];
   // When I change the date, the ledenlist will not be refreshed. It is read just once at page load.
   public ledenList: Array<LedenItemExt> = [];
   public trainingDag = new TrainingDag();  // contains the Date and a array of players who where present
+  public trainingsTijden: Array<TrainingstijdItem> = [];
+  public groups: Array<TrainingsGroupForUI> = [];
 
   constructor(
     protected ledenService: LedenService,
     protected trainingService: TrainingService,
     protected snackBar: MatSnackBar,
+    protected trainingstijdService: TrainingstijdService,
     protected adapter: DateAdapter<any>
   ) {
     super(snackBar)
@@ -48,64 +55,98 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.getPresenceDataFromDate(new Date);  // vandaag dus
+    this.loadData(new Date);
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
   }
 
+  private subTrainingsTijden: Observable<Object>;
+  private subLeden: Observable<Object>;
+  private subTrainingDays: Observable<Object>;
+
   /***************************************************************************************************
-  / Get the data for a specific date
+  / Load data door middel van forkJoin
   /***************************************************************************************************/
-  private getPresenceDataFromDate(date: Date): void {
-    let sub = this.ledenService.getYouthMembers$()
-      .subscribe(data => {
-        this.ledenList = data;
-        this.readAndMergeLedenWithPresence(date);
-      });
-    this.registerSubscription(sub);
+  private loadData(date: Date): void {
+    this.subTrainingsTijden = this.trainingstijdService.getAll$().pipe(catchError(err => of(err.status)));
+    this.subLeden = this.ledenService.getYouthMembers$().pipe(catchError(err => of(err.status)));
+    this.subTrainingDays = this.trainingService.getDate$(date)
+      .pipe(catchError(err => {
+        return of(new TrainingDag(date))
+      }));
+    // Als er nog geen trainingsdag is in de trainingtabel dan krijgen we een 404 terug. Die wordt opgevangen door
+    // de catchError. (err.status zal de waarde 404 hebben) In de catch geef ik een 'of(object)' terug. De 'of'
+    // creeert een Observable die het object doorgeeft.
+    // Hierdoor krijgt de subscribe van het observable geen fout maar het object binnen. Dit kan dan goed verwerkt worden.
+
+    // De forkJoin wacht totdat alle observable klaar zijn voordat de gemeenschappelijke subscribe terug komt. Er is dan ook een
+    // gemeenschappelijke foutafhandeling. Als dat niet wenselijk is dan moet je het met een pipe oplossing op de individuele
+    // Observable zoal hierboven gebeurd.
+    forkJoin([this.subTrainingsTijden, this.subLeden, this.subTrainingDays]).subscribe(results => {
+      this.trainingsTijden = results[0] as Array<TrainingstijdItem>;
+      this.ledenList = results[1] as Array<LedenItemExt>;
+      this.trainingDag = results[2] as TrainingDag;
+
+      this.combineResults();
+    },
+      error => console.error("TrainingDeelnameComponent --> loadData --> error", error)
+    );
   }
 
   /***************************************************************************************************
-  / Read Presencelist and Merge it with the ledenlist
+  / Alle obserables zijn klaar, dus resultaten combineren.
   /***************************************************************************************************/
-  private readAndMergeLedenWithPresence(date: Date): void {
-    let sub = this.trainingService.getDate$(date)
-      .subscribe(trainingDag => {
-        this.trainingDag = trainingDag;
-        this.dataSource.data = this.mergeLedenAndPresence(this.ledenList, this.trainingDag);
-      },
-        (error: AppError) => {  // I create an empty presence day
-          this.trainingDag = new TrainingDag();
-          this.trainingDag.Datum = date.to_YYYY_MM_DD();
-          this.dataSource.data = this.mergeLedenAndPresence(this.ledenList, this.trainingDag);
-        });
-    this.registerSubscription(sub);
+  private combineResults(): void {
+    const dagnaam = moment(this.trainingDag.Datum).locale('NL-nl').format('dd').toLowerCase();
+    this.trainingsTijden.forEach(tijdstip => {
+      if (dagnaam != tijdstip.Code.substring(0, 2).toLowerCase()) {
+        return;
+      }
+      let group: TrainingsGroupForUI = new Object() as TrainingsGroupForUI;
+      group.Name = tijdstip.Day;
+      group.Code = tijdstip.Code;
+      this.groups.push(group);
+    });
+
+    this.dataSource = this.mergeLedenAndPresence(this.ledenList, this.trainingDag);
   }
 
   /***************************************************************************************************
   / Merge ledenlist with presencelist
   /***************************************************************************************************/
   private mergeLedenAndPresence(ledenList: Array<LedenItemExt>, trainingDag): Array<LedenItemTableRow> {
-    let newList = new Array<LedenItemTableRow>();
+    let newList = new Dictionary([]);
+    this.groups.forEach(item => { newList.add(item.Code, []) });
+
     // merge beide tabellen
     ledenList.forEach(lid => {
+      if (!lid.ExtraA) return; // niet ingedeelde leden
+
+      // het juiste groepen voor deze dag zijn hier al geselecteerd.
       let newElement = new LedenItemTableRow(lid.LidNr, lid.Naam);
       trainingDag.DeelnameList.forEach(spelerMetStatus => {
+
         if (lid.LidNr == spelerMetStatus.LidNr) {
           newElement.SetState(spelerMetStatus.State)  // Copy the state
           return;
         }
       });
-      newList.push(newElement);
+
+      for (let index = 0; index < this.groups.length; index++) {
+        if (lid.ExtraA.indexOf(this.groups[index].Code) > -1) {
+          let list = newList.get(this.groups[index].Code);
+          list.push(newElement);
+        }
+      }
     });
-    return newList;
+
+    return newList.values;
   }
 
   /***************************************************************************************************
   / Is triggered when datapicker changed the date.
   /***************************************************************************************************/
   onChangeDate(event: MatDatepickerInputEvent<Moment>) {
-    // receive presence data of new data and merge it with 'old' ledenlist.
-    this.readAndMergeLedenWithPresence(event.value.toDate());
+    this.loadData(event.value.toDate());
   }
 
   /***************************************************************************************************
@@ -128,7 +169,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   private savePresence(): void {
     this.trainingDag.DeelnameList = [];
 
-    this.dataSource.data.forEach(element => {
+    this.dataSource.forEach(element => {
       if (element.Dirty) {
         let trainingItem = new TrainingItem();
         trainingItem.LidNr = element.LidNr;
@@ -171,6 +212,16 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     row.SetNextState();
   }
 }
+
+interface TrainingsGroupForUI {
+  Name: string;
+  Code: string;
+  Members: number;
+  Present: number;
+  SignOff: number;
+  Absent: number;
+}
+
 
 /***************************************************************************************************
 / Extra velden voor iedere lidregel om de checkbox te besturen.

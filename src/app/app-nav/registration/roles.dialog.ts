@@ -49,7 +49,7 @@ export class RolesDialogComponent extends BaseComponent implements OnInit {
         for (let i = 0; i < this.toPrintDict.length(); i++) {
             let section: Section = Object();
             section.header = this.toPrintDict.keys()[i];
-            section.pages = this.toPrintDict.values()[i].toString().split(',').join(', ');
+            section.pages = this.toPrintDict.values[i].toString().split(',').join(', ');
             this.rolesList.push(section); // add section to list
         }
     }

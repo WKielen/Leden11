@@ -99,8 +99,8 @@ export class TrainingDag {
   Datum: string;
   DeelnameList: TrainingItem[] = [];
 
-  constructor(){
-    this.Datum = new Date().to_YYYY_MM_DD();
+  constructor(datum?: Date) {
+    this.Datum = (datum?? new Date()).to_YYYY_MM_DD();
   }
 }
 

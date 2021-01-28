@@ -46,9 +46,11 @@ export class Dictionary {
   keys(): string[] {
     return this._keys;
   }
-  values(): any[] {
+
+  get values(): Array<any> {
     return this._values;
   }
+
   length(): number {
     return this._keys.length;
   }
@@ -58,9 +60,9 @@ export class Dictionary {
     }
     return this._keys.indexOf(key) !== -1;
   }
-  toLookup(): IDictionary {
-    return this;
-  }
+  // toLookup(): IDictionary {
+  //   return this;
+  //}
   addSorted(key: string, value: any) {
     if (this._keys.length <= 0 || key > this._keys[this._keys.length - 1]) {
       this._keys.push(key);

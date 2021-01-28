@@ -60,10 +60,10 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   / Filters
   /***************************************************************************************************/
   createFilters(): void {
-    this.dataSourceNewRegistrations.data = this.registerList.values();
+    this.dataSourceNewRegistrations.data = this.registerList.values;
     this.dataSourceNewRegistrations.filterPredicate = this.createRegisterFilter();
 
-    this.dataSourceExistingRegistrations.data = this.registerList.values();
+    this.dataSourceExistingRegistrations.data = this.registerList.values;
     this.dataSourceExistingRegistrations.filterPredicate = this.createRegisterFilter();
 
     this.refreshFilters();
