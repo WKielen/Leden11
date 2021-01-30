@@ -40,6 +40,15 @@ $alt-theme: mat-light-theme($alt-theme-primary, $custom-theme-accent, $custom-th
   @include angular-material-theme($alt-theme);
 }
 
+$training-theme-primary: mat-palette($mat-green, 700);
+$training-theme-accent: mat-palette($mat-orange, 700);
+$training-theme: mat-light-theme($training-theme-primary, $training-theme-accent, $custom-theme-warn);
+
+.trainings-theme {
+  @include angular-material-theme($training-theme);
+}
+
+
 @import "src/variables.scss";
 
 /* You can add global styles to this file, and also import other style files */
