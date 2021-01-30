@@ -44,6 +44,13 @@
       </table>
     </div>
 
+    <div *ngIf="afmeldingen.length > 0">
+      <h2 class="primary-color"> Afmeldingen </h2>
+      <div class="internalcard" *ngFor="let afmelding of afmeldingen; index as i" id='id{{i}}'>
+        <div class="primary-color">{{ afmelding.Naam }}</div>
+        <div style="margin-top: 5px;">{{ afmelding.Reden }}</div>
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>
 <div class="fab-container">

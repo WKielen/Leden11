@@ -47,7 +47,6 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   ngOnInit(): void {
     this.loadData(new Date);
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
-    // this.registerSubscription(this.subTrainingsTijden);
   }
 
 
@@ -61,6 +60,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
 
   public displayedColumns: string[] = ['actions1', 'Naam'];
   public dataSource = [];
+  public afmeldingen = [];
   public fabButtons = [];  // dit zijn de buttons op het scherm
   public fabIcons = [{ icon: 'save' }, { icon: 'event' }];
   // When I change the date, the ledenlist will not be refreshed. It is read just once at page load.
@@ -74,7 +74,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   / Load data door middel van forkJoin
   /***************************************************************************************************/
   private loadData(date: Date): void {
-    date = new Date('2021-01-28')
+    // date = new Date('2021-01-28')
     this.subTrainingsTijden = this.trainingstijdService.getAll$().pipe(catchError(err => of(err.status)));
     this.subLeden = this.ledenService.getYouthMembers$().pipe(catchError(err => of(err.status)));
     this.subTrainingDays = this.trainingService.getDate$(date)
@@ -127,6 +127,11 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
         this.trainingDag.DeelnameList.forEach((trainingsItem: TrainingItem) => {
           if (lidvaneengroep.LidNr == trainingsItem.LidNr) {
             lidvaneengroep.SetState(trainingsItem.State);
+            lidvaneengroep.Reason = trainingsItem.Reason;
+
+            if (trainingsItem.Reason) {
+              this.afmeldingen.push({ "Naam": lidvaneengroep.Naam, "Reden": trainingsItem.Reason})
+            }
 
             switch (trainingsItem.State) { // huidige status
               case TrainingItem.AFGEMELD:
@@ -143,7 +148,6 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
       trainingsGroupForUI.Absent = trainingsGroupForUI.Members - trainingsGroupForUI.Present - trainingsGroupForUI.SignOff;
 
     };
-
     this.dataSource = dictWithMembersPerGroup.values;
   }
 
@@ -217,11 +221,12 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     this.trainingDag.DeelnameList = [];
 
     for (let index = 0; index < this.dataSource.length; index++) {
-      this.dataSource[index].forEach(element => {
+      this.dataSource[index].forEach((element:LedenItemTableRow) => {
         if (element.Dirty) {
           let trainingItem = new TrainingItem();
           trainingItem.LidNr = element.LidNr;
           trainingItem.State = element.State;
+          trainingItem.Reason = element.Reason;
           this.trainingDag.DeelnameList.push(trainingItem);
         }
       });
@@ -280,10 +285,6 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
         this.groepenVanGekozenDatum[groep].Absent += 1;
         break;
     }
-
-    console.log("TrainingDeelnameComponent --> onRowClick --> this.groepenVanGekozenDatum", this.groepenVanGekozenDatum);
-
-
   }
 }
 
@@ -358,4 +359,5 @@ class LedenItemTableRow {
   Checked: any;
   Indeterminate: boolean;;
   State: number;
+  Reason: string;
 }

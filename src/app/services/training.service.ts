@@ -113,7 +113,8 @@ export class TrainingItem {
   public static readonly AFGEMELD = 2;
 
   LidNr: number = 0;
-  State?: number;
+  State?: number = 0;
+  Reason?: string = '';
 
   constructor(){
     this.State = TrainingItem.AFWEZIG;
