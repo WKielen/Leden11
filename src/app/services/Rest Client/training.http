@@ -1,3 +1,12 @@
+post https://www.ttvn.nl/api/training/signoff HTTP/1.1
+content-type: application/json
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTE4MjUwMDYsImlzcyI6ImxvY2FsaG9zdCIsImV4cCI6MTYxMTkxMTQwNiwidXNlcmlkIjoiamV1Z2QiLCJkYXRhYmFzZSI6InR0ZXN0Iiwicm9sZSI6IkpFIiwiZmlyc3RuYW1lIjoiamV1Z2QiLCJsYXN0bmFtZSI6ImxpZCIsImxpZG5yIjoiNDgyIn0.H-XqmfrmpGnux4MbG4ZDGIwMKnyOedxA1xS6oIB8dqE
+
+{ "Date": "2021-01-28", "Reason": "Ik ben ziek32" }
+
+###
+
 GET https://www.ttvn.nl/api/training/getall HTTP/1.1
 content-type: application/json
 Accept: application/json

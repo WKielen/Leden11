@@ -244,3 +244,7 @@ body {
   }
 
 }
+
+.primary-color {
+  color: mat-color($custom-theme-primary) !important;
+}

@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild, Output } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { LedenService, LedenItemExt } from '../../services/leden.service';
 import { TrainingService, TrainingDag, TrainingItem } from '../../services/training.service';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTable } from '@angular/material/table';
 import { DateAdapter } from '@angular/material/core';
@@ -33,16 +32,6 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;
   @ViewChild('picker', { static: false }) picker: MatDatepicker<any>;
 
-  public displayedColumns: string[] = ['actions1', 'Naam'];
-  public dataSource = [];
-  public fabButtons = [];  // dit zijn de buttons op het scherm
-  public fabIcons = [{ icon: 'save' }, { icon: 'event' }];
-  // When I change the date, the ledenlist will not be refreshed. It is read just once at page load.
-  public ledenList: Array<LedenItemExt> = [];
-  public trainingDag = new TrainingDag();  // contains the Date and a array of players who where present
-  public trainingsTijden: Array<TrainingstijdItem> = [];
-  public groups: Array<TrainingsGroupForUI> = [];
-
   constructor(
     protected ledenService: LedenService,
     protected trainingService: TrainingService,
@@ -54,19 +43,38 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     this.adapter.setLocale('nl');
   }
 
+
   ngOnInit(): void {
     this.loadData(new Date);
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
+    // this.registerSubscription(this.subTrainingsTijden);
   }
 
+
+
+  // subscriptions
   private subTrainingsTijden: Observable<Object>;
   private subLeden: Observable<Object>;
   private subTrainingDays: Observable<Object>;
+
+
+
+  public displayedColumns: string[] = ['actions1', 'Naam'];
+  public dataSource = [];
+  public fabButtons = [];  // dit zijn de buttons op het scherm
+  public fabIcons = [{ icon: 'save' }, { icon: 'event' }];
+  // When I change the date, the ledenlist will not be refreshed. It is read just once at page load.
+  public ledenList: Array<LedenItemExt> = [];
+  public trainingDag = new TrainingDag();  // contains the Date and a array of players who where present
+  public trainingsTijden: Array<TrainingstijdItem> = [];
+  public groepenVanGekozenDatum: Array<TrainingsGroupForUI> = [];
+
 
   /***************************************************************************************************
   / Load data door middel van forkJoin
   /***************************************************************************************************/
   private loadData(date: Date): void {
+    date = new Date('2021-01-28')
     this.subTrainingsTijden = this.trainingstijdService.getAll$().pipe(catchError(err => of(err.status)));
     this.subLeden = this.ledenService.getYouthMembers$().pipe(catchError(err => of(err.status)));
     this.subTrainingDays = this.trainingService.getDate$(date)
@@ -81,65 +89,104 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     // De forkJoin wacht totdat alle observable klaar zijn voordat de gemeenschappelijke subscribe terug komt. Er is dan ook een
     // gemeenschappelijke foutafhandeling. Als dat niet wenselijk is dan moet je het met een pipe oplossing op de individuele
     // Observable zoal hierboven gebeurd.
-    forkJoin([this.subTrainingsTijden, this.subLeden, this.subTrainingDays]).subscribe(results => {
-      this.trainingsTijden = results[0] as Array<TrainingstijdItem>;
-      this.ledenList = results[1] as Array<LedenItemExt>;
-      this.trainingDag = results[2] as TrainingDag;
+    this.registerSubscription(
+      forkJoin([this.subTrainingsTijden, this.subLeden, this.subTrainingDays]).subscribe(results => {
+        this.trainingsTijden = results[0] as Array<TrainingstijdItem>;
+        this.ledenList = results[1] as Array<LedenItemExt>;
+        this.trainingDag = results[2] as TrainingDag;
 
-      this.combineResults();
-    },
-      error => console.error("TrainingDeelnameComponent --> loadData --> error", error)
+        this.combineResults();
+      },
+        error => console.error("TrainingDeelnameComponent --> loadData --> error", error)
+      )
     );
   }
 
   /***************************************************************************************************
-  / Alle obserables zijn klaar, dus resultaten combineren.
+  / Alle observables zijn klaar, dus resultaten combineren.
   /***************************************************************************************************/
   private combineResults(): void {
-    const dagnaam = moment(this.trainingDag.Datum).locale('NL-nl').format('dd').toLowerCase();
-    this.trainingsTijden.forEach(tijdstip => {
-      if (dagnaam != tijdstip.Code.substring(0, 2).toLowerCase()) {
-        return;
-      }
-      let group: TrainingsGroupForUI = new Object() as TrainingsGroupForUI;
-      group.Name = tijdstip.Day;
-      group.Code = tijdstip.Code;
-      this.groups.push(group);
-    });
 
-    this.dataSource = this.mergeLedenAndPresence(this.ledenList, this.trainingDag);
-  }
+    // console.log('%c--------------------------------------------------', 'color: #ec6969; font-weight: bold;');
 
-  /***************************************************************************************************
-  / Merge ledenlist with presencelist
-  /***************************************************************************************************/
-  private mergeLedenAndPresence(ledenList: Array<LedenItemExt>, trainingDag): Array<LedenItemTableRow> {
-    let newList = new Dictionary([]);
-    this.groups.forEach(item => { newList.add(item.Code, []) });
+    // Ik heb alle trainingsgroepen ingelezen. Nu ga ik de groepen van de huidige dag selecteren.
+    this.groepenVanGekozenDatum = this.selectTrainingGroups();
 
-    // merge beide tabellen
-    ledenList.forEach(lid => {
-      if (!lid.ExtraA) return; // niet ingedeelde leden
+    // Voeg de leden aan hun trainingsgroep toe.
+    let dictWithMembersPerGroup = this.fillDictWithMembersPerGroup();
 
-      // het juiste groepen voor deze dag zijn hier al geselecteerd.
-      let newElement = new LedenItemTableRow(lid.LidNr, lid.Naam);
-      trainingDag.DeelnameList.forEach(spelerMetStatus => {
+    // We moeten nu de groepen cross-referencen met de ingevulde statussen.
+    for (let index = 0; index < dictWithMembersPerGroup.values.length; index++) {
+      const groepmetleden = dictWithMembersPerGroup.values[index];
+      let trainingsGroupForUI: TrainingsGroupForUI = this.groepenVanGekozenDatum[index];
 
-        if (lid.LidNr == spelerMetStatus.LidNr) {
-          newElement.SetState(spelerMetStatus.State)  // Copy the state
-          return;
-        }
+      // dictWithMembersPerGroup.values.forEach((groepmetleden: Array<LedenItemTableRow>) => {
+      groepmetleden.forEach((lidvaneengroep: LedenItemTableRow) => {
+        trainingsGroupForUI.Members++;
+
+        this.trainingDag.DeelnameList.forEach((trainingsItem: TrainingItem) => {
+          if (lidvaneengroep.LidNr == trainingsItem.LidNr) {
+            lidvaneengroep.SetState(trainingsItem.State);
+
+            switch (trainingsItem.State) { // huidige status
+              case TrainingItem.AFGEMELD:
+                trainingsGroupForUI.SignOff += 1;
+                break;
+              case TrainingItem.AANWEZIG:
+                trainingsGroupForUI.Present += 1;
+                break;
+            }
+          }
+        });
       });
 
-      for (let index = 0; index < this.groups.length; index++) {
-        if (lid.ExtraA.indexOf(this.groups[index].Code) > -1) {
-          let list = newList.get(this.groups[index].Code);
-          list.push(newElement);
+      trainingsGroupForUI.Absent = trainingsGroupForUI.Members - trainingsGroupForUI.Present - trainingsGroupForUI.SignOff;
+
+    };
+
+    this.dataSource = dictWithMembersPerGroup.values;
+  }
+
+
+  fillDictWithMembersPerGroup(): Dictionary {
+    let dictWithMembersPerGroup = new Dictionary([]);
+    // Dus groups bevat nu de groepen van de gekozen dag
+    // Nu maak ik een dict met groepen van de gekozen dag. Ik deze dict bouw ik een lijst op met
+    // leden die trainen op deze dag.
+    this.groepenVanGekozenDatum.forEach(item => { dictWithMembersPerGroup.add(item.Code, []) });
+
+
+    this.ledenList.forEach(lid => {
+      // in ExtraA property sla ik de lijst op met trainingsgroepen
+      if (!lid.ExtraA) return; // niet ingedeelde leden
+
+      // Ik maak een regel voor het lid voor in de tabel
+      let memberTableRow = new LedenItemTableRow(lid.LidNr, lid.Naam);
+
+      // Nu moeten we nog bepalen in welke groep we hem gaan toevoegen.
+      for (let index = 0; index < this.groepenVanGekozenDatum.length; index++) {
+        if (lid.ExtraA.indexOf(this.groepenVanGekozenDatum[index].Code) > -1) {
+          memberTableRow.Group = index;
+          dictWithMembersPerGroup.get(this.groepenVanGekozenDatum[index].Code).push(memberTableRow);
         }
       }
     });
 
-    return newList.values;
+    return dictWithMembersPerGroup;
+  }
+
+  selectTrainingGroups(): TrainingsGroupForUI[] {
+    // In de trainingsgroepen controleer ik of de eerste 2 letters van de Code (do1) uit trainingstijden
+    // als dat zo is worden die groepen geselecteerd in groups.
+    const eerste2LettersVanDeDag = moment(this.trainingDag.Datum).locale('NL-nl').format('dd').toLowerCase();
+    let groups: Array<TrainingsGroupForUI> = [];
+    this.trainingsTijden.forEach(tijdstip => {
+      if (eerste2LettersVanDeDag != tijdstip.Code.substring(0, 2).toLowerCase()) {
+        return;
+      }
+      groups.push(new TrainingsGroupForUI(tijdstip.Day, tijdstip.Code));
+    });
+    return groups;
   }
 
   /***************************************************************************************************
@@ -169,15 +216,16 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   private savePresence(): void {
     this.trainingDag.DeelnameList = [];
 
-    this.dataSource.forEach(element => {
-      if (element.Dirty) {
-        let trainingItem = new TrainingItem();
-        trainingItem.LidNr = element.LidNr;
-        trainingItem.State = element.State;
-        this.trainingDag.DeelnameList.push(trainingItem);
-      }
-    });
-
+    for (let index = 0; index < this.dataSource.length; index++) {
+      this.dataSource[index].forEach(element => {
+        if (element.Dirty) {
+          let trainingItem = new TrainingItem();
+          trainingItem.LidNr = element.LidNr;
+          trainingItem.State = element.State;
+          this.trainingDag.DeelnameList.push(trainingItem);
+        }
+      });
+    }
     let sub = this.trainingService.updateRec$(this.trainingDag)
       .subscribe(data => {
         this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
@@ -208,18 +256,50 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   / The onRowClick from a row that has been hit
   /***************************************************************************************************/
   onRowClick(row: LedenItemTableRow): void {
-    // console.log('onRowClick', row.State );
+    let groep = row.Group;
+    switch (row.State) {
+      case TrainingItem.AFGEMELD:
+        this.groepenVanGekozenDatum[groep].SignOff -= 1;
+        break;
+      case TrainingItem.AANWEZIG:
+        this.groepenVanGekozenDatum[groep].Present -= 1;
+        break;
+      case TrainingItem.AFWEZIG:
+        this.groepenVanGekozenDatum[groep].Absent -= 1;
+        break;
+    }
     row.SetNextState();
+    switch (row.State) {
+      case TrainingItem.AFGEMELD:
+        this.groepenVanGekozenDatum[groep].SignOff += 1;
+        break;
+      case TrainingItem.AANWEZIG:
+        this.groepenVanGekozenDatum[groep].Present += 1;
+        break;
+      case TrainingItem.AFWEZIG:
+        this.groepenVanGekozenDatum[groep].Absent += 1;
+        break;
+    }
+
+    console.log("TrainingDeelnameComponent --> onRowClick --> this.groepenVanGekozenDatum", this.groepenVanGekozenDatum);
+
+
   }
 }
 
-interface TrainingsGroupForUI {
+class TrainingsGroupForUI {
+
+  constructor(name: string, code: string) {
+    this.Name = name;
+    this.Code = code;
+  }
+
   Name: string;
   Code: string;
-  Members: number;
-  Present: number;
-  SignOff: number;
-  Absent: number;
+  Members: number = 0;
+  Present: number = 0;
+  SignOff: number = 0;
+  Absent: number = 0;
 }
 
 
@@ -251,22 +331,18 @@ class LedenItemTableRow {
   }
 
   public SetState(State: number): void {
-    //console.log('this', this, State);
     switch (State) {
       case TrainingItem.AANWEZIG:
-        // console.log('van afwezig naar aanwezig');
         this.Checked = true;
         this.Indeterminate = false;
         this.State = TrainingItem.AANWEZIG;
         break;
       case TrainingItem.AFGEMELD:
-        // console.log('van aanwezig naar afgemeld');
         this.Checked = false;
         this.Indeterminate = true;
         this.State = TrainingItem.AFGEMELD;
         break;
       case TrainingItem.AFWEZIG:
-        // console.log('van afgemeld naar afwezig');
         this.Checked = false;
         this.Indeterminate = false;
         this.State = TrainingItem.AFWEZIG;
@@ -277,6 +353,7 @@ class LedenItemTableRow {
 
   Naam: string;
   LidNr: number;
+  Group: number;
   Dirty: boolean;
   Checked: any;
   Indeterminate: boolean;;

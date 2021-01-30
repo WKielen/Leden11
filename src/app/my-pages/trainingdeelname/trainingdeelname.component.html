@@ -9,11 +9,17 @@
     <mat-card-title>{{trainingDag.Datum | date: 'EEEE d MMM yyyy' : 'nl'}}</mat-card-title>
   </mat-card-header>
   <mat-card-content>
+    <div *ngIf="groepenVanGekozenDatum.length == 0">
+      <h2 class="primary-color">Vandaag geen groepen.</h2>
+    </div>
+    <div *ngFor="let group of groepenVanGekozenDatum; index as j" #fabs id='group'>
+      <h2 class="primary-color"> {{ groepenVanGekozenDatum[j].Name }} </h2>
 
-      <!-- <div *ngIf="groups"> -->
-    <div *ngFor="let group of groups; index as j" #fabs id='{{j}}'>
-      <h3 class="mat-subheading-2" style="color: red; margin: 0px;" color="primary"> Groep {{ j+1 }}</h3>
-
+      <small class="primary-color">
+        Aanwezig: {{this.groepenVanGekozenDatum[j].Present }} / Afgemeld: {{this.groepenVanGekozenDatum[j].SignOff }} /
+        Afwezig: {{this.groepenVanGekozenDatum[j].Absent }}
+      </small>
+      <mat-divider [inset]="true"></mat-divider>
       <table mat-table #table [dataSource]="dataSource[j]">
 
         <ng-container matColumnDef="Naam">
@@ -32,12 +38,11 @@
           </td>
         </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr> -->
         <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)='onRowClick(row)'>
         </tr>
       </table>
     </div>
-
 
   </mat-card-content>
 </mat-card>
