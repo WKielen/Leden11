@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { LedenService, LedenItemExt } from '../../services/leden.service';
 import { TrainingService, TrainingDag, TrainingItem } from '../../services/training.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -108,6 +108,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   private combineResults(): void {
 
     // console.log('%c--------------------------------------------------', 'color: #ec6969; font-weight: bold;');
+    this.afmeldingen = [];
 
     // Ik heb alle trainingsgroepen ingelezen. Nu ga ik de groepen van de huidige dag selecteren.
     this.groepenVanGekozenDatum = this.selectTrainingGroups();
@@ -120,11 +121,12 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
       const groepmetleden = dictWithMembersPerGroup.values[index];
       let trainingsGroupForUI: TrainingsGroupForUI = this.groepenVanGekozenDatum[index];
 
-      // dictWithMembersPerGroup.values.forEach((groepmetleden: Array<LedenItemTableRow>) => {
       groepmetleden.forEach((lidvaneengroep: LedenItemTableRow) => {
         trainingsGroupForUI.Members++;
 
-        this.trainingDag.DeelnameList.forEach((trainingsItem: TrainingItem) => {
+        const deelnameList: Array<TrainingItem> = JSON.parse(this.trainingDag.Value);
+
+        deelnameList.forEach((trainingsItem: TrainingItem) => {
           if (lidvaneengroep.LidNr == trainingsItem.LidNr) {
             lidvaneengroep.SetState(trainingsItem.State);
             lidvaneengroep.Reason = trainingsItem.Reason;
@@ -218,8 +220,8 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
   / Save the presence for this day
   /***************************************************************************************************/
   private savePresence(): void {
-    this.trainingDag.DeelnameList = [];
-
+    // this.trainingDag.DeelnameList = [];
+    let deelnameList: Array<TrainingItem> = [];
     for (let index = 0; index < this.dataSource.length; index++) {
       this.dataSource[index].forEach((element:LedenItemTableRow) => {
         if (element.Dirty) {
@@ -227,18 +229,19 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
           trainingItem.LidNr = element.LidNr;
           trainingItem.State = element.State;
           trainingItem.Reason = element.Reason;
-          this.trainingDag.DeelnameList.push(trainingItem);
+          deelnameList.push(trainingItem);
         }
       });
     }
-    let sub = this.trainingService.updateRec$(this.trainingDag)
+    this.trainingDag.Value = JSON.stringify(deelnameList);
+    let sub = this.trainingService.update$(this.trainingDag)
       .subscribe(data => {
         this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
       },
         (error: AppError) => {
           if (error instanceof NotFoundError) {
             // Als het record niet is gevonden dan voeg ik het toe.
-            let sub2 = this.trainingService.insertRec$(this.trainingDag)
+            let sub2 = this.trainingService.create$(this.trainingDag)
               .subscribe(result => {
                 let tmp: any = result;
                 this.trainingDag.Id = tmp.Key;
