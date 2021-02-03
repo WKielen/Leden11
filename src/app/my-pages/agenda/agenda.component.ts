@@ -14,6 +14,8 @@ import { NoChangesMadeError } from "src/app/shared/error-handling/no-changes-mad
 import { NotFoundError } from "src/app/shared/error-handling/not-found-error";
 import { addHolidaysToEvents, agendaToEvent, setEventProps } from "../agenda/event-utils";
 import { ActionItem, ActionService, ACTIONSTATUS } from "src/app/services/action.service";
+import { catchError, map, switchMap } from "rxjs/operators";
+import { Observable, forkJoin, of } from "rxjs";
 
 
 // TODO:Select Multiple dates into vakantie
@@ -37,7 +39,7 @@ export class AgendaComponent
   }
 
   private events: EventInput[] = [];
-  private actionList: Array<ActionItem> = [];
+  // private actionList: Array<ActionItem> = [];
 
   private calendarApi: Calendar;
   @ViewChild('calendar') calendarComponent: FullCalendarComponent;
@@ -49,7 +51,8 @@ export class AgendaComponent
     if (this.authService.isMobile) {
       this.calendarOptions.initialView = "listMonth";
     }
-
+    this.loadData();
+/*
     this.registerSubscription(
       this.agendaService
         .getAll$()
@@ -103,10 +106,74 @@ export class AgendaComponent
 
     // De vakanties toevoegen aan de events array
     this.events = this.events.concat(addHolidaysToEvents());
+    */
+  }
+
+  private subAgenda: Observable<Object>;
+  private subAction: Observable<Object>;
+
+  private loadData() {
+    this.subAgenda = this.agendaService.getAll$()
+    .pipe(
+      catchError(err => of(new Array<AgendaItem>()))
+    );
+    this.subAction = this.actionService.getAllActions$().pipe(
+      catchError(err => of(new Array<ActionItem>()))
+    );
+
+    this.registerSubscription(
+      forkJoin([this.subAgenda, this.subAction ]).subscribe(results => {
+        this.fillEventsWithAgenda(results[0] as  Array<AgendaItem>);
+        this.fillEventsWithActions(results[1] as  Array<ActionItem>);
+        this.calendarOptions.events = this.events;
+      },
+        error => console.error("TrainingDeelnameComponent --> loadData --> error", error)
+      )
+    );
+  }
+
+  fillEventsWithActions(actionList: Array<ActionItem>) {
+    // let actions: EventInput[] = [];
+    actionList.forEach((item) => {
+      if (item.Status != ACTIONSTATUS.OPEN && item.Status != ACTIONSTATUS.REPEATING)
+        return;
+
+      let action: EventInput = new Object();
+      action.title = item.Title;
+      action.start = item.StartDate;
+      action.end = item.StartDate;
+      action.id = action.title + action.start;
+      let agendaItem: AgendaItem = new AgendaItem();
+      agendaItem.Extra1 = '1';
+      agendaItem.Datum = item.StartDate;
+      agendaItem.Tijd = '';
+      agendaItem.EvenementNaam = item.Title;
+      agendaItem.Lokatie = '';
+      agendaItem.Type = 'A';
+      agendaItem.DoelGroep = 'S';
+      agendaItem.Toelichting = item.Description;
+      agendaItem.Inschrijven = '';
+      agendaItem.Inschrijfgeld = '';
+      agendaItem.BetaalMethode = '';
+      agendaItem.ContactPersoon = item.HolderName;
+      agendaItem.Vervoer = '';
+      agendaItem.VerzamelAfspraak = '';
+      agendaItem.Extra1 = '2';
+      action.extendedProps = { agendaItem: agendaItem };
+      this.events.push(action);
+    });
+  }
 
 
+  fillEventsWithAgenda(agendaList: Array<AgendaItem>) {
+    agendaList.forEach((item) => {
+      this.events.push(agendaToEvent(item));
+    });
 
   }
+
+
+
 
   // Voor deze lifecycle hook is the calendar component nog niet geinitialiseerd.
   ngAfterViewChecked() {
