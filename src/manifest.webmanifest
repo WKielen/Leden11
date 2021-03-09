@@ -6,7 +6,7 @@
   "display": "standalone",
   "scope": "/app/",
   "start_url": "/app/index.html",
-  "shortcuts": [ 
+  "shortcuts": [
     {
       "name": "Ledenlijst",
       "short_name": "Ledenlijst",
@@ -16,7 +16,7 @@
           "src": "assets/icons/app-logo-192x192.png",
           "sizes": "192x192",
           "purpose": "maskable"
-        } 
+        }
       ]
     },
     {
@@ -28,7 +28,7 @@
           "src": "assets/icons/app-logo-192x192.png",
           "sizes": "192x192",
           "purpose": "maskable"
-        } 
+        }
       ]
     }
   ],
@@ -81,5 +81,6 @@
       "type": "image/png",
       "purpose": "maskable any"
     }
-  ]
+  ],
+  "gcm_sender-id": "953979335612"
 }
