@@ -1,11 +1,11 @@
 {
   "name": "TTVN Nieuwegein",
-  "short_name": "TTVN",
+  "short_name": "Admin",
   "theme_color": "#FBC02D",
   "background_color": "#FBC02D",
   "display": "standalone",
-  "scope": "/app/",
-  "start_url": "/app/index.html",
+  "scope": "/",
+  "start_url": "index.html",
   "shortcuts": [
     {
       "name": "Ledenlijst",
