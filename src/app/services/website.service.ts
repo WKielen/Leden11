@@ -41,7 +41,6 @@ export class WebsiteService extends DataService {
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Download', 'DisplayOnRoles': PAGEROLES.downloadPageRoles.join(), 'Url': ROUTE.downloadPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Contributie', 'DisplayOnRoles': PAGEROLES.contrbedragenPageRoles.join(), 'Url': ROUTE.contrbedragenPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Oud Leden', 'DisplayOnRoles': PAGEROLES.oudledenPageRoles.join(), 'Url': ROUTE.oudledenPageRoute });
-    // pages.push({ 'Id': '0', 'MenuDisplayValue': 'Gebruikers', 'DisplayOnRoles': 'AD,BS', 'Url': 'users' });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Gebruikersbeheer', 'DisplayOnRoles': PAGEROLES.registrationPageRoles.join(), 'Url': ROUTE.registrationPageRoute});
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Sync NTTB', 'DisplayOnRoles': PAGEROLES.syncnttbPageRoles.join(), 'Url': ROUTE.syncnttbPageRoute });
     pages.push({ 'Id': '0', 'MenuDisplayValue': 'Deelname training', 'DisplayOnRoles': PAGEROLES.trainingdeelnamePageRoles.join(), 'Url': ROUTE.trainingdeelnamePageRoute });
@@ -80,24 +79,23 @@ export const ROLES = {
 };
 
 export const PAGEROLES = {
-  ledenPageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC, ROLES.TRAINER],
-  ledenmanagerPageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.LEDENADMIN],
-  mailPageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC],
-  agendaPageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC],
-  websitePageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC],
-  multiupdatePageRoles: [ROLES.ADMIN, ROLES.PENNINGMEESTER, ROLES.LEDENADMIN],
-  downloadPageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC],
-  oudledenPageRoles: [ROLES.ADMIN, ROLES.BESTUUR, ROLES.LEDENADMIN],
-  contrbedragenPageRoles: [ROLES.ADMIN, ROLES.PENNINGMEESTER],
-  // usersPageRoles: [ROLES.ADMIN, ROLES.BESTUUR],
-  ladderPageRoles: [ROLES.ADMIN, ROLES.JC],
-  syncnttbPageRoles: [ROLES.ADMIN, ROLES.LEDENADMIN],
-  testPageRoles: [ROLES.TEST],
-  trainingdeelnamePageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN, ROLES.BESTUUR,],
-  masterzPageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN, ROLES.BESTUUR,],
-  todolistPageRoles: [ROLES.TEST],
-  registrationPageRoles: [ROLES.ADMIN],
-  traininggroupsPageRoles: [ROLES.TRAINER, ROLES.JC, ROLES.ADMIN]
+  ledenmanagerPageRoles:      [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.LEDENADMIN ],
+  oudledenPageRoles:          [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.LEDENADMIN ],
+  ledenPageRoles:             [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC, ROLES.TRAINER ],
+  trainingdeelnamePageRoles:  [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC, ROLES.TRAINER ],
+  masterzPageRoles:           [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC, ROLES.TRAINER ],
+  mailPageRoles:              [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC ],
+  agendaPageRoles:            [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC ],
+  websitePageRoles:           [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC ],
+  downloadPageRoles:          [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.JC ],
+  todolistPageRoles:          [ ROLES.ADMIN, ROLES.BESTUUR, ROLES.TEST ],
+  contrbedragenPageRoles:     [ ROLES.ADMIN, ROLES.PENNINGMEESTER ],
+  multiupdatePageRoles:       [ ROLES.ADMIN, ROLES.PENNINGMEESTER, ROLES.LEDENADMIN ],
+  ladderPageRoles:            [ ROLES.ADMIN, ROLES.JC ],
+  syncnttbPageRoles:          [ ROLES.ADMIN, ROLES.LEDENADMIN ],
+  traininggroupsPageRoles:    [ ROLES.ADMIN, ROLES.TRAINER, ROLES.JC ],
+  registrationPageRoles:      [ ROLES.ADMIN ],
+  testPageRoles:              [ ROLES.TEST ],
 };
 
 export const ROUTE = {
@@ -107,13 +105,11 @@ export const ROUTE = {
   ledenmanagerPageRoute: 'ledenmanager',
   mailPageRoute: 'mail',
   agendaPageRoute: 'agenda',
-  // agendaManagerPageRoute: 'agendamanager',
   websitePageRoute: 'website',
   multiupdatePageRoute: 'multiupdate',
   downloadPageRoute: 'download',
   oudledenPageRoute: 'oudleden',
   contrbedragenPageRoute: 'contrbedragen',
-  // usersPageRoute: 'users',
   ladderPageRoute: 'ladder',
   syncnttbPageRoute: 'syncnttb',
   testPageRoute: 'test',
