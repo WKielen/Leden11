@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { LedenService, LedenItem, LidTypeValues, LedenItemExt } from '../../services/leden.service';
+import { LedenService, LedenItem, LidTypeValues, LedenItemExt, DateRoutines } from '../../services/leden.service';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { CountingValues } from 'src/app/shared/modules/CountingValues';
 import { FormControl } from '@angular/forms';
@@ -62,7 +62,6 @@ export class LedenComponent extends ParentComponent implements OnInit {
             this.ledenDataArrayFotoVerbod.push({VolledigeNaam: lid.VolledigeNaam, LeeftijdCategorie: lid.LeeftijdCategorie });
 
         });
-        console.log( this.ledenDataArrayFotoVerbod );
         this.dataSource.data = this.ledenDataArray;
         this.dataSource.filterPredicate = this.createFilter();
       });
@@ -135,6 +134,10 @@ export class LedenComponent extends ParentComponent implements OnInit {
 
   getLidCategory(value: string): number {
     return this.categories.get(value);
+  }
+
+  InnerHtmlLabelLeeftijdsCategorie(value: string): string {
+    return DateRoutines.InnerHtmlLabelLeeftijdsCategorie(value);
   }
 
 }

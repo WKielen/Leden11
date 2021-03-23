@@ -9,7 +9,7 @@
 
         <ng-container matColumnDef="Naam">
           <th mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>
-            <div class="mat-cell" >
+            <div class="mat-cell">
               <strong>Naam</strong>
             </div>
             <mat-form-field floatLabel="never" style="width:100px">
@@ -31,7 +31,7 @@
               <input matInput id="zoek2" [formControl]="ageFilter">
             </mat-form-field>
           </th>
-          <td mat-cell *matCellDef="let element" class='lastcolumnshrink'> {{ element.LeeftijdCategorieBond }} </td>
+          <td mat-cell *matCellDef="let element" class='lastcolumnshrink'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie(element.LeeftijdCategorieBond)"></div></td>
         </ng-container>
 
         <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
@@ -45,11 +45,6 @@
                   <td width="65%"></td>
                   <td width="5%"></td>
                 </tr>
-                <!-- <tr>    TODO:     has to be sanatized -> uitzoeken hoe! 
-                  <td class='cell'>
-                    <img src='data:image/JPEG;base64,{{element.image}}' height='50px' style='margin:10px;'>
-                  </td>
-                </tr> -->
                 <tr *ngIf='element.LidNr'>
                   <td class='cell'>LidNr:</td>
                   <td class='cell'>{{ element.LidNr }}</td>
@@ -113,7 +108,7 @@
                 </tr>
                 <tr *ngIf='element.LeeftijdCategorieBond'>
                   <td class='cell'>Categorie:</td>
-                  <td class='cell'>{{ element.LeeftijdCategorieBond }}</td>
+                  <td class='cell'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie(element.LeeftijdCategorieBond)"></div></td>
                 </tr>
                 <tr *ngIf='element.LidBond'>
                   <td class='cell'>Lid NTTB:</td>
@@ -150,25 +145,10 @@
                     </button>
                   </td>
                 </tr>
-
                 <tr *ngIf='element.Geslacht'>
                   <td class='cell'>Geslacht:</td>
                   <td class='cell'>{{ element.Geslacht }}</td>
                 </tr>
-
-                <!-- <tr *ngIf='element.IBAN'>
-                  <td class='cell'>IBAN :</td>
-                  <td class='cell'>{{ element.IBAN }}</td>
-                </tr> -->
-                <!-- <tr *ngIf='element.BIC'>
-                  <td class='cell'>BIC :</td>
-                  <td class='cell'>{{ element.BIC }}</td>
-                </tr> -->
-                <!-- <tr *ngIf='element.BetaalWijze'>
-                  <td class='cell'>BetaalWijze :</td>
-                  <td class='cell'>{{ getBetaalWijze(element.BetaalWijze) }}</td>
-                </tr> -->
-
                 <tr *ngIf='element.LidType'>
                   <td class='cell'>Lidtype:</td>
                   <td class='cell'>{{ getLidType(element.LidType) }}</td>
@@ -177,15 +157,6 @@
                   <td class='cell'>Lid vanaf:</td>
                   <td class='cell'>{{ element.LidVanaf }}</td>
                 </tr>
-                <!-- <tr *ngIf='element.VastBedrag > 0'>
-                  <td class='cell'>Vast bedrag:</td>
-                  <td class='cell'>{{ element.VastBedrag }}</td>
-                </tr> -->
-                <!-- <tr *ngIf='element.Korting > 0'>
-                  <td class='cell'>Korting:</td>
-                  <td class='cell'>{{ element.Korting }}</td>
-                </tr> -->
-
                 <tr *ngIf='element.Ouder1_Naam'>
                   <td class='cell'>Ouder Naam :</td>
                   <td class='cell'>{{ element.Ouder1_Naam }}</td>
@@ -294,7 +265,7 @@
 
         <table>
           <tr>
-            <td class='mat-cell cell-header-static'><strong>Senioren</strong></td>
+            <td class='mat-cell cell-header-static'><strong>Volwassenen</strong></td>
             <td class='mat-cell'><strong>{{ getLidCategory('Volwassenen') }}</strong></td>
           </tr>
           <tr>
@@ -306,8 +277,12 @@
             <td class='mat-cell'>{{ getLidCategory('65-Plus') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Senior1</td>
-            <td class='mat-cell'>{{ getLidCategory('Senior1') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Senior/O23')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Senior/O23') }}</td>
+          </tr>
+          <tr>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Senior1/O23')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Senior1/O23') }}</td>
           </tr>
         </table>
 
@@ -317,52 +292,56 @@
             <td class='mat-cell'><strong>{{ getLidCategory('Jeugd') }}</strong></td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Junior 3</td>
-            <td class='mat-cell'>{{ getLidCategory('Junior3') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder19/2')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder19/2') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Junior 2</td>
-            <td class='mat-cell'>{{ getLidCategory('Junior2') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder19/1')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder19/1') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Junior 1</td>
-            <td class='mat-cell'>{{ getLidCategory('Junior1') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder17/2')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder17/2') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Cadet 2</td>
-            <td class='mat-cell'>{{ getLidCategory('Cadet2') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder17/1')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder17/1') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Cadet 1</td>
-            <td class='mat-cell'>{{ getLidCategory('Cadet1') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder15/2')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder15/2') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Pupil 2</td>
-            <td class='mat-cell'>{{ getLidCategory('Pupil2') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder15/1')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder15/1') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Pupil 1</td>
-            <td class='mat-cell'>{{ getLidCategory('Pupil1') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder13/2')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder13/2') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Welp 2</td>
-            <td class='mat-cell'>{{ getLidCategory('Welp2') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder13/1')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder13/1') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Welp 1</td>
-            <td class='mat-cell'>{{ getLidCategory('Welp1') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder11/2')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder11/2') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Welp 0</td>
-            <td class='mat-cell'>{{ getLidCategory('Welp-0') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder11/1')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder11/1') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Welp -1</td>
-            <td class='mat-cell'>{{ getLidCategory('Welp-1') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder11/0')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder11/0') }}</td>
           </tr>
           <tr>
-            <td class='mat-cell cell-static'>Welp -2</td>
-            <td class='mat-cell'>{{ getLidCategory('Welp-2') }}</td>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder11/-1')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder11/-1') }}</td>
+          </tr>
+          <tr>
+            <td class='mat-cell cell-static'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie('Onder11/-2')"></div></td>
+            <td class='mat-cell'>{{ getLidCategory('Onder11/-2') }}</td>
           </tr>
         </table>
       </mat-card-content>

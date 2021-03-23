@@ -308,7 +308,7 @@ export class LidTypeValues {
   public static readonly MALE = 'M';
   public static readonly FEMALE = 'V';
 
-  public static readonly MAXYOUTHAGE = 17;
+  public static readonly MAXYOUTHAGE = 18;
 
 
   public static table: any[] = [
@@ -439,23 +439,53 @@ export class DateRoutines {
   /***************************************************************************************************/
   public static LeeftijdCategorieBond(birthdate: Date): string {
     const yearsOld = this.BondsLeeftijd(birthdate);
-    if (yearsOld <= 6) { return 'Welp-2'; }
-    if (yearsOld === 7) { return 'Welp-1'; }
-    if (yearsOld === 8) { return 'Welp-0'; }
-    if (yearsOld === 9) { return 'Welp1'; }
-    if (yearsOld === 10) { return 'Welp2'; }
-    if (yearsOld === 11) { return 'Pupil1'; }
-    if (yearsOld === 12) { return 'Pupil2'; }
-    if (yearsOld === 13) { return 'Cadet1'; }
-    if (yearsOld === 14) { return 'Cadet2'; }
-    if (yearsOld === 15) { return 'Junior1'; }
-    if (yearsOld === 16) { return 'Junior2'; }
-    if (yearsOld === 17) { return 'Junior3'; }
-    if (yearsOld === 18) { return 'Senior1'; }
+    if (yearsOld <= 6) { return 'Onder11/-2'; }
+    if (yearsOld === 7) { return 'Onder11/-1'; }
+    if (yearsOld === 8) { return 'Onder11/0'; }
+    if (yearsOld === 9) { return 'Onder11/1'; }
+    if (yearsOld === 10) { return 'Onder11/2'; }
+    if (yearsOld === 11) { return 'Onder13/1'; }
+    if (yearsOld === 12) { return 'Onder13/2'; }
+    if (yearsOld === 13) { return 'Onder15/1'; }
+    if (yearsOld === 14) { return 'Onder15/2'; }
+    if (yearsOld === 15) { return 'Onder17/1'; }
+    if (yearsOld === 16) { return 'Onder17/2'; }
+    if (yearsOld === 17) { return 'Onder19/1'; }
+    if (yearsOld === 18) { return 'Onder19/2'; }
+    if (yearsOld === 19) { return 'Senior1/O23'; }
+    if (yearsOld === 20) { return 'Senior/O23'; }
+    if (yearsOld === 21) { return 'Senior/O23'; }
+    if (yearsOld === 22) { return 'Senior/O23'; }
     if (yearsOld >= 65) { return '65-Plus'; }
     return 'Senior';
   }
+
+  public static InnerHtmlLabelLeeftijdsCategorie(leeftijdsCategorie: string) {
+    switch (leeftijdsCategorie) {
+      case 'Onder11/-2' : return 'Onder 11 <sup>-2</sup>';
+      case 'Onder11/-1' : return 'Onder 11 <sup>-1</sup>';
+      case 'Onder11/0'  : return 'Onder 11 <sup>0</sup>';
+      case 'Onder11/1'  : return 'Onder 11 <sup>1</sup>';
+      case 'Onder11/2'  : return 'Onder 11 <sup>2</sup>';
+      case 'Onder13/1'  : return 'Onder 13 <sup>1</sup>';
+      case 'Onder13/2'  : return 'Onder 13 <sup>2</sup>';
+      case 'Onder15/1'  : return 'Onder 15 <sup>1</sup>';
+      case 'Onder15/2'  : return 'Onder 15 <sup>2</sup>';
+      case 'Onder17/1'  : return 'Onder 17 <sup>1</sup>';
+      case 'Onder17/2'  : return 'Onder 17 <sup>2</sup>';
+      case 'Onder19/1'  : return 'Onder 19 <sup>1</sup>';
+      case 'Onder19/2'  : return 'Onder 19 <sup>2</sup>';
+      case 'Senior1/O23': return 'Senior/O23 <sup>1</sup>';
+      case 'Senior/O23' : return 'Senior/O23';
+      case 'Senior'     : return 'Senior';
+      case '65-Plus'    : return '65-Plus';
+    }
+    return '';
+  }
+
+
 }
+
       // public static string LeeftijdCategorieBond(DateTime birthdate, bool longversion)
       // {
       //     int yearsOld = BondsLeeftijd(birthdate);

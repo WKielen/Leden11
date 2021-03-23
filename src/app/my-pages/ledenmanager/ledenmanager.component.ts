@@ -104,7 +104,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     public theBoundCallback: Function;
     onDelete($event, index: number): void {
@@ -155,7 +155,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     onEdit(index: number): void {
         let toBeEdited: LedenItem = this.dataSource.data[index];
@@ -215,7 +215,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     }
 
     /***************************************************************************************************
-    / 
+    /
     /***************************************************************************************************/
     private refreshTableLayout(): void {
         this.dataSource.data.sort((item1, item2) => {
@@ -229,5 +229,9 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     /***************************************************************************************************/
     onDblclick($event, index): void {
         this.onEdit(index);
+    }
+
+    InnerHtmlLabelLeeftijdsCategorie(value: string): string {
+      return DateRoutines.InnerHtmlLabelLeeftijdsCategorie(value);
     }
 }

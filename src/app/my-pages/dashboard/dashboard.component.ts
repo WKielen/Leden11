@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { LedenService } from 'src/app/services/leden.service';
+import { LedenService, LidTypeValues } from 'src/app/services/leden.service';
 import * as moment from 'moment';
 import { formatDate } from '@angular/common';
 import { DateRoutines } from 'src/app/services/leden.service';
@@ -39,9 +39,10 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   private countAge_0_10: number = 0;
   private countAge_11_12: number = 0;
   private countAge_13_14: number = 0;
-  private countAge_15_17: number = 0;
-  private countAge_17_25: number = 0;
-  private countAge_25_35: number = 0;
+  private countAge_15_16: number = 0;
+  private countAge_17_18: number = 0;
+  private countAge_19_23: number = 0;
+  private countAge_24_35: number = 0;
   private countAge_35_65: number = 0;
   private countAge_65_100: number = 0;
 
@@ -89,7 +90,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       lid.Leeftijd = DateRoutines.AgeRel(lid.GeboorteDatum, this.todayDate);
       lid.membershipYears = this.todayMoment.get('years') - moment(lid.LidVanaf).get('years');
 
-      if (lid.Leeftijd <= 17) {
+      if (lid.Leeftijd <= LidTypeValues.MAXYOUTHAGE) {
         if (lid.Geslacht == 'M') {
           this.countJunMale += 1;
         } else {
@@ -117,15 +118,19 @@ export class DashboardComponent extends BaseComponent implements OnInit {
           break;
         }
         case lid.Leeftijd <= 17: {
-          this.countAge_15_17 += 1;
+          this.countAge_15_16 += 1;
           break;
         }
-        case lid.Leeftijd <= 25: {
-          this.countAge_17_25 += 1;
+        case lid.Leeftijd <= 19: {
+          this.countAge_17_18 += 1;
+          break;
+        }
+        case lid.Leeftijd <= 23: {
+          this.countAge_19_23 += 1;
           break;
         }
         case lid.Leeftijd <= 35: {
-          this.countAge_25_35 += 1;
+          this.countAge_24_35 += 1;
           break;
         }
         case lid.Leeftijd <= 65: {
@@ -183,7 +188,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       let countJuniorLeden = 0;
       let countSeniorLeden = 0;
 
-      // voor een datum gaan we alle leden langs of ze misschien al lid waren. 
+      // voor een datum gaan we alle leden langs of ze misschien al lid waren.
       this.ledenDataArray.forEach(lid => {
         let lidvanaf: Date = new Date(lid.LidVanaf);
         let lidtot: Date = new Date(lid.LidTot);
@@ -192,7 +197,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
           countLeden += 1;
 
           let age = DateRoutines.AgeRel(lid.GeboorteDatum, referenceDate);
-          if (age <= 17) {
+          if (age <= LidTypeValues.MAXYOUTHAGE) {
             countJuniorLeden += 1;
           } else {
             countSeniorLeden += 1;
@@ -291,23 +296,26 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     pieData.LabelFormat = '<b>{point.name}</b>: {point.percentage:.1f} %';
     pieData.TooltipFormat = '{point.y} {series.name}: <b>{point.percentage:.1f}%</b>';
     pieData.Data = [{
-      name: '< 10 jaar',
+      name: 'Onder 11',
       y: this.countAge_0_10,
     }, {
-      name: '11-12 jaar',
+      name: 'Onder 13',
       y: this.countAge_11_12
     }, {
-      name: '13-14 jaar',
+      name: 'Onder 15',
       y: this.countAge_13_14
     }, {
-      name: '15-17 jaar',
-      y: this.countAge_15_17,
+      name: 'Onder 17',
+      y: this.countAge_15_16,
     }, {
-      name: '18-25 jaar',
-      y: this.countAge_17_25,
+      name: 'Onder 19',
+      y: this.countAge_17_18,
+    }, {
+      name: 'Onder 23',
+      y: this.countAge_19_23,
     }, {
       name: '26-35 jaar',
-      y: this.countAge_25_35
+      y: this.countAge_24_35
     }, {
       name: '36-65 jaar',
       y: this.countAge_35_65
@@ -358,7 +366,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
   }
 
   /***************************************************************************************************
-  / 
+  /
   /***************************************************************************************************/
   public isSmallScreen: boolean = false;
   @HostListener('window:resize', ['$event'])
