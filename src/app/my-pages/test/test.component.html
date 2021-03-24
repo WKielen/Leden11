@@ -1,64 +1,12 @@
 
-<form [formGroup]="testForm" novalidate>
-  <mat-form-field class="mat-form-max-width">
-    <input matInput type="text" placeholder="Veld1" [formControl]="Field1">
-    <mat-error *ngIf="Field1.hasError('required')">
-        Veld is verplicht
-    </mat-error>
-</mat-form-field>
-
-<mat-form-field class="mat-form-max-width">
-  <input matInput type="text" placeholder="Veld2" [formControl]="Field2">
-  <mat-error *ngIf="Field2.hasError('required')">
-      Veld is verplicht
-  </mat-error>
-</mat-form-field>
-
-<mat-form-field appearance="fill">
-  <mat-label>Chips</mat-label>
-  <mat-multi-chip-select formControlName="tel" required></mat-multi-chip-select>
-  <mat-hint>Kies een datum</mat-hint>
-</mat-form-field>
-
-
-<mat-form-field appearance="fill">
-  <mat-label>Phone number</mat-label>
-  <example-tel-input formControlName="tel" required></example-tel-input>
-  <mat-icon matSuffix>phone</mat-icon>
-  <mat-hint>Include area code</mat-hint>
-</mat-form-field>
-
-
-<button mat-raised-button class="mat-card-actions" color="primary" type="button"
-(click)="onTestClick()" [disabled]='!testForm.valid'>Doe iets met test</button>
-
-
-</form>
-
 
 <mat-card>
-  <mat-card-header-spinner title="Kopje pagina"></mat-card-header-spinner>
-  <mat-card-content>
-    <app-select-lid-dropdown [leden-array]="ledenLijst" [default-value]="selected" (valueSelected)="onUserSelectedRole($event)">
-    </app-select-lid-dropdown>
-    <p>You selected: {{selected}}</p>
-  </mat-card-content>
-</mat-card>
-
-
-<mat-card>
-    <mat-card-header-spinner title="Kopje pagina" [progress]="progress"></mat-card-header-spinner>
+    <mat-card-header-spinner title="Kopje pagina" ></mat-card-header-spinner>
 
     <mat-card-content>
       <app-a2hs></app-a2hs>
-      <mat-progress-bar [value]="progress" max="100" style="margin-top: 50px;"></mat-progress-bar>
     </mat-card-content>
     <mat-card-actions>
       <button mat-raised-button (click)="onClick()" color="primary">Doe iets</button>
-        <mat-waiting-button icon="edit" (holdTime)="holdHandler($event)" [myCallback]="theBoundCallback"></mat-waiting-button>
-        <button mat-icon-button color="primary" holdable (holdTime)="holdHandler($event)">
-          <mat-icon aria-label="Done">done</mat-icon>
-      </button>
-      <button mat-raised-button (click)="onTest()" color="primary">test dialog</button>
     </mat-card-actions>
 </mat-card>
