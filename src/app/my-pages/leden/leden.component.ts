@@ -48,11 +48,11 @@ export class LedenComponent extends ParentComponent implements OnInit {
   };
 
   ngOnInit(): void {
-
     let sub = this.ledenService.getActiveMembers$()
       .subscribe((data) => {
+        this.dataSource.data = data;
+        this.dataSource.filterPredicate = this.createFilter();
         this.ledenDataArray = data;
-
         data.forEach((lid) => {
           this.categories.Increment(lid.LeeftijdCategorieBond);
           this.categories.Increment(lid.LeeftijdCategorie);
@@ -62,8 +62,7 @@ export class LedenComponent extends ParentComponent implements OnInit {
             this.ledenDataArrayFotoVerbod.push({VolledigeNaam: lid.VolledigeNaam, LeeftijdCategorie: lid.LeeftijdCategorie });
 
         });
-        this.dataSource.data = this.ledenDataArray;
-        this.dataSource.filterPredicate = this.createFilter();
+
       });
     this.registerSubscription(sub);
 
