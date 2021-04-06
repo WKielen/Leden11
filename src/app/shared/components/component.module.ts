@@ -11,32 +11,27 @@ import { HoldableModule } from '../directives/directives.module';
 import { CheckboxListComponent } from './checkbox.list.component';
 import { DialogMessageBoxComponent } from './dialog.message.box';
 
+const componentList = [
+  CardHeaderSpinnerComponent,
+  A2hsComponent,
+  OldCheckboxListComponent,
+  SelectLidDropdownComponent,
+  CardHeaderDetailComponent,
+  WaitingButtonComponent,
+  CheckboxListComponent,
+  DialogMessageBoxComponent,
+]
 @NgModule({
-  declarations: [
-    CardHeaderSpinnerComponent,
-    A2hsComponent,
-    OldCheckboxListComponent,
-    SelectLidDropdownComponent,
-    CardHeaderDetailComponent,
-    WaitingButtonComponent,
-    CheckboxListComponent,
-    DialogMessageBoxComponent,
-  ],
   imports: [
     CommonModule,
     CustomMaterialModule,
     HoldableModule,
-
+  ],
+  declarations: [
+    ...componentList
   ],
   exports: [
-    CardHeaderSpinnerComponent,
-    A2hsComponent,
-    OldCheckboxListComponent,
-    SelectLidDropdownComponent,
-    CardHeaderDetailComponent,
-    WaitingButtonComponent,
-    CheckboxListComponent,
-    DialogMessageBoxComponent,
+    ...componentList
   ]
 })
 export class SharedComponentsModule { }
