@@ -7,7 +7,6 @@ import { AgendaComponent } from './../my-pages/agenda/agenda.component';
 import { WebsiteComponent } from './../my-pages/website/website.component';
 import { LadderComponent } from './../my-pages/ladder/ladder.component';
 import { MultiUpdateComponent } from './../my-pages/multi-update/multi-update.component';
-import { DownloadComponent } from './../my-pages/download/download.component';
 import { ContrBedragenComponent } from './../my-pages/contr-bedragen/contr-bedragen.component';
 import { OudLedenComponent } from './../my-pages/oud-leden/oud-leden.component';
 import { UsersComponent } from './../my-pages/users/users.component';
@@ -68,7 +67,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     WebsiteComponent,
     LadderComponent,
     MultiUpdateComponent,
-    DownloadComponent,
     ContrBedragenComponent,
     OudLedenComponent,
     UsersComponent,
