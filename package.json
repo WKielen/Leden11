@@ -39,6 +39,7 @@
     "highcharts-angular": "^2.8.2",
     "iban": "0.0.14",
     "jspdf": "^2.3.1",
+    "jspdf-autotable": "^3.5.14",
     "leden-lib": "file:../Leden-lib/dist/leden-lib",
     "moment": "^2.29.1",
     "ng-pwa-tools": "0.0.15",
