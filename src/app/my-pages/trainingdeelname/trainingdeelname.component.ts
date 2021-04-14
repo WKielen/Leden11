@@ -124,6 +124,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
       groepmetleden.forEach((lidvaneengroep: LedenItemTableRow) => {
         trainingsGroupForUI.Members++;
 
+        if (!this.trainingDag.Value) return;
         const deelnameList: Array<TrainingItem> = JSON.parse(this.trainingDag.Value);
 
         deelnameList.forEach((trainingsItem: TrainingItem) => {
