@@ -313,9 +313,9 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     autoTable(doc, {
       head: head,
       body: data,
-      didDrawCell: (data) => {
-        console.log(data.column.index)
-      },
+      // didDrawCell: (data) => {
+      //   console.log(data.column.index)
+      // },
       startY: currentposition
     })
 
@@ -342,9 +342,9 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     autoTable(doc, {
       head: head,
       body: data,
-      didDrawCell: (data) => {
-        console.log(data.column.index)
-      },
+      // didDrawCell: (data) => {
+      //   console.log(data.column.index)
+      // },
       startY: currentposition
     })
 
@@ -370,9 +370,9 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     autoTable(doc, {
       head: decisionheader,
       body: data,
-      didDrawCell: (data) => {
-        console.log(data.column.index)
-      },
+      // didDrawCell: (data) => {
+      //   console.log(data.column.index)
+      // },
       startY: currentposition
     })
 
@@ -399,9 +399,9 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     autoTable(doc, {
       head: head,
       body: data,
-      didDrawCell: (data) => {
-        console.log(data.column.index)
-      },
+      // didDrawCell: (data) => {
+      //   console.log(data.column.index)
+      // },
       startY: currentposition
     })
 
@@ -429,9 +429,9 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     autoTable(doc, {
       head: head,
       body: data,
-      didDrawCell: (data) => {
-        console.log(data.column.index)
-      },
+      // didDrawCell: (data) => {
+      //   console.log(data.column.index)
+      // },
       startY: currentposition
     })
 
