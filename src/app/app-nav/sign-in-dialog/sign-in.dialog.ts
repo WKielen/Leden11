@@ -15,7 +15,7 @@ import { ROUTE } from 'src/app/services/website.service';
   styles: ['mat-form-field {width: 100%; }',
     `.internalcard {border: 1px solid rgba(0, 0, 0, 0.03); box-shadow: 2px 5px 5px lightgrey;
                 margin: 15px; border-radius: 5px;}`,
-    '.internalcardcontent { margin: 10px 10px 10px 20px;'
+    '.internalcardcontent { margin: 10px 10px 10px 20px;}'
   ],
 
 })
