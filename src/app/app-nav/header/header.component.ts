@@ -7,7 +7,11 @@ import { NotificationDialogComponent } from 'src/app/app-nav/headernotificationd
 import { LogonData } from 'src/app/shared/classes/LogonData';
 import { A2hsSafariHow2 } from 'src/app/shared/components/a2hs-ios-safari-how2/a2hs-ios-safari-how2';
 import { ROUTE } from 'src/app/services/website.service';
-// import { version } from '../../../../package.json';
+
+// Een stukje JS voor het ophalen van de applicatie versie uit package.json
+declare var require: any;
+const { version: appVersion } = require('../../../../package.json');
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -18,7 +22,7 @@ export class HeaderComponent implements OnInit {
   @Output() toggleSideBarForMe: EventEmitter<any> = new EventEmitter();
 
   logonData: LogonData = new LogonData;
-  public version: string = /* version + */ '/' + VERSION.full;
+  public version: string = appVersion +  '/' + VERSION.full;
 
   constructor(
     private router: Router,
