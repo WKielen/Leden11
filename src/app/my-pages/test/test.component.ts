@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { ParamService } from "src/app/services/param.service";
 import { ParentComponent } from "src/app/shared/parent.component";
 
 @Component({
@@ -13,7 +14,7 @@ export class TestComponent
   implements OnInit {
   constructor(
     protected snackBar: MatSnackBar,
-
+    protected paramService: ParamService
   ) {
     super(snackBar);
   }
@@ -29,6 +30,10 @@ export class TestComponent
 
 
   onClick() {
+
+    // this.paramService.delete$("abc").subscribe();
+    this.paramService.readParamData$("getinstantwebsitetext").subscribe();
+
 
   }
 

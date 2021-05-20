@@ -120,12 +120,12 @@ export class LedenService extends DataService {
           data => console.log('Received: ', data),
           error => console.log('Oeps: ', error)
         ),
-        map(function (value: LedenItem[]) {
-          this.localdata = value;
-          this.localdata.forEach(element => {
+        map(function (value: LedenItemExt[]) {
+          let localdata = value;
+          localdata.forEach(element => {
             element.Naam = LedenItem.getFullNameAkCt(element.Voornaam, element.Tussenvoegsel, element.Achternaam);
           });
-          return this.localdata;
+          return localdata;
         })
       );
   }
