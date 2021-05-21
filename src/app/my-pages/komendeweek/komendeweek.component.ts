@@ -38,11 +38,15 @@ export class KomendeWeekComponent extends BaseComponent implements OnInit {
             return localdata;
           })
         )
-        .subscribe((agendaLijst: Array<AgendaItem>) => {
-          agendaLijst.forEach(agendaItem => {
-            this.addtoDagListIfThisWeek(agendaItem);
-          });
+        .subscribe({
+          next: (agendaLijst: Array<AgendaItem>) => {
+            agendaLijst.forEach(agendaItem => {
+              this.addtoDagListIfThisWeek(agendaItem);
+            });
+          },
+          error: (e) => { console.error(e) }
         })
+
     );
 
     this.registerSubscription(
@@ -54,27 +58,29 @@ export class KomendeWeekComponent extends BaseComponent implements OnInit {
             return localdata;
           })
         )
-        .subscribe((actionLijst: Array<ActionItem>) => {
-          actionLijst.forEach(element => {
-            if (element.Status != ACTIONSTATUS.OPEN && element.Status != ACTIONSTATUS.REPEATING)
-              return;
-            let ai: AgendaItem = new AgendaItem();
-            ai.Datum = element.StartDate
-            ai.EvenementNaam = element.Title;
-            ai.Toelichting = element.Description;
-            ai.ContactPersoon = element.HolderName;
-            ai.Type = "S";
-            this.addtoDagListIfThisWeek(ai);
+        .subscribe({
+          next: (actionLijst: Array<ActionItem>) => {
+            actionLijst.forEach(element => {
+              if (element.Status != ACTIONSTATUS.OPEN && element.Status != ACTIONSTATUS.REPEATING)
+                return;
+              let ai: AgendaItem = new AgendaItem();
+              ai.Datum = element.StartDate
+              ai.EvenementNaam = element.Title;
+              ai.Toelichting = element.Description;
+              ai.ContactPersoon = element.HolderName;
+              ai.Type = "S";
+              this.addtoDagListIfThisWeek(ai);
 
-            ai = new AgendaItem();
-            ai.Datum = element.TargetDate
-            ai.EvenementNaam = element.Title;
-            ai.Toelichting = element.Description;
-            ai.ContactPersoon = element.HolderName;
-            ai.Type = "E";
-            this.addtoDagListIfThisWeek(ai);
+              ai = new AgendaItem();
+              ai.Datum = element.TargetDate
+              ai.EvenementNaam = element.Title;
+              ai.Toelichting = element.Description;
+              ai.ContactPersoon = element.HolderName;
+              ai.Type = "E";
+              this.addtoDagListIfThisWeek(ai);
 
-          });
+            });
+          }
         })
     );
   }

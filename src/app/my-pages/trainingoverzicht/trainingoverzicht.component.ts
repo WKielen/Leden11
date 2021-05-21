@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatGridList } from '@angular/material/grid-list';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
-import { Observable, forkJoin } from 'rxjs';
+import { Observable, forkJoin, lastValueFrom } from 'rxjs';
 import { TrainingService, TrainingItem } from 'src/app/services/training.service';
 import { calcBetweenDates } from 'src/app/shared/modules/DateRoutines';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
@@ -30,7 +30,7 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
   public deelNameTiles: Array<Tile> = [];
   private ledenList: Array<LedenItemExt> = [];
   private databaseRecord = new DatabaseRecord();
-  private aanwezigheidsList = new Dictionary([]);  // lijst key is lidnr, value is datumlijst met status  
+  private aanwezigheidsList = new Dictionary([]);  // lijst key is lidnr, value is datumlijst met status
 
   fabButtons = [];  // dit zijn de buttons op het scherm
   fabIcons = [{ icon: 'menu' }];
@@ -50,7 +50,7 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
   /***************************************************************************************************
   / De eerste call om de param te lezen wordt SYNC uitgevoerd. Dit doe ik omdat de eerste keer het param
   / record nog niet aanwezig is. Het wordt dan gecreerd. Eerst had ik deze call in de 'forkJoin' zitten
-  / maar daar valt hij uit vanwege de NotFound Error. Daarom apart en sync omdat de data nodig is 
+  / maar daar valt hij uit vanwege de NotFound Error. Daarom apart en sync omdat de data nodig is
   / voordat de bovenste regel gevuld kan worden. Nu weet ik zeker dat de data er is.
   / Als je denkt dat dit anders en netter kan dan hoor ik het graag.
   /***************************************************************************************************/
@@ -77,8 +77,7 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
   / De SYNC call voor het ophalen van de parameter
   /***************************************************************************************************/
   async readOrCreateParamRecord(): Promise<void> {
-    await this.readParamData$()
-      .toPromise()
+    await lastValueFrom(this.readParamData$())
       .catch(e => { })   // Hier wordt de NotFound weggevangen
       .then(response => {
         if (response) {  // In geval van een NotFound is de response leeg
@@ -131,10 +130,10 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
     // dit is de uiterste datum waarop ze aanwezig geweest zouden moeten zijn.
     let alarmBeginDate: Date = moment(new Date()).subtract(this.databaseRecord.alertAfterNumberOfDays, 'days').toDate();
 
-    // de tiles hebben geen regels. We moeten dus zelf uitrekenen wanneer het einde van de regel is en 
+    // de tiles hebben geen regels. We moeten dus zelf uitrekenen wanneer het einde van de regel is en
     // vervolgens weer een 'naam'-tile moeten maken.
     // de loops gaan alsvolgt:
-    //  Loop door de leden 
+    //  Loop door de leden
     //     Loop door de (header) colommen
     //        Loop door de data waarop het lid aanwezig is geweest.
 
@@ -200,7 +199,7 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
   /***************************************************************************************************/
   private FillFirstRow(): void {
     let beginOfSeasonDate: Date = this.CalculateBeginOfSeasonDate();
-    let numberOfDays = calcBetweenDates(new Date(), beginOfSeasonDate).days + 1; // aantal dagen 
+    let numberOfDays = calcBetweenDates(new Date(), beginOfSeasonDate).days + 1; // aantal dagen
 
     let tile = new Tile('', '#babdbe', '', this.NAME_COL_SIZE);
     this.headerTiles = [];
@@ -239,7 +238,7 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
 
   /***************************************************************************************************
   / De input bevat Lidnr en status per datum
-  / De output bevat een Dictorary met Datum en status per lid. 
+  / De output bevat een Dictorary met Datum en status per lid.
   /***************************************************************************************************/
   private ReorganisePresenceArray(PresenceList: Array<any>): Dictionary {
     let list: Dictionary = new Dictionary([]);

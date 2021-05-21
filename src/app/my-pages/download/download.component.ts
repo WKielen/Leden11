@@ -14,6 +14,7 @@ import { ActionItem, ActionService, ACTIONSTATUS } from 'src/app/services/action
 import { Clipboard } from '@angular/cdk/clipboard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
+import { lastValueFrom } from 'rxjs';
 @Component({
   selector: 'app-download-page',
   templateUrl: './download.component.html',
@@ -246,8 +247,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   readAgendaLijst(): Promise<Object> {
     // -------------------------------------------------------- :o)
-    return this.agendaService.getAll$()
-      .toPromise()
+    return lastValueFrom(this.agendaService.getAll$())
       .then(response => {
         return response
       });
@@ -444,8 +444,7 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
   /***************************************************************************************************/
   readActionLijst(): Promise<Object> {
     // -------------------------------------------------------- :o)
-    return this.actionService.getAll$()
-      .toPromise()
+    return lastValueFrom(this.actionService.getAll$())
       .then(response => {
         return response
       });

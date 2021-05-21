@@ -48,59 +48,66 @@ export class LedenComponent extends ParentComponent implements OnInit {
   };
 
   ngOnInit(): void {
-    let sub = this.ledenService.getActiveMembers$()
-      .subscribe((data) => {
-        this.dataSource.data = data;
-        this.dataSource.filterPredicate = this.createFilter();
-        this.ledenDataArray = data;
-        data.forEach((lid) => {
-          this.categories.Increment(lid.LeeftijdCategorieBond);
-          this.categories.Increment(lid.LeeftijdCategorie);
-          this.categories.Increment(lid.LeeftijdCategorieWithSex);
-          this.categories.Increment('Totaal');
-          if (lid.MagNietOpFoto == '1')
-            this.ledenDataArrayFotoVerbod.push({VolledigeNaam: lid.VolledigeNaam, LeeftijdCategorie: lid.LeeftijdCategorie });
 
-        });
-
-      });
-    this.registerSubscription(sub);
+    this.registerSubscription(
+      this.ledenService.getActiveMembers$()
+        .subscribe({
+          next: (data) => {
+            this.dataSource.data = data;
+            this.dataSource.filterPredicate = this.createFilter();
+            this.ledenDataArray = data;
+            data.forEach((lid) => {
+              this.categories.Increment(lid.LeeftijdCategorieBond);
+              this.categories.Increment(lid.LeeftijdCategorie);
+              this.categories.Increment(lid.LeeftijdCategorieWithSex);
+              this.categories.Increment('Totaal');
+              if (lid.MagNietOpFoto == '1')
+                this.ledenDataArrayFotoVerbod.push({ VolledigeNaam: lid.VolledigeNaam, LeeftijdCategorie: lid.LeeftijdCategorie });
+            });
+          }
+        })
+    );
 
     /***************************************************************************************************
     / Er is een key ingetypt op de naam categorie filter: aboneer op de filter
     /***************************************************************************************************/
-    let sub2 = this.nameFilter.valueChanges
-      .subscribe(
-        name => {
-          this.filterValues.Naam = name;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.registerSubscription(sub2);
+    this.registerSubscription(
+      this.nameFilter.valueChanges
+        .subscribe({
+          next: name => {
+            this.filterValues.Naam = name;
+            this.dataSource.filter = JSON.stringify(this.filterValues);
+          }
+        })
+    );
 
     /***************************************************************************************************
     / Er is een key ingetypt op de leeftijd categorie filter
     /***************************************************************************************************/
-    let sub3 = this.ageFilter.valueChanges
-      .subscribe(
-        age => {
-          this.filterValues.Leeftijd = age;
-          this.dataSource.filter = JSON.stringify(this.filterValues);
-        }
-      )
-    this.registerSubscription(sub3);
+    this.registerSubscription(
+      this.ageFilter.valueChanges
+        .subscribe({
+          next: age => {
+            this.filterValues.Leeftijd = age;
+            this.dataSource.filter = JSON.stringify(this.filterValues);
+          }
+        })
+    );
 
     /***************************************************************************************************
     / De laatste 5 nieuwe en de laatste 5 opzeggingen
     /***************************************************************************************************/
-    let s4 = this.ledenService.getMutaties$()
-      .subscribe((data2: LedenItem[]) => {
-        this.ledenDataArrayNieuw = data2.slice();  // copy by value
-        this.ledenDataArrayOpgezegd = data2.slice();
-        this.ledenDataArrayNieuw.splice(5, 5);
-        this.ledenDataArrayOpgezegd.splice(0, 5);
-      });
-    this.registerSubscription(s4);
+    this.registerSubscription(
+      this.ledenService.getMutaties$()
+        .subscribe({
+          next: (data2: LedenItem[]) => {
+            this.ledenDataArrayNieuw = data2.slice();  // copy by value
+            this.ledenDataArrayOpgezegd = data2.slice();
+            this.ledenDataArrayNieuw.splice(5, 5);
+            this.ledenDataArrayOpgezegd.splice(0, 5);
+          }
+        })
+    );
   }
 
   /***************************************************************************************************
@@ -118,7 +125,7 @@ export class LedenComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / Als er op een copy icon wordt gekikt dan wordt de waarde in het clipboard gezet
   /***************************************************************************************************/
-  onClickCopy(field:string) {
+  onClickCopy(field: string) {
     console.log('copied: ', field);
     this.clipboard.copy(field);
     this.showSnackBar('Copied: ' + field);

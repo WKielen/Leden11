@@ -64,7 +64,8 @@ export class LedenService extends DataService {
     delete element['LeeftijdCategorie'];
     delete element['LeeftijdCategorieWithSex'];
     delete element['Leeftijd'];
-    element['ExtraA'] = element['Trainingsgroepen'].join();
+    if (element['Trainingsgroepen'])
+      element['ExtraA'] = element['Trainingsgroepen'].join();
     delete element['Trainingsgroepen'];
     return super.update$(element);
   }

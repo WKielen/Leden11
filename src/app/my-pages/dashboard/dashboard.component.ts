@@ -67,15 +67,16 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     / We halen alle leden op en vullen vervolgens de counters.
     /***************************************************************************************************/
     let sub = this.ledenService.getAll$()
-      .subscribe((data: Array<object>) => {
+    .subscribe({
+      next: (data: Array<object>) => {
         this.ledenDataArray = data;
         this.FillTheCounters();
         this.bigChart = this.GetDataForLineChart();
         this.pieChart1 = this.GetDataForMaleFemalePie();
         this.pieChart2 = this.GetDataForAgePie();
         this.pieChart3 = this.GetDataForMemberschipPie();;
-      });
-
+      }
+    });
     this.registerSubscription(sub);
   }
 
