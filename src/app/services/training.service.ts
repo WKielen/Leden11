@@ -23,10 +23,10 @@ export class TrainingService extends DataService {
     return this.http.get(environment.baseUrl + '/training/get?Datum='  + TrainingDate.to_YYYY_MM_DD()  )
     .pipe(
       retry(3),
-      tap( // Log the result or error
-        data => console.log('Received: ', data),
-        error => console.log('Oeps: ', error)
-      ),
+      tap({ // Log the result or error
+        next: data => console.log('Received: ', data),
+        error: error => console.log('Oeps: ', error)
+      }),
     );
   }
 
@@ -63,10 +63,10 @@ export class TrainingService extends DataService {
     return this.http.get(environment.baseUrl + '/training/getfromdate?Datum=' + TrainingDate.to_YYYY_MM_DD() )
     .pipe(
       retry(3),
-      tap( // Log the result or error
-        data => console.log('Received: ', data),
-        error => console.log('Oeps: ', error)
-      ),
+      tap({ // Log the result or error
+        next: data => console.log('Received: ', data),
+        error: error => console.log('Oeps: ', error)
+      }),
    );
   }
 }

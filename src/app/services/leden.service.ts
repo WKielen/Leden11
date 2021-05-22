@@ -31,10 +31,10 @@ export class LedenService extends DataService {
     return this.http.get(environment.baseUrl + subUrl)
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         map(function (value: LedenItemExt[]) {
           let localdata = value;
           localdata.forEach(element => {
@@ -77,10 +77,10 @@ export class LedenService extends DataService {
     return this.http.get(environment.baseUrl + '/lid/getrol')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
       );
   }
 
@@ -91,10 +91,10 @@ export class LedenService extends DataService {
     return this.http.get(environment.baseUrl + '/lid/getnewlidnr')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
       );
   }
 
@@ -117,10 +117,10 @@ export class LedenService extends DataService {
     return this.http.get(environment.baseUrl + '/lid/getretiredmembers')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         map(function (value: LedenItemExt[]) {
           let localdata = value;
           localdata.forEach(element => {
@@ -138,10 +138,10 @@ export class LedenService extends DataService {
     return this.http.get(environment.baseUrl + '/lid/laatstemutaties')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         map(function (value: LedenItemExt[]) {
           let localdata = value;
           localdata.forEach(element => {
@@ -158,10 +158,10 @@ export class LedenService extends DataService {
     return this.http.get(environment.baseUrl + '/lid/convert')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
       );
   }
 }

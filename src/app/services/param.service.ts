@@ -20,21 +20,20 @@ export class ParamService extends DataService {
   / Read the Parameter and CREATE one in the database if it doesn't exist. After this read only an
   / update statement is needed.
   /***************************************************************************************************/
-  readParamData$(Id: string, Default?: string, Description?: string): Observable<string>{
+  readParamData$(Id: string, Default?: string, Description?: string): Observable<string> {
     return this.http.get(environment.baseUrl + '/param/get?Id=' + Id)
       .pipe(
         map(response => {
           return atob((response as ParamItem).Value);      // atob  = decrypt
         }),
-        tap(
-          data => console.log('Received: ', data),
-          error => {
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => {
             console.log('Not found, create one our selves: ', error)
             // De parameter niet gevonden dus maken we hem zelf aan zodat deze gebruikt kan worden.
             this.registerSubscription(this.createParamData$(Id, Default, Description).subscribe());
           }
-        ),
-
+        }),
         catchError(this.errorHandler)
       );
   }

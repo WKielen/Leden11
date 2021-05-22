@@ -23,23 +23,23 @@ export class MailService extends DataService {
     // De inject is om door een param door te geven aan de MailService vanuit een component
     // Dit lukt nog niet.
     @Inject('param') @Optional() public useServerSideParams: string
-    ) {
+  ) {
     super(environment.baseUrl + '/param', http);
     if (authService.isLoggedIn()) {
       // if (!useServerSideParams)
       this.readMailLoginData();
-    // } else {
-    //   this.mailBoxParam.UserId = '';
-    //   this.mailBoxParam.Password = '';
-    //   this.mailBoxParam.UserId = '';
-    //   this.mailBoxParam.Name = '';
-    } 
+      // } else {
+      //   this.mailBoxParam.UserId = '';
+      //   this.mailBoxParam.Password = '';
+      //   this.mailBoxParam.UserId = '';
+      //   this.mailBoxParam.Name = '';
+    }
   }
 
   /***************************************************************************************************
   / Send a mail
   /***************************************************************************************************/
-  mail$(mailItems: MailItem[] ): Observable<Object> {
+  mail$(mailItems: MailItem[]): Observable<Object> {
     let externalRecord = new ExternalMailApiRecord();
     externalRecord.UserId = this.mailBoxParam.UserId;
     externalRecord.Password = this.mailBoxParam.Password;
@@ -50,10 +50,10 @@ export class MailService extends DataService {
     return this.http.post(environment.baseUrl + '/mail/sendmail', JSON.stringify(externalRecord))
       .pipe(
         retry(1),
-        tap(
-          data => console.log('Inserted: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
@@ -65,15 +65,16 @@ export class MailService extends DataService {
     let sub = this.paramService.readParamData$('mailboxparam' + this.authService.userId,
       JSON.stringify(new MailBoxParam()),
       'Om in te loggen in de mailbox')
-      .subscribe(data => {
-        let result = data as string;
-        this.mailBoxParam = JSON.parse(result) as MailBoxParam;
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          let result = data as string;
+          this.mailBoxParam = JSON.parse(result) as MailBoxParam;
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      );
-      this.registerSubscription(sub);
+      })
+    this.registerSubscription(sub);
   }
 
   // /***************************************************************************************************
@@ -94,12 +95,12 @@ export class MailService extends DataService {
 
 
   // /***************************************************************************************************
-  // / Send a notification to the email server. 
+  // / Send a notification to the email server.
   // / De mailserver dient als vehicle om een bericht te sturen naar Firebase Message Service
   // / Deze service stuurt het bericht naar de browser die het laten zien op het scherm.
   // /***************************************************************************************************/
   // notification$(token:any): Observable<Object> {
-  //   // return this.http.post(environment.mailUrl + '/notification', externalRecord)  
+  //   // return this.http.post(environment.mailUrl + '/notification', externalRecord)
   //   return this.http.post('http://localhost:5000' + '/notification', token)  //TODO
   //     .pipe(
   //       retry(1),
@@ -111,7 +112,7 @@ export class MailService extends DataService {
   //     );
   // }
   // /***************************************************************************************************
-  // / Send a notification to the email server. 
+  // / Send a notification to the email server.
   // / De mailserver dient als vehicle om een bericht te sturen naar Firebase Message Service
   // / Deze service stuurt het bericht naar de browser die het laten zien op het scherm.
   // /***************************************************************************************************/

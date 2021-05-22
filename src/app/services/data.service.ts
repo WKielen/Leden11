@@ -45,10 +45,10 @@ export class DataService {
     return this.http.post(this.url + '/Insert', resource)
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Inserted: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
@@ -57,16 +57,16 @@ export class DataService {
     return this.http.delete(this.url + '/Delete?Id=' + '"' + id + '"')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Deleted: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
 
   protected errorHandler(error: HttpErrorResponse) {
-    
+
     if (error.status === 404) {
       return observableThrowError(new NotFoundError());
     }
@@ -88,7 +88,7 @@ export class DataService {
 
 
 /***************************************************************************************************
-/ When dealing with RxJs Observables and Subscriptions, it can easily happen, that you leak some memory. 
+/ When dealing with RxJs Observables and Subscriptions, it can easily happen, that you leak some memory.
 / That is because your component is destroyed, but the function you registered inside of the observable
 / is not. That way, you not only leak memory but probably also encounter some odd behavior.
 /***************************************************************************************************/

@@ -17,13 +17,13 @@ export class ReadTextFileService {
     return this.http.get('assets/' + filename, {responseType: 'text'})
     .pipe(
       retry( 3 ),
-      tap(
-        data => console.log('Read: ', data),
-        error => console.log( 'Oeps: ', error )
-      ),
+      tap({ // Log the result or error
+        next: data => console.log('Received: ', data),
+        error: error => console.log('Oeps: ', error)
+      }),
       catchError(this.errorHandler)
     );
-  } 
+  }
 
 /***************************************************************************************************
 / Separe errorhandling because it isn't inherited from parent DataServices

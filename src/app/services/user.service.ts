@@ -48,10 +48,10 @@ export class UserService extends DataService {
         map(response => {
           return response;
         }),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
@@ -60,10 +60,10 @@ export class UserService extends DataService {
     return this.http.delete(this.url + '/Delete?Userid=' + '"' + userid + '"')
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Deleted: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
