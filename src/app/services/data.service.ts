@@ -1,7 +1,7 @@
 import { AppError } from '../shared/error-handling/app-error';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { tap, catchError, retry } from 'rxjs/operators';
-import { throwError as observableThrowError, Subscription } from 'rxjs';
+import { throwError as observableThrowError, Subscription, of } from 'rxjs';
 import { NotFoundError } from '../shared/error-handling/not-found-error';
 import { DuplicateKeyError } from '../shared/error-handling/duplicate-key-error';
 import { NoChangesMadeError } from '../shared/error-handling/no-changes-made-error';
@@ -20,10 +20,10 @@ export class DataService {
     return this.http.get(this.url + '/GetAll')
       .pipe(
         retry(3),
-        tap( // Log the result or error
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
@@ -33,10 +33,10 @@ export class DataService {
     return this.http.patch(this.url + '/Update', resource)
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Updated: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
@@ -68,22 +68,22 @@ export class DataService {
   protected errorHandler(error: HttpErrorResponse) {
 
     if (error.status === 404) {
-      return observableThrowError(new NotFoundError());
+      return observableThrowError(() => new NotFoundError());
     }
 
     if (error.status === 409) {
-      return observableThrowError(new DuplicateKeyError());
+      return observableThrowError(() => new DuplicateKeyError());
     }
 
     if (error.status === 422) {
-      return observableThrowError(new NoChangesMadeError());
+      return observableThrowError(() => new NoChangesMadeError());
     }
 
     if (error.status === 503) {
-      return observableThrowError(new ServiceUnavailableError());
+      return observableThrowError(() => new ServiceUnavailableError());
     }
 
-    return observableThrowError(new AppError(error));
+    return observableThrowError(() => new AppError(error));
   }
 
 

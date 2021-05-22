@@ -30,9 +30,9 @@ export class ReadTextFileService {
 /***************************************************************************************************/
   protected errorHandler(error: HttpErrorResponse) {
     if (error.status === 404) {
-      return observableThrowError(new NotFoundError());
+      return observableThrowError(() => new NotFoundError());
     }
 
-    return observableThrowError(new AppError(error));
+    return observableThrowError(() => new AppError(error));
   }
 }

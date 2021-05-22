@@ -4,7 +4,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserItem, UserService } from 'src/app/services/user.service';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { AppError } from 'src/app/shared/error-handling/app-error';
-import { MailService } from 'src/app/services/mail.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
@@ -51,7 +50,6 @@ export class RegisterDialogComponent extends BaseComponent {
 
   constructor(
     private userService: UserService,
-    private mailService: MailService,
     public dialogRef: MatDialogRef<RegisterDialogComponent>,
   ) {
     super()
@@ -69,21 +67,22 @@ export class RegisterDialogComponent extends BaseComponent {
     user.Password = this.password.value;
 
     this.userService.register$(user)
-      .subscribe(addResult => {
-        if (addResult.hasOwnProperty('Key')) {
+    .subscribe({
+      next: (data) => {
+        if (data.hasOwnProperty('Key')) {
           this.responseText = 'Registratie gelukt. \nNa goedkeuring door de vereniging krijg je een mail dat je account is geactiveerd. Vanaf dat moment kan je aanloggen.';
           this.error = false;
         } else {
-          this.responseText = addResult;
+          this.responseText = data;
         }
       },
-        (error: AppError) => {
-          if (error instanceof DuplicateKeyError) {
-            this.responseText = "Deze gebruiker bestaat al";
-            this.error = true;
-          } else { throw error; }
-        }
-      );
+      error: (error: AppError) => {
+        if (error instanceof DuplicateKeyError) {
+          this.responseText = "Deze gebruiker bestaat al";
+          this.error = true;
+        } else { throw error; }
+    }
+    })
   }
 
   /***************************************************************************************************
