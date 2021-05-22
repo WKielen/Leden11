@@ -17,6 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+              "aot": true,
               "allowedCommonJsDependencies": [
                  "xlsx",
                  "export-to-csv",
