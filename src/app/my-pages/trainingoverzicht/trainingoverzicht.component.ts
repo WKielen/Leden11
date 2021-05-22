@@ -57,17 +57,18 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
   ngOnInit() {
     this.readOrCreateParamRecord();  // zie tekst in kop
     let sub = this.requestDataFromMultipleSources()
-      // Alle gevraagde gegevens zijn binnen
-      .subscribe(responseList => {
-        this.ledenList = responseList[0];
-        this.aanwezigheidsList = this.ReorganisePresenceArray(responseList[1]);
+    .subscribe({
+      next: (data) => {
+        this.ledenList = data[0];
+        this.aanwezigheidsList = this.ReorganisePresenceArray(data[1]);
 
         this.FillFirstRow();
         this.FillLedenRows(this.aanwezigheidsList);
       },
-        (error: AppError) => {
-            this.showSnackBar('Er zijn nog geen gegevens voor deze periode', '');
-        })
+      error: (error: AppError) => {
+        this.showSnackBar('Er zijn nog geen gegevens voor deze periode', '');
+      }
+    })
 
     this.registerSubscription(sub);
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
@@ -112,12 +113,13 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
    /***************************************************************************************************/
   private SaveChangedParamFields(param: DatabaseRecord): void {
     let sub = this.paramService.saveParamData$("PresenceOverviewParams" + this.authService.userId, JSON.stringify(param), 'Parameters deelname training overzicht')
-      .subscribe(data => {
-        // console.log('Saved', data);
+    .subscribe({
+      next: (data) => {
       },
-        (error: AppError) => {
-          console.log('Error', error);
-        });
+      error: (error: AppError) => {
+        console.log("error", error);
+      }
+    })
     this.registerSubscription(sub);
   }
 
@@ -272,22 +274,26 @@ export class TrainingOverzichtComponent extends ParentComponent implements OnIni
       data: dialogRecord
     })
       .afterClosed()  // returns an observable
-      .subscribe((result: DialogRecord) => {
-        // in case of cancel the result will be false
-        if (result) {
-          // console.log('result', result);
-          this.databaseRecord.displayDaysOfWeek = result.displayDaysOfWeek;
-          this.databaseRecord.showEmptyLines = result.showEmptyLines;
-          this.databaseRecord.alertAfterNumberOfDays = result.alertAfterNumberOfDays;
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            // console.log('result', result);
+            this.databaseRecord.displayDaysOfWeek = data.displayDaysOfWeek;
+            this.databaseRecord.showEmptyLines = data.showEmptyLines;
+            this.databaseRecord.alertAfterNumberOfDays = data.alertAfterNumberOfDays;
 
-          this.SaveChangedParamFields(this.databaseRecord);
+            this.SaveChangedParamFields(this.databaseRecord);
 
-          // repaint the form
-          this.FillFirstRow();
-          this.FillLedenRows(this.aanwezigheidsList);
+            // repaint the form
+            this.FillFirstRow();
+            this.FillLedenRows(this.aanwezigheidsList);
 
+          }
+          },
+        error: (error: AppError) => {
+          console.log("error", error);
         }
-      });
+      })
   }
 
   /***************************************************************************************************

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { LedenService, LedenItem } from './../../services/leden.service';
+import { LedenService, LedenItem, LedenItemExt } from './../../services/leden.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
@@ -16,7 +16,7 @@ export class MultiUpdateComponent extends ParentComponent implements OnInit {
   @ViewChild(MatTable, {static: false}) table: MatTable<any>;
 
   displayedColumns: string[] = ['Naam', 'LidBond', 'CompGerechtigd', 'VrijwilligersKorting'];
-  dataSource = new MatTableDataSource<LedenItemExt>();
+  dataSource = new MatTableDataSource<LedenItemExt2>();
   selection = new SelectionModel<LedenItem>(true, []); //used for checkboxes
   fabButtons = [];  // dit zijn de buttons op het scherm
   fabIcons = [{ icon: 'save' }];
@@ -31,9 +31,14 @@ export class MultiUpdateComponent extends ParentComponent implements OnInit {
   ngOnInit(): void {
     this.registerSubscription(
       this.ledenService.getActiveMembers$()
-        .subscribe((data: Array<LedenItemExt>) => {
-          this.dataSource.data = data;
-        }));
+        .subscribe({
+          next: (data) => {
+            this.dataSource.data = data;
+          }
+        })
+
+
+        );
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
   }
 
@@ -79,6 +84,6 @@ export class MultiUpdateComponent extends ParentComponent implements OnInit {
 /***************************************************************************************************
 / Met dit veld controleren we of een rij is aangepast
 /***************************************************************************************************/
-class LedenItemExt extends LedenItem {
-  Dirty = false;
+class LedenItemExt2 extends LedenItemExt {
+  Dirty?:boolean = false;
 }

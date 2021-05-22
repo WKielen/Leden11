@@ -90,15 +90,19 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     // gemeenschappelijke foutafhandeling. Als dat niet wenselijk is dan moet je het met een pipe oplossing op de individuele
     // Observable zoal hierboven gebeurd.
     this.registerSubscription(
-      forkJoin([this.subTrainingsTijden, this.subLeden, this.subTrainingDays]).subscribe(results => {
-        this.trainingsTijden = results[0] as Array<TrainingstijdItem>;
-        this.ledenList = results[1] as Array<LedenItemExt>;
-        this.trainingDag = results[2] as TrainingDag;
+      forkJoin([this.subTrainingsTijden, this.subLeden, this.subTrainingDays])
+        .subscribe({
+          next: (data) => {
+            this.trainingsTijden = data[0] as Array<TrainingstijdItem>;
+            this.ledenList = data[1] as Array<LedenItemExt>;
+            this.trainingDag = data[2] as TrainingDag;
 
-        this.combineResults();
-      },
-        error => console.error("TrainingDeelnameComponent --> loadData --> error", error)
-      )
+            this.combineResults();
+          },
+          error: (error: AppError) => {
+            console.error("error", error);
+          }
+        })
     );
   }
 
@@ -133,7 +137,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
             lidvaneengroep.Reason = trainingsItem.Reason;
 
             if (trainingsItem.Reason) {
-              this.afmeldingen.push({ "Naam": lidvaneengroep.Naam, "Reden": trainingsItem.Reason})
+              this.afmeldingen.push({ "Naam": lidvaneengroep.Naam, "Reden": trainingsItem.Reason })
             }
 
             switch (trainingsItem.State) { // huidige status
@@ -224,7 +228,7 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     // this.trainingDag.DeelnameList = [];
     let deelnameList: Array<TrainingItem> = [];
     for (let index = 0; index < this.dataSource.length; index++) {
-      this.dataSource[index].forEach((element:LedenItemTableRow) => {
+      this.dataSource[index].forEach((element: LedenItemTableRow) => {
         if (element.Dirty) {
           let trainingItem = new TrainingItem();
           trainingItem.LidNr = element.LidNr;
@@ -236,17 +240,20 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
     }
     this.trainingDag.Value = JSON.stringify(deelnameList);
     let sub = this.trainingService.update$(this.trainingDag)
-      .subscribe(data => {
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+        },
+        error: (error: AppError) => {
           if (error instanceof NotFoundError) {
             // Als het record niet is gevonden dan voeg ik het toe.
             let sub2 = this.trainingService.create$(this.trainingDag)
-              .subscribe(result => {
-                let tmp: any = result;
-                this.trainingDag.Id = tmp.Key;
-                this.showSnackBar(SnackbarTexts.SuccessNewRecord);
+              .subscribe({
+                next: (data) => {
+                  let tmp: any = data;
+                  this.trainingDag.Id = tmp.Key;
+                  this.showSnackBar(SnackbarTexts.SuccessNewRecord);
+                },
               });
             this.registerSubscription(sub2);
           }
@@ -257,7 +264,8 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
           else {
             this.showSnackBar(SnackbarTexts.UpdateError, '');
           }
-        });
+        }
+      })
     this.registerSubscription(sub);
   }
 

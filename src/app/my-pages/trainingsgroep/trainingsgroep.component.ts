@@ -6,6 +6,7 @@ import { ParentComponent } from 'src/app/shared/parent.component';
 import { TrainingstijdItem, TrainingstijdService } from 'src/app/services/trainingstijd.service';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { CountingValues } from 'src/app/shared/modules/CountingValues';
+import { AppError } from 'src/app/shared/error-handling/app-error';
 
 @Component({
   selector: 'app-trainingsgroep',
@@ -35,13 +36,19 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
   ngOnInit(): void {
     this.registerSubscription(
       this.trainingstijdService.getAll$()
-        .subscribe((data: Array<TrainingstijdItem>) => {
-          this.trainingsTijden = data;
-          this.trainingsTijden.forEach(tijdstip => {
-            this.displayedColumns.push(tijdstip.Code);
-          });
-          this.vulLidInGroepLijst();
-        }));
+        .subscribe({
+          next: (data: Array<TrainingstijdItem>) => {
+            this.trainingsTijden = data;
+            this.trainingsTijden.forEach(tijdstip => {
+              this.displayedColumns.push(tijdstip.Code);
+            });
+            this.vulLidInGroepLijst();
+          },
+          error: (error: AppError) => {
+            console.log("error", error);
+          }
+        })
+    );
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
   }
 
@@ -49,22 +56,24 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
     this.dataSource.data = [];
     this.registerSubscription(
       this.ledenService.getYouthMembers$()
-        .subscribe((data: Array<LedenItemExt>) => {
-          data.forEach(lid => {
-            let tmp: trainingsgroepLine = Object();
-            tmp.Naam = lid.VolledigeNaam;
-            this.trainingsTijden.forEach(tijdstip => {
-              tmp[tijdstip.Code] = false;
+        .subscribe({
+          next: (data: Array<LedenItemExt>) => {
+            data.forEach(lid => {
+              let tmp: trainingsgroepLine = Object();
+              tmp.Naam = lid.VolledigeNaam;
+              this.trainingsTijden.forEach(tijdstip => {
+                tmp[tijdstip.Code] = false;
+              });
+              lid.Trainingsgroepen.forEach(tijdstip => {
+                tmp[tijdstip] = true;
+                this.categories.Increment(tijdstip);
+              });
+              tmp.Dirty = false;
+              tmp.LidNr = lid.LidNr;
+              this.dataSource.data.push(tmp);
             });
-            lid.Trainingsgroepen.forEach(tijdstip => {
-              tmp[tijdstip] = true;
-              this.categories.Increment(tijdstip);
-            });
-            tmp.Dirty = false;
-            tmp.LidNr = lid.LidNr;
-            this.dataSource.data.push(tmp);
-          });
-          this.table.renderRows();
+            this.table.renderRows();
+          }
         }));
   }
 
@@ -78,11 +87,11 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
   }
 
   onFabClick(event, buttonNbr): void {
-    switch(buttonNbr) {
+    switch (buttonNbr) {
       case 0: this.onFabClickSave(event);
-              break;
+        break;
       case 1: this.onFabClickDownload(event);
-              break;
+        break;
     }
   }
 
@@ -104,7 +113,11 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
             'Trainingsgroepen': geselecteerdeDagen,
           };
           let sub = this.ledenService.update$(updateRecord)
-            .subscribe();
+          .subscribe({
+            error: (error: AppError) => {
+              console.log("error", error);
+            }
+          })
           this.registerSubscription(sub);
         }
       });
@@ -113,17 +126,11 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
     catch (e) {
       this.showSnackBar(SnackbarTexts.UpdateError, '');
     }
-    // this.dataSource.data.forEach(element => {
-    //   if (element.Dirty) {
-    //     console.log('ditry', element);
-    //   }
-    // });
   }
+
   onFabClickDownload(event): void {
     this.showSnackBar('Nog niet gedaan', '');
   }
-
-
 }
 
 export interface trainingsgroepLine {

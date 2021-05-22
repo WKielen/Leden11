@@ -17,7 +17,7 @@ import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-mad
 
 export class LadderComponent extends ParentComponent implements OnInit {
 
-  @ViewChild(MatTable, {static: false}) table: MatTable<any>;
+  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
 
   displayedColumns: string[] = ['Name', 'Points', 'Step'];
   dataSource = new MatTableDataSource<LadderItem>();
@@ -29,7 +29,7 @@ export class LadderComponent extends ParentComponent implements OnInit {
   constructor(private paramService: ParamService,
     protected snackBar: MatSnackBar,
   ) {
-    super ( snackBar)
+    super(snackBar)
   }
 
   ngOnInit(): void {
@@ -42,18 +42,19 @@ export class LadderComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   readLadderItem(): void {
     let sub = this.paramService.readParamData$("ladderstand", JSON.stringify(new Ladder()), "Stand van de ladder")
-      .subscribe(data => {
-        let result = data as string;
-        // this.dataSource.data = this.createDummyData().LadderItems;
-        let tmp:Ladder = JSON.parse(result);
-        this.dataSource.data = tmp.LadderItems;
-        this.titleOfLadderPage = tmp.StandPer;
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          let result = data as string;
+          // this.dataSource.data = this.createDummyData().LadderItems;
+          let tmp: Ladder = JSON.parse(result);
+          this.dataSource.data = tmp.LadderItems;
+          this.titleOfLadderPage = tmp.StandPer;
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
-      this.registerSubscription(sub);
+      });
+    this.registerSubscription(sub);
   }
 
   /***************************************************************************************************
@@ -83,9 +84,9 @@ export class LadderComponent extends ParentComponent implements OnInit {
     this.table.renderRows();
   }
 
-/***************************************************************************************************
-/ Save the table
-/***************************************************************************************************/
+  /***************************************************************************************************
+  / Save the table
+  /***************************************************************************************************/
   onSave(): void {
     // first remove empty rows
     for (let i = this.dataSource.data.length - 1; i >= 0; i--) {
@@ -113,15 +114,17 @@ export class LadderComponent extends ParentComponent implements OnInit {
     param.Value = JSON.stringify(ladder);
 
     let sub = this.paramService.saveParamData$(param.Id, param.Value, param.Description)
-      .subscribe(data => {
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+        },
+        error: (error: AppError) => {
           if (error instanceof NoChangesMadeError) {
             this.showSnackBar(SnackbarTexts.NoChanges, '');
           } else { throw error; }
-        });
-        this.registerSubscription(sub);
+        }
+      });
+    this.registerSubscription(sub);
   }
 
   /***************************************************************************************************

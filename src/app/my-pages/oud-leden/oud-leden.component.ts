@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { LedenItem, LedenService, LidTypeValues, BetaalWijzeValues } from 'src/app/services/leden.service';
 import { trigger, state, transition, style, animate } from '@angular/animations';
+import { ParentComponent } from 'src/app/shared/parent.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AppError } from 'src/app/shared/error-handling/app-error';
 
 @Component({
   selector: 'app-oud-leden',
@@ -15,20 +18,29 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
   ],
 })
 
-export class OudLedenComponent implements OnInit {
+export class OudLedenComponent extends ParentComponent implements OnInit {
   constructor(
+    protected snackBar: MatSnackBar,
     private ledenService: LedenService) {
+    super(snackBar)
   }
 
   public ledenDataArray: LedenItem[] = null;
-  public columnsToDisplay: string[] = [ 'Naam' , 'LidTot' ];
+  public columnsToDisplay: string[] = ['Naam', 'LidTot'];
   public expandedElement; // added on the angular 8 upgrade to suppres error message
 
   ngOnInit(): void {
-    this.ledenService.getRetiredMembers$()
-      .subscribe((data: LedenItem[]) => {
-        this.ledenDataArray = data;
-      });
+    this.registerSubscription(
+      this.ledenService.getRetiredMembers$()
+        .subscribe({
+          next: (data) => {
+            this.ledenDataArray = data;
+          },
+          error: (error: AppError) => {
+            console.log("error", error);
+          }
+        })
+    );
   }
 
   /***************************************************************************************************

@@ -141,8 +141,10 @@ export class MailComponent extends ParentComponent implements OnInit {
   ngOnInit(): void {
     this.registerSubscription(
       this.ledenService.getActiveMembers$()
-        .subscribe((data: Array<LedenItemExt>) => {
-          this.dataSource.data = data;
+        .subscribe({
+          next: (data: Array<LedenItemExt>) => {
+            this.dataSource.data = data;
+          }
         }));
 
     this.dataSource.filterPredicate = this.createFilter();
@@ -184,17 +186,21 @@ export class MailComponent extends ParentComponent implements OnInit {
       data: mailDialogInputMessage
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {  // in case of cancel the result will be false
-        console.log('result', result);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .subscribe({
+        next: (result: any) => {
+          if (result) {  // in case of cancel the result will be false
+            console.log('result', result);
+          }
+        }
+      });
   }
 
   /***************************************************************************************************
-  / Hier bepaal ik naar wie er een mail moet worden gestuurd. 
+  / Hier bepaal ik naar wie er een mail moet worden gestuurd.
   / Het issue is dat ik niet fatsoenlijk vast kan stellen welke regels er checked zijn binnen
-  / de gefilterde regels. 
+  / de gefilterde regels.
   /***************************************************************************************************/
   private determineMailToSend(): void {
     var filteredData = this.dataSource.filteredData ? this.dataSource.filteredData : new LedenItemExt()[0];
@@ -211,7 +217,7 @@ export class MailComponent extends ParentComponent implements OnInit {
   }
 
   /***************************************************************************************************
-  / Een checkbox van de ledenlijst is gewijzigd. 
+  / Een checkbox van de ledenlijst is gewijzigd.
   /***************************************************************************************************/
   onCheckboxChange(event, row): void {
     if (event) {
@@ -246,47 +252,51 @@ export class MailComponent extends ParentComponent implements OnInit {
       this.savedMailNames.MailNameItems.push(mailSaveItem.Name);
 
       // bewaar de maillijst
-      let sub = this.paramService.saveParamData$('mailist' + this.authService.userId,
+      this.registerSubscription(this.paramService.saveParamData$('mailist' + this.authService.userId,
         JSON.stringify(this.savedMailNames), 'Maillijst' + this.authService.userId)
-        .subscribe(data => {
-        },
-          (error: AppError) => {
-            if (error instanceof DuplicateKeyError) {
-              this.showSnackBar(SnackbarTexts.DuplicateKey, '');
-            } else { throw error; }
-          });
-      this.registerSubscription(sub);
-
-      // Bewaar de email
-      let sub2 = this.paramService.createParamData$('mail' + this.authService.userId + mailSaveItem.Name,
-        JSON.stringify(mailSaveItem), 'Mail' + this.authService.userId)
-        .subscribe(addResult => {
-          let tmp = addResult;
-          this.showSnackBar(SnackbarTexts.SuccessNewRecord, '');
-        },
-          (error: AppError) => {
+        .subscribe({
+          next: (data) => {
+          },
+          error: (error: AppError) => {
             if (error instanceof DuplicateKeyError) {
               this.showSnackBar(SnackbarTexts.DuplicateKey, '');
             } else { throw error; }
           }
-        );
-      this.registerSubscription(sub2);
+        })
+      );
+
+      // Bewaar de email
+      this.registerSubscription(this.paramService.createParamData$('mail' + this.authService.userId + mailSaveItem.Name,
+        JSON.stringify(mailSaveItem), 'Mail' + this.authService.userId)
+        .subscribe({
+          next: (data) => {
+            let tmp = data;
+            this.showSnackBar(SnackbarTexts.SuccessNewRecord, '');
+          },
+          error: (error: AppError) => {
+            if (error instanceof DuplicateKeyError) {
+              this.showSnackBar(SnackbarTexts.DuplicateKey, '');
+            } else { throw error; }
+          }
+        })
+      );
 
     }
     else {
 
-      let sub = this.paramService.saveParamData$('mail' + this.authService.userId + mailSaveItem.Name,
+      this.registerSubscription(this.paramService.saveParamData$('mail' + this.authService.userId + mailSaveItem.Name,
         JSON.stringify(mailSaveItem), 'Mail' + this.authService.userId)
-        .subscribe(data => {
-          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-        },
-          (error: AppError) => {
+        .subscribe({
+          next: (data) => {
+            this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+          },
+          error: (error: AppError) => {
             if (error instanceof NoChangesMadeError) {
               this.showSnackBar(SnackbarTexts.NoChanges, '');
-
             } else { throw error; }
-          });
-      this.registerSubscription(sub);
+          }
+        })
+      );
     }
   }
 
@@ -323,34 +333,36 @@ export class MailComponent extends ParentComponent implements OnInit {
   / Lees het bewaard mail overzicht uit de Param tabel
   /***************************************************************************************************/
   private readMailList(): void {
-    let sub = this.paramService.readParamData$('mailist' + this.authService.userId, JSON.stringify(new MailNameList()), 'Maillijst' + this.authService.userId)
-      .subscribe(data => {
-        let result = JSON.parse(data as string) as MailNameList;
-        this.savedMailNames = result;
-      },
-        (error: AppError) => {
+    this.registerSubscription(this.paramService.readParamData$('mailist' + this.authService.userId, JSON.stringify(new MailNameList()), 'Maillijst' + this.authService.userId)
+      .subscribe({
+        next: (data) => {
+          let result = JSON.parse(data as string) as MailNameList;
+          this.savedMailNames = result;
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
-    this.registerSubscription(sub);
+      })
+    );
   }
 
   /***************************************************************************************************
   / Lees het bewaarde mail uit de Param tabel
   /***************************************************************************************************/
   private readMail(key: string): void {
-    let sub = this.paramService.readParamData$(key, JSON.stringify(new MailSaveItem()), 'Mail' + this.authService.userId)
-      .subscribe(data => {
-        let result = JSON.parse(data as string) as MailSaveItem;
-        this.EmailName.setValue(result.Name);
-        this.EmailSubject.setValue(result.Subject);
-        this.HtmlContent.setValue(result.Message);
-      },
-        (error: AppError) => {
+    this.registerSubscription(this.paramService.readParamData$(key, JSON.stringify(new MailSaveItem()), 'Mail' + this.authService.userId)
+      .subscribe({
+        next: (data) => {
+          let result = JSON.parse(data as string) as MailSaveItem;
+          this.EmailName.setValue(result.Name);
+          this.EmailSubject.setValue(result.Subject);
+          this.HtmlContent.setValue(result.Message);
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
-    this.registerSubscription(sub);
+      })
+    );
   }
 
   /***************************************************************************************************
@@ -364,32 +376,34 @@ export class MailComponent extends ParentComponent implements OnInit {
     }
 
     // bewaar de maillijst
-    let sub = this.paramService.saveParamData$('mailist' + this.authService.userId,
+    this.registerSubscription(this.paramService.saveParamData$('mailist' + this.authService.userId,
       JSON.stringify(this.savedMailNames), 'Maillijst' + this.authService.userId)
-      .subscribe(data => {
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+        },
+        error: (error: AppError) => {
           if (error instanceof NotFoundError) {
             this.showSnackBar(SnackbarTexts.NotFound, '');
           }
           else { throw error; }
-        });
-    this.registerSubscription(sub);
+        }
+      })
+    );
 
     // delete mail
     let key = 'mail' + this.authService.userId + this.SavedMails.value;
-    let sub2 = this.paramService.delete$(key)
-      .subscribe(addResult => {
-        let tmp = addResult;
-        this.showSnackBar(SnackbarTexts.SuccessDelete, '');
-      },
-        (error: AppError) => {
+    this.registerSubscription(this.paramService.delete$(key)
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessDelete, '');
+        },
+        error: (error: AppError) => {
           if (error instanceof NotFoundError) {
             this.showSnackBar(SnackbarTexts.NotFound, '');
           } else { throw error; }
         }
-      );
-    this.registerSubscription(sub2);
+      })
+    );
   }
 
   /***************************************************************************************************

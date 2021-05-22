@@ -21,7 +21,7 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 
 export class MasterzComponent extends ParentComponent implements OnInit {
   public ledenList: Array<LedenItemExt> = [];
-  public displayedColumns: string[] = ['Naam', 'Leeftijd', 'actions1', ];
+  public displayedColumns: string[] = ['Naam', 'Leeftijd', 'actions1',];
   public dataSource = new MatTableDataSource<LedenItemTableRow>();
   public fabButtons = [];  // dit zijn de buttons op het scherm
   public fabIcons = [{ icon: 'save' }];
@@ -38,15 +38,21 @@ export class MasterzComponent extends ParentComponent implements OnInit {
 
   ngOnInit(): void {
     let sub = this.ledenService.getYouthMembers$()
-      .subscribe(data => {
-        let tmpList: Array<LedenItemExt> = data;
+      .subscribe({
+        next: (data) => {
+          let tmpList: Array<LedenItemExt> = data;
 
-        for (let i = 0; i < tmpList.length; i++) {
-          if (tmpList[i].Leeftijd <= 12 || tmpList[i].CompGerechtigd == '0') continue;
-          this.ledenList.push(tmpList[i]);
+          for (let i = 0; i < tmpList.length; i++) {
+            if (tmpList[i].Leeftijd <= 12 || tmpList[i].CompGerechtigd == '0') continue;
+            this.ledenList.push(tmpList[i]);
+          }
+          this.readAndMergeLedenWithDiploma();
+        },
+        error: (error: AppError) => {
+          console.log("error", error);
         }
-        this.readAndMergeLedenWithDiploma();
       });
+
     this.fabButtons = this.fabIcons;  // plaats add button op scherm
 
     this.registerSubscription(sub);
@@ -57,14 +63,16 @@ export class MasterzComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   private readAndMergeLedenWithDiploma(): void {
     let sub = this.paramService.readParamData$('Masterz', JSON.stringify(this.geslaagden), 'Geslaagden')
-      .subscribe(geslaagden => {
-        this.geslaagden = JSON.parse(geslaagden);
-        this.dataSource.data = this.mergeLedenAndDiploma(this.ledenList, this.geslaagden);
-        console.log('', this.dataSource.data);
-      },
-        (error: AppError) => {  // I create an empty Diploma day
+      .subscribe({
+        next: (data) => {
+          this.geslaagden = JSON.parse(data);
           this.dataSource.data = this.mergeLedenAndDiploma(this.ledenList, this.geslaagden);
-        });
+          console.log('', this.dataSource.data);
+        },
+        error: (error: AppError) => {
+          this.dataSource.data = this.mergeLedenAndDiploma(this.ledenList, this.geslaagden);
+        }
+      });
     this.registerSubscription(sub);
   }
 
@@ -113,10 +121,11 @@ export class MasterzComponent extends ParentComponent implements OnInit {
     });
 
     let sub = this.paramService.saveParamData$('Masterz', JSON.stringify(this.geslaagden), 'geslaagden')
-      .subscribe(data => {
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+        },
+        error: (error: AppError) => {
           if (error instanceof NotFoundError) {
             this.showSnackBar(SnackbarTexts.NotFound, '');
           }
@@ -126,7 +135,8 @@ export class MasterzComponent extends ParentComponent implements OnInit {
           else {
             this.showSnackBar(SnackbarTexts.UpdateError, '');
           }
-        });
+        }
+      })
     this.registerSubscription(sub);
   }
 
@@ -158,10 +168,10 @@ class LedenItemTableRow {
 /*
 Beste TTVN-er,
 
-'Veilig sporten' is de speerpunten van het NOC/NSF (Nederlands Olympisch Comite). Bij 'Veilig sporten' kan je denken aan regels tegen pesten, ongewenste opmerkingen en aanrakingen. Naast deze zaken valt ook het spelen van wedstrijden onder 'Veilig sporten'. Hier moet je er aan denken dat het prettig is als je tegenstander volgens dezelfde spelregels speelt, als jij. 
-Om dit te bereiken, heeft het NOC/NSF bepaald dat alle jeugdsporten op de hoogte moeten zijn van de spelregels van hun sport. Dit geldt dus ook voor tafeltennissers. 
+'Veilig sporten' is de speerpunten van het NOC/NSF (Nederlands Olympisch Comite). Bij 'Veilig sporten' kan je denken aan regels tegen pesten, ongewenste opmerkingen en aanrakingen. Naast deze zaken valt ook het spelen van wedstrijden onder 'Veilig sporten'. Hier moet je er aan denken dat het prettig is als je tegenstander volgens dezelfde spelregels speelt, als jij.
+Om dit te bereiken, heeft het NOC/NSF bepaald dat alle jeugdsporten op de hoogte moeten zijn van de spelregels van hun sport. Dit geldt dus ook voor tafeltennissers.
 Onze eigen bond, de Nationale Tafeltennisbond (NTTB), heeft bepaald dat alle jeugdspelers van 13 jaar en ouder moeten laten zien dat ze op de hoogte zijn van de spelregels. Ze hebben daarvoor een test gemaakt die je via een website kan invullen. Op website staan ook de belangrijkste spelregels en oefentoetsen.
-Dus als je 13 of ouder bent en je gaat competitie spelen dan moet je deze test doen. 
+Dus als je 13 of ouder bent en je gaat competitie spelen dan moet je deze test doen.
 
 Het werkt als volgt:
 1. Ga naar www.tafeltennismasterz.nl

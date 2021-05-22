@@ -11,10 +11,10 @@ import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { ReadTextFileService } from 'src/app/services/readtextfile.service';
 import { CheckImportedAgenda, AddImportedAgendaToDB } from 'src/app/shared/modules/AgendaRoutines';
 import { ActionItem, ActionService, ACTIONSTATUS } from 'src/app/services/action.service';
-import { Clipboard } from '@angular/cdk/clipboard';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { lastValueFrom } from 'rxjs';
+import { AppError } from 'src/app/shared/error-handling/app-error';
 @Component({
   selector: 'app-download-page',
   templateUrl: './download.component.html',
@@ -52,7 +52,6 @@ export class DownloadComponent extends ParentComponent implements OnInit {
     private actionService: ActionService,
     public readTextFileService: ReadTextFileService,
     protected snackBar: MatSnackBar,
-    private clipboard: Clipboard,
   ) {
     super(snackBar)
   }
@@ -60,16 +59,27 @@ export class DownloadComponent extends ParentComponent implements OnInit {
   ngOnInit(): void {
     this.registerSubscription(
       this.ledenService.getActiveMembers$()
-        .subscribe((data: Array<LedenItemExt>) => {
-          this.ledenArray = data;
-        }));
+        .subscribe({
+          next: (data: Array<LedenItemExt>) => {
+            this.ledenArray = data;
+          },
+          error: (error: AppError) => {
+            console.error(error);
+          }
+        })
+    );
 
     this.registerSubscription(
       this.readTextFileService.read('templates/template_vcard.txt')
-        .subscribe(data => {
-          this.vcard = data;
-        }
-        ));
+        .subscribe({
+          next: (data) => {
+            this.vcard = data;
+          },
+          error: (error: AppError) => {
+            console.error(error);
+          }
+        })
+    );
   }
 
   /***************************************************************************************************

@@ -19,7 +19,7 @@ import { map } from 'rxjs/operators';
 })
 export class DefaultComponent implements OnInit {
 
-  sideBarOpen: boolean = false;
+  sideBarOpen: boolean = true;
 
   constructor(
     private breakpointObserver: BreakpointObserver,

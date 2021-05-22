@@ -52,61 +52,6 @@ export class AgendaComponent
       this.calendarOptions.initialView = "listMonth";
     }
     this.loadData();
-/*
-    this.registerSubscription(
-      this.agendaService
-        .getAll$()
-        .subscribe((agendaLijst: Array<AgendaItem>) => {
-          agendaLijst.forEach((item) => {
-            this.events.push(agendaToEvent(item));
-          });
-          this.calendarOptions.events = this.events;
-        })
-    );
-
-
-    let actions: EventInput[] = [];
-    this.registerSubscription(
-      this.actionService
-        .getAllActions$()
-        .subscribe((actionList: Array<ActionItem>) => {
-          if (!actionList) return;
-          actionList.forEach((item) => {
-            if (item.Status != ACTIONSTATUS.OPEN && item.Status != ACTIONSTATUS.REPEATING)
-              return;
-
-            let action: EventInput = new Object();
-            action.title = item.Title;
-            action.start = item.StartDate;
-            action.end = item.StartDate;
-            action.id = action.title + action.start;
-            let agendaItem: AgendaItem = new AgendaItem();
-            agendaItem.Extra1 = '1';
-            agendaItem.Datum = item.StartDate;
-            agendaItem.Tijd = '';
-            agendaItem.EvenementNaam = item.Title;
-            agendaItem.Lokatie = '';
-            agendaItem.Type = 'A';
-            agendaItem.DoelGroep = 'S';
-            agendaItem.Toelichting = item.Description;
-            agendaItem.Inschrijven = '';
-            agendaItem.Inschrijfgeld = '';
-            agendaItem.BetaalMethode = '';
-            agendaItem.ContactPersoon = item.HolderName;
-            agendaItem.Vervoer = '';
-            agendaItem.VerzamelAfspraak = '';
-            agendaItem.Extra1 = '2';
-            action.extendedProps = { agendaItem: agendaItem };
-            actions.push(action);
-          });
-          this.events = this.events.concat(actions);
-
-        })
-    );
-
-    // De vakanties toevoegen aan de events array
-    this.events = this.events.concat(addHolidaysToEvents());
-    */
   }
 
   private subAgenda: Observable<Object>;
@@ -114,21 +59,25 @@ export class AgendaComponent
 
   private loadData() {
     this.subAgenda = this.agendaService.getAll$()
-    .pipe(
-      catchError(err => of(new Array<AgendaItem>()))
-    );
+      .pipe(
+        catchError(err => of(new Array<AgendaItem>()))
+      );
     this.subAction = this.actionService.getAllActions$().pipe(
       catchError(err => of(new Array<ActionItem>()))
     );
 
     this.registerSubscription(
-      forkJoin([this.subAgenda, this.subAction ]).subscribe(results => {
-        this.fillEventsWithAgenda(results[0] as  Array<AgendaItem>);
-        this.fillEventsWithActions(results[1] as  Array<ActionItem>);
-        this.calendarOptions.events = this.events;
-      },
-        error => console.error("TrainingDeelnameComponent --> loadData --> error", error)
-      )
+      forkJoin([this.subAgenda, this.subAction])
+        .subscribe({
+          next: (data) => {
+            this.fillEventsWithAgenda(data[0] as Array<AgendaItem>);
+            this.fillEventsWithActions(data[1] as Array<ActionItem>);
+            this.calendarOptions.events = this.events;
+          },
+          error: (error: AppError) => {
+            console.error("TrainingDeelnameComponent --> loadData --> error", error);
+          }
+        })
     );
   }
 
@@ -226,9 +175,11 @@ export class AgendaComponent
         data: { method: "Toevoegen", data: toBeAdded },
       })
       .afterClosed() // returns an observable
-      .subscribe((result) => {
-        if (result) {
-          this.storeResults(null, { 'method': 'Toevoegen', 'data': result });
+      .subscribe({
+        next: (result) => {
+          if (result) {
+            this.storeResults(null, { 'method': 'Toevoegen', 'data': result });
+          }
         }
       });
   }
@@ -244,8 +195,10 @@ export class AgendaComponent
       },
     })
       .afterClosed()
-      .subscribe(result => {
-        this.storeResults(clickInfo.event, result);
+      .subscribe({
+        next: result => {
+          this.storeResults(clickInfo.event, result);
+        }
       });
   }
 
@@ -267,59 +220,67 @@ export class AgendaComponent
     let sub;
     switch (result.method) {
       case 'Verwijderen':
-        sub = this.agendaService.delete$(event.id)
-          .subscribe(data => {
-            this.calendarApi.getEventById(event.id).remove();
-            this.showSnackBar(SnackbarTexts.SuccessDelete);
-          },
-            (error: AppError) => {
-              console.log('error', error);
-              if (error instanceof NotFoundError) {
-                this.showSnackBar(SnackbarTexts.NotFound);
-              } else { throw error; } // global error handler
-            }
-          );
-        this.registerSubscription(sub);
+        this.registerSubscription(
+          this.agendaService.delete$(event.id)
+            .subscribe({
+              next: (data) => {
+                this.calendarApi.getEventById(event.id).remove();
+                this.showSnackBar(SnackbarTexts.SuccessDelete);
+              },
+              error: (error: AppError) => {
+                console.log('error', error);
+                if (error instanceof NotFoundError) {
+                  this.showSnackBar(SnackbarTexts.NotFound);
+                } else { throw error; } // global error handler
+              }
+            })
+
+        );
         break;
       case 'Toevoegen':
-        sub = this.agendaService.create$(result.data).subscribe(
-          (addResult: any) => {
-            result.Id = addResult.Key.toString();
-            result.data.Id = addResult.Key.toString();
-            this.events.push(agendaToEvent(result.data));
-            this.calendarApi.unselect(); // clear date selection
-            this.calendarApi.addEvent(agendaToEvent(result.data));
-            this.showSnackBar(SnackbarTexts.SuccessNewRecord);
-            // bug gevonden. Het ID wordty niet goed bewaard
-          },
-          (error: AppError) => {
-            if (error instanceof DuplicateKeyError) {
-              this.showSnackBar(SnackbarTexts.DuplicateKey);
-            } else {
-              throw error;
-            }
-          }
+        this.registerSubscription(
+          this.agendaService.create$(result.data)
+            .subscribe({
+              next: (data: any) => {
+                result.Id = data.Key.toString();
+                result.data.Id = data.Key.toString();
+                this.events.push(agendaToEvent(result.data));
+                this.calendarApi.unselect(); // clear date selection
+                this.calendarApi.addEvent(agendaToEvent(result.data));
+                this.showSnackBar(SnackbarTexts.SuccessNewRecord);
+                // bug gevonden. Het ID wordty niet goed bewaard
+              },
+              error: (error: AppError) => {
+                if (error instanceof DuplicateKeyError) {
+                  this.showSnackBar(SnackbarTexts.DuplicateKey);
+                } else {
+                  throw error;
+                }
+              }
+            })
+
         );
-        this.registerSubscription(sub);
         break;
 
       case 'Wijzigen':
-        sub = this.agendaService.update$(result.data).subscribe(
-          (data) => {
-            setEventProps(event, result.data);
-            this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-          },
-          (error: AppError) => {
-            if (error instanceof NoChangesMadeError) {
-              this.showSnackBar(SnackbarTexts.NoChanges);
-            } else if (error instanceof NotFoundError) {
-              this.showSnackBar(SnackbarTexts.NotFound);
-            } else {
-              throw error;
-            }
-          }
+        this.registerSubscription(
+          this.agendaService.update$(result.data)
+            .subscribe({
+              next: (data) => {
+                setEventProps(event, result.data);
+                this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+              },
+              error: (error: AppError) => {
+                if (error instanceof NoChangesMadeError) {
+                  this.showSnackBar(SnackbarTexts.NoChanges);
+                } else if (error instanceof NotFoundError) {
+                  this.showSnackBar(SnackbarTexts.NotFound);
+                } else {
+                  throw error;
+                }
+              }
+            })
         );
-        this.registerSubscription(sub);
         break;
     }
   }

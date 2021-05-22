@@ -46,24 +46,30 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   private readnasComplijst(): void {
     let sub = this.paramService.readParamData$('nasComplijst' + this.authService.userId, JSON.stringify([]), 'NAS Ledenlijst' + this.authService.userId)
-      .subscribe(data => {
-        this.bondsNummers = JSON.parse(data as string) as any;;
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.bondsNummers = JSON.parse(data as string) as any;;
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
+      });
     this.registerSubscription(sub);
   }
-  
+
   /***************************************************************************************************
   / Lees TTVN Ledenlijst uit DB
   /***************************************************************************************************/
   private readLedenLijst(): void {
     let sub = this.ledenService.getActiveMembers$()
-      .subscribe((data: Array<LedenItem>) => {
-        this.ledenLijst = data;
-        this.onCompare();
+      .subscribe({
+        next: (data) => {
+          this.ledenLijst = data;
+          this.onCompare();
+        },
+        error: (error: AppError) => {
+          console.log("error", error);
+        }
       });
     this.registerSubscription(sub);
   }
@@ -87,7 +93,7 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / Aanname: Iedere regel van het bestand begint met een bondsnummer
   /***************************************************************************************************/
-  private SubtractBondsNummers(lines: Array<string>):void {
+  private SubtractBondsNummers(lines: Array<string>): void {
     this.bondsNummers = [];
     lines.forEach(line => {
       if (line.search(/TTVN/gi) == -1) return;
@@ -104,7 +110,7 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
     this.dataSource = new MatTableDataSource<LidDifference>();
 
     this.ledenLijst.forEach(lid => {
-      let bondsnummerFound:boolean = false;
+      let bondsnummerFound: boolean = false;
       this.bondsNummers.forEach(bondsnummer => {
         if (lid.BondsNr == bondsnummer) {
           bondsnummerFound = true;
@@ -138,21 +144,25 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
       data: { 'method': 'Wijzigen', 'data': toBeEdited }
     });
 
-    dialogRef.afterClosed().subscribe((result: LedenItem) => {
-      // console.log('received in OnEdit from dialog');
-      if (result) {  // in case of cancel the result will be false
-        let sub = this.ledenService.update$(result)
-          .subscribe(data => {
-            this.readnasComplijst();
-            this.readLedenLijst();
-            this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-          },
-            (error: AppError) => {
-              if (error instanceof NoChangesMadeError) {
-                this.showSnackBar(SnackbarTexts.NoChanges);
-              } else { throw error; }
+    dialogRef.afterClosed().subscribe({
+      next: (result: LedenItem) => {
+        // console.log('received in OnEdit from dialog');
+        if (result) {  // in case of cancel the result will be false
+          let sub = this.ledenService.update$(result)
+            .subscribe({
+              next: (data) => {
+                this.readnasComplijst();
+                this.readLedenLijst();
+                this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+              },
+              error: (error: AppError) => {
+                if (error instanceof NoChangesMadeError) {
+                  this.showSnackBar(SnackbarTexts.NoChanges);
+                } else { throw error; }
+              }
             });
-        this.registerSubscription(sub);
+          this.registerSubscription(sub);
+        }
       }
     });
   }
@@ -162,29 +172,30 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   private addImportedNasLedenToDB(): void {
     this.paramService.saveParamData$('nasComplijst' + this.authService.userId, JSON.stringify(this.bondsNummers), 'NAS Ledenlijst' + this.authService.userId)
-    .subscribe(data => {
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-    },
-        (error: AppError) => {
-            if (error instanceof NotFoundError) {
-                this.showSnackBar(SnackbarTexts.NotFound, '');
-            }
-            else if (error instanceof DuplicateKeyError) {
-                this.showSnackBar(SnackbarTexts.DuplicateKey, '');
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+        },
+        error: (error: AppError) => {
+          if (error instanceof NotFoundError) {
+            this.showSnackBar(SnackbarTexts.NotFound, '');
+          }
+          else if (error instanceof DuplicateKeyError) {
+            this.showSnackBar(SnackbarTexts.DuplicateKey, '');
 
-            }
-            else if (error instanceof NoChangesMadeError) {
-                this.showSnackBar(SnackbarTexts.NoChanges, '');
-            }
-            else {
-                this.showSnackBar(SnackbarTexts.UpdateError, '');
-            }
-        });
-
+          }
+          else if (error instanceof NoChangesMadeError) {
+            this.showSnackBar(SnackbarTexts.NoChanges, '');
+          }
+          else {
+            this.showSnackBar(SnackbarTexts.UpdateError, '');
+          }
+        }
+      })
   }
 
   /***************************************************************************************************
-  / 
+  /
   /***************************************************************************************************/
   selectedFile: File = null;
   uploadFileName: string = '';

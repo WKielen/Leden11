@@ -68,13 +68,18 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
     this.registerSubscription(
       this.actionService.getAllActions$()
-        .subscribe((data: Array<ActionItem>) => {
-          if (data) {
-            data.forEach((item) => {
-              this.actionList.add(item.Id, item);
-            });
+        .subscribe({
+          next: (data) => {
+            if (data) {
+              data.forEach((item) => {
+                this.actionList.add(item.Id, item);
+              });
+            }
+            this.createFilters();
+          },
+          error: (error: AppError) => {
+            console.log("error", error);
           }
-          this.createFilters();
         })
     );
 
@@ -149,22 +154,25 @@ export class TodolistComponent extends ParentComponent implements OnInit {
       disableClose: true
     })
       .afterClosed()  // returns an observable
-      .subscribe(result => {
-        if (result) {  // in case of cancel the result will be false
-          let sub = this.actionService.create$(result)
-            .subscribe(addResult => {
-              this.showSnackBar(SnackbarTexts.SuccessNewRecord);
-              result.Id = addResult['Key'];
-              this.actionList.add(result.Id, result);
-              this.refreshFilters();
-            },
-              (error: AppError) => {
-                if (error instanceof DuplicateKeyError) {
-                  this.showSnackBar(SnackbarTexts.DuplicateKey);
-                } else { throw error; }
-              }
-            );
-          this.registerSubscription(sub);
+      .subscribe({
+        next: result => {
+          if (result) {  // in case of cancel the result will be false
+            let sub = this.actionService.create$(result)
+              .subscribe({
+                next: (data) => {
+                  this.showSnackBar(SnackbarTexts.SuccessNewRecord);
+                  result.Id = data['Key'];
+                  this.actionList.add(result.Id, result);
+                  this.refreshFilters();
+                },
+                error: (error: AppError) => {
+                  if (error instanceof DuplicateKeyError) {
+                    this.showSnackBar(SnackbarTexts.DuplicateKey);
+                  } else { throw error; }
+                }
+              })
+            this.registerSubscription(sub);
+          }
         }
       });
   }
@@ -193,15 +201,17 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   updateAction(toBeEdited: ActionItem): void {
     this.registerSubscription(
       this.actionService.update$(toBeEdited)
-        .subscribe(data => {
-          this.refreshFilters();
-          this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-        },
-          (error: AppError) => {
+        .subscribe({
+          next: (data) => {
+            this.refreshFilters();
+            this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+          },
+          error: (error: AppError) => {
             if (error instanceof NoChangesMadeError) {
               this.showSnackBar(SnackbarTexts.NoChanges);
             } else { throw error; }
-          })
+          }
+        })
     );
   }
 
@@ -217,11 +227,16 @@ export class TodolistComponent extends ParentComponent implements OnInit {
       },
     })
       .afterClosed()
-      .subscribe(result => {
-        if (result) {
-          this.updateAction(toBeEdited);
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.updateAction(toBeEdited);
+          }
+        },
+        error: (error: AppError) => {
+          console.log("error", error);
         }
-      });
+      })
   }
 
   /***************************************************************************************************
@@ -378,18 +393,19 @@ export class TodolistComponent extends ParentComponent implements OnInit {
 
   deleteAction(toBeDeleted: ActionItem): void {
     let sub = this.actionService.delete$(toBeDeleted.Id)
-      .subscribe(data => {
-        this.actionList.remove(toBeDeleted.Id);
-        this.refreshFilters();
-        this.showSnackBar(SnackbarTexts.SuccessDelete);
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.actionList.remove(toBeDeleted.Id);
+          this.refreshFilters();
+          this.showSnackBar(SnackbarTexts.SuccessDelete);
+        },
+        error: (error: AppError) => {
           console.log('error', error);
           if (error instanceof NotFoundError) {
             this.showSnackBar(SnackbarTexts.NotFound);
           } else { throw error; } // global error handler
         }
-      );
+      })
     this.registerSubscription(sub);
   }
 

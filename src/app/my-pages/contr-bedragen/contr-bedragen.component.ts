@@ -109,21 +109,22 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   readContributieBedragen(): void {
     let sub = this.paramService.readParamData$("ContributieBedragen", JSON.stringify(new ContributieBedragen()), 'Contributie bedragen')
-      .subscribe(data => {
-        this.contributieBedragen = JSON.parse(data as string) as ContributieBedragen;
-        this.HalfjaarVolwassenen.setValue(this.contributieBedragen.HalfjaarVolwassenen);
-        this.HalfjaarJeugd.setValue(this.contributieBedragen.HalfjaarJeugd);
-        this.CompetitieBijdrageVolwassenen.setValue(this.contributieBedragen.CompetitieBijdrageVolwassenen);
-        this.CompetitieBijdrageJeugd.setValue(this.contributieBedragen.CompetitieBijdrageJeugd);
-        this.HalfjaarBondBijdrage.setValue(this.contributieBedragen.HalfjaarBondBijdrage);
-        this.ZwerflidPercentage.setValue(this.contributieBedragen.ZwerflidPercentage);
-        this.KostenRekening.setValue(this.contributieBedragen.KostenRekening);
-        this.KortingVrijwilliger.setValue(this.contributieBedragen.KortingVrijwilliger);
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.contributieBedragen = JSON.parse(data as string) as ContributieBedragen;
+          this.HalfjaarVolwassenen.setValue(this.contributieBedragen.HalfjaarVolwassenen);
+          this.HalfjaarJeugd.setValue(this.contributieBedragen.HalfjaarJeugd);
+          this.CompetitieBijdrageVolwassenen.setValue(this.contributieBedragen.CompetitieBijdrageVolwassenen);
+          this.CompetitieBijdrageJeugd.setValue(this.contributieBedragen.CompetitieBijdrageJeugd);
+          this.HalfjaarBondBijdrage.setValue(this.contributieBedragen.HalfjaarBondBijdrage);
+          this.ZwerflidPercentage.setValue(this.contributieBedragen.ZwerflidPercentage);
+          this.KostenRekening.setValue(this.contributieBedragen.KostenRekening);
+          this.KortingVrijwilliger.setValue(this.contributieBedragen.KortingVrijwilliger);
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
+      })
     this.registerSubscription(sub);
   }
 
@@ -131,19 +132,20 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   / Lees de extra param uit de Param tabel
   / - Omschrijving op afschrift
   / - Extra tekst op contributie email
-  / - Verwachte incasso datum op email 
+  / - Verwachte incasso datum op email
   /***************************************************************************************************/
   readSecondaryFeeParams(): void {
     let sub = this.paramService.readParamData$("SecondaryFeeParams", JSON.stringify(new SecondaryFeeParams()), 'Extra contributie parameters')
-      .subscribe(data => {
-        this.secondaryFeeParams = JSON.parse(data as string) as SecondaryFeeParams;
-        this.Omschrijving.setValue(this.secondaryFeeParams.Description);
-        this.requestedDirectDebitDate.setValue(new Date(this.secondaryFeeParams.RequestedDirectDebitDate));
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.secondaryFeeParams = JSON.parse(data as string) as SecondaryFeeParams;
+          this.Omschrijving.setValue(this.secondaryFeeParams.Description);
+          this.requestedDirectDebitDate.setValue(new Date(this.secondaryFeeParams.RequestedDirectDebitDate));
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
+      })
     this.registerSubscription(sub);
   }
 
@@ -152,9 +154,14 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   readActiveMembers(): void {
     let sub = this.ledenService.getActiveMembers$(true)
-      .subscribe((data) => {
-        this.ledenArray = data;
-      });
+      .subscribe({
+        next: (data) => {
+          this.ledenArray = data;
+        },
+        error: (error: AppError) => {
+          console.log("error", error);
+        }
+      })
     this.registerSubscription(sub);
   }
 
@@ -215,7 +222,7 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   }
 
   /***************************************************************************************************
-  / Maak een overzicht van alle gegevens die zijn gebruikt bij het berekenen van de contributie 
+  / Maak een overzicht van alle gegevens die zijn gebruikt bij het berekenen van de contributie
   /***************************************************************************************************/
   onBerekeningOverzicht(): void {
     let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, this.OudeBerekenMethode.value, '', this.Omschrijving.value);
@@ -228,7 +235,7 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   / Als de cursor een van de volgende velden verlaat dan bewaren we de inhoud. (Als service naar de gebruiker)
   / - Omschrijving op afschrift
   / - Extra tekst op contributie email
-  / - Verwachte incasso datum op email 
+  / - Verwachte incasso datum op email
   /***************************************************************************************************/
   onSaveChangedFields(): void {
     this.secondaryFeeParams.Description = this.Omschrijving.value; // alleen deze de andere twee zitten niet in een form
@@ -240,12 +247,12 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   }
   saveSecondaryParams(): void {
     let sub = this.paramService.saveParamData$("SecondaryFeeParams", JSON.stringify(this.secondaryFeeParams), 'Extra contributie parameters')
-    .subscribe(data => {
-    },
-      (error: AppError) => {
-        if (error instanceof NoChangesMadeError) {
-        } else { throw error; }
-      });
+      .subscribe(data => {
+      },
+        (error: AppError) => {
+          if (error instanceof NoChangesMadeError) {
+          } else { throw error; }
+        });
     this.registerSubscription(sub);
   }
 
