@@ -7,6 +7,7 @@ import { BaseComponent } from 'src/app/shared/base.component';
 import { RolesDialogComponent } from './roles.dialog';
 import { Md5 } from 'ts-md5';
 import { LedenItem, LedenService } from 'src/app/services/leden.service';
+import { AppError } from 'src/app/shared/error-handling/app-error';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
   public roles: Array<Role> = [];
   public ledenLijst: Array<LedenItem> = [] // Alleen voor de dropdown van het component
   showLidOnDropDown = "";// Het lid dat de dropdown laat zien.
-  
+
   constructor(
     public dialogRef: MatDialogRef<RegistrationDialogComponent>,
     public websiteService: WebsiteService,
@@ -47,8 +48,14 @@ export class RegistrationDialogComponent extends BaseComponent implements OnInit
   }
 
   ngOnInit(): void {
-    this.ledenService.getActiveMembers$().subscribe(data => {
-      this.ledenLijst = data;
+    this.ledenService.getActiveMembers$()
+    .subscribe({
+      next: (data) => {
+        this.ledenLijst = data;
+      },
+      error: (error: AppError) => {
+        console.log("error", error);
+      }
     });
     this.roles = this.websiteService.getRoles();
     this.roles.forEach(role => {

@@ -22,7 +22,7 @@ export class NotificationService extends DataService {
   }
 
   /***************************************************************************************************
-  / Deze method haalt de public key op van de raspberry pi via een proxy. 
+  / Deze method haalt de public key op van de raspberry pi via een proxy.
   /***************************************************************************************************/
   getPublicKey$(): Observable<Object> {
     const httpOptions = {
@@ -43,13 +43,13 @@ export class NotificationService extends DataService {
   }
 
   /***************************************************************************************************
-  / Deze method haalt de public key op van de raspberry pi via een proxy. 
+  / Deze method haalt de public key op van de raspberry pi via een proxy.
   /***************************************************************************************************/
   // insertToken gebeurt via de parent create$
 
 
   /***************************************************************************************************
-  / Ik gooi alle records weg die van deze UserId. Dus alle subscriptions worden weggegooid. 
+  / Ik gooi alle records weg die van deze UserId. Dus alle subscriptions worden weggegooid.
   / Dit gebeurt dmv button op notification.dialog.ts
   /***************************************************************************************************/
   public Unsubscribe$(UserId: string): Observable<Object> {
@@ -85,7 +85,7 @@ export class NotificationService extends DataService {
 
 
   /***************************************************************************************************
- / Send a notification to the email server. 
+ / Send a notification to the email server.
  / De mailserver dient als vehicle om een bericht te sturen naar Firebase Message Service
  / Deze service stuurt het bericht naar de browser die het laten zien op het scherm.
  /***************************************************************************************************/
@@ -116,14 +116,19 @@ export class NotificationService extends DataService {
     // console.log('sendNotificationsForRole', 'ik haal alle users op met rol' , audiance, header, message);
 
     let sub = this.ledenService.getRol$()
-      .subscribe((data: Array<LedenItem>) => {
-        const ledenLijst: Array<LedenItem> = data;
-        // console.log('Dit heb ik opgehaald', ledenLijst, 'nu ga ik ze een voor een verzenden');
+      .subscribe({
+        next: (data: Array<LedenItem>) => {
+          const ledenLijst: Array<LedenItem> = data;
+          // console.log('Dit heb ik opgehaald', ledenLijst, 'nu ga ik ze een voor een verzenden');
 
-        ledenLijst.forEach(lid => {
-          this.processLid(lid, audiance, header, message);
-        })
-      });
+          ledenLijst.forEach(lid => {
+            this.processLid(lid, audiance, header, message);
+          })
+        },
+        error: (error: AppError) => {
+          console.log("error", error);
+        }
+      })
     this.registerSubscription(sub);
   }
 
@@ -148,7 +153,7 @@ export class NotificationService extends DataService {
 
   /***************************************************************************************************
   / Dit gaat over een AANTAL USERS
-  / Stuur een notificatie naar alle registraties van een userid. Ik lees eerst alle registraties met 
+  / Stuur een notificatie naar alle registraties van een userid. Ik lees eerst alle registraties met
   / dit userid in en dan stuur ik elke browser een melding
   /***************************************************************************************************/
   // private sendNotificationToUserIds(UserIdArray: string[], header: string, message: string): void {
@@ -159,7 +164,7 @@ export class NotificationService extends DataService {
 
   /***************************************************************************************************
   / Dit gaat over 1 USER
-  / Stuur een notificatie naar alle registraties van een userid. Ik lees eerst alle registraties met 
+  / Stuur een notificatie naar alle registraties van een userid. Ik lees eerst alle registraties met
   / dit userid in en dan stuur ik elke browser een melding
   /***************************************************************************************************/
   private sendNotificationToUserId(userid: string, header: string, message: string): void {
@@ -167,18 +172,20 @@ export class NotificationService extends DataService {
 
 
     let sub = this.getSubscribtionsUserId$(userid)
-      .subscribe(data => {
-        let notificationArray = data as Array<NotificationRecord>;
-        if (notificationArray) {
-          // console.log('Dit heb ik opgehaald', notificationArray, 'stuur het nu een voor een door naar send notification');
-          notificationArray.forEach(notificatie => {
-            this.sendNotification(atob(notificatie.Token), header, message, notificatie.SendWithVapidAud);
-          })
-        }
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          let notificationArray = data as Array<NotificationRecord>;
+          if (notificationArray) {
+            // console.log('Dit heb ik opgehaald', notificationArray, 'stuur het nu een voor een door naar send notification');
+            notificationArray.forEach(notificatie => {
+              this.sendNotification(atob(notificatie.Token), header, message, notificatie.SendWithVapidAud);
+            })
+          }
+        },
+        error: (error: AppError) => {
           console.log("error", error);
-        })
+        }
+      })
     this.registerSubscription(sub);
   }
 
@@ -189,10 +196,10 @@ export class NotificationService extends DataService {
     return this.http.get(this.url + '/getuserid?userid=' + "'" + UserId + "'")
       .pipe(
         retry(3),
-        tap(
-          data => console.log('Received: ', data),
-          error => console.log('Oeps: ', error)
-        ),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
         catchError(this.errorHandler)
       );
   }
@@ -202,25 +209,27 @@ export class NotificationService extends DataService {
   / Stuur een notificatie naar de mail server die het door zal sturen naar de Firebase Notification Service
   /***************************************************************************************************/
   public sendNotification(token: string, header: string, message: string, sendwithvapidaud: string): void {
-    // console.log('sendNotification', token, 'hier wordt notification$ aangeroepen'); 
+    // console.log('sendNotification', token, 'hier wordt notification$ aangeroepen');
 
     let payload = { 'sub_token': token, 'message': NotificationService.Create_WS_Payload(header, message), 'SendWithVapidAud': sendwithvapidaud };
     // console.log('payload met sendwithvapid',payload);
 
     let sub = this.notification$(payload)
-      .subscribe((data) => {
-        if (data.hasOwnProperty('failed')) {
-          let message: string = data['failed'];
-          if (message.indexOf('401') !== -1) {
-            let sub2 = this.deleteToken$(token).subscribe();
-            this.registerSubscription(sub2);
+      .subscribe({
+        next: (data) => {
+          if (data.hasOwnProperty('failed')) {
+            let message: string = data['failed'];
+            if (message.indexOf('401') !== -1) {
+              let sub2 = this.deleteToken$(token)
+                .subscribe();
+              this.registerSubscription(sub2);
+            }
           }
-        }
-      },
-        (error: AppError) => {
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      );
+      })
     this.registerSubscription(sub);
   }
 

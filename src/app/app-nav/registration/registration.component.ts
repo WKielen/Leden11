@@ -30,8 +30,8 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   existingRegistrationSpinner = 0;
   headerToggleChecked: boolean = false;
   registerList: Dictionary = new Dictionary([]);
-  columnsNewToDisplay: string[] = ['FirstName', 'LastName','Userid', 'Email', 'actions3'];
-  columnsExistingToDisplay: string[] = ['FirstName', 'LastName','Userid', 'Email', 'actions2'];
+  columnsNewToDisplay: string[] = ['FirstName', 'LastName', 'Userid', 'Email', 'actions3'];
+  columnsExistingToDisplay: string[] = ['FirstName', 'LastName', 'Userid', 'Email', 'actions2'];
 
   dataSourceNewRegistrations = new MatTableDataSource<UserItem>();
   dataSourceExistingRegistrations = new MatTableDataSource<UserItem>();
@@ -46,12 +46,17 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
 
   ngOnInit(): void {
     let sub = this.registerService.getAll$()
-      .subscribe((data: Array<UserItem>) => {
-        data.forEach((item) => {
-          this.registerList.add(item.Userid, item);
-        });
-        this.createFilters();
-      });
+      .subscribe({
+        next: (data: Array<UserItem>) => {
+          data.forEach((item) => {
+            this.registerList.add(item.Userid, item);
+          });
+          this.createFilters();
+        },
+        error: (error: AppError) => {
+          console.log("error", error);
+        }
+      })
     this.registerSubscription(sub);
   }
 
@@ -98,22 +103,25 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
       disableClose: true
     })
       .afterClosed()  // returns an observable
-      .subscribe(result => {
-        if (result) {  // in case of cancel the result will be false
+      .subscribe({
+        next: result => {
+          if (result) {  // in case of cancel the result will be false
 
-          let sub = this.registerService.create$(result)
-            .subscribe(addResult => {
-              this.registerList.add(result.Userid, result);
-              this.refreshFilters();
-              this.showSnackBar(SnackbarTexts.SuccessNewRecord);
-            },
-              (error: AppError) => {
-                if (error instanceof DuplicateKeyError) {
-                  this.showSnackBar(SnackbarTexts.DuplicateKey);
-                } else { throw error; }
-              }
-            );
-          this.registerSubscription(sub);
+            let sub = this.registerService.create$(result)
+              .subscribe({
+                next: (data) => {
+                  this.registerList.add(result.Userid, result);
+                  this.refreshFilters();
+                  this.showSnackBar(SnackbarTexts.SuccessNewRecord);
+                },
+                error: (error: AppError) => {
+                  if (error instanceof DuplicateKeyError) {
+                    this.showSnackBar(SnackbarTexts.DuplicateKey);
+                  } else { throw error; }
+                }
+              })
+            this.registerSubscription(sub);
+          }
         }
       });
   }
@@ -142,10 +150,10 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     data.Subject = "Bevestiging gebruiker TTVN app";
     data.Lid = lid;
     this.dialog.open(SingleMailDialogComponent, {
-        data: data,
-        disableClose: true
+      data: data,
+      disableClose: true
     })
-}
+  }
 
 
   onEditNewRegistation(index: number): void {
@@ -158,7 +166,7 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     this.newRegistrationSpinner = $event;
     if ($event == 0) {  // first time call
       this.setCallBackParameters(index, this.dataSourceNewRegistrations, this.cbDeleteNewRegistation); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
-      }
+    }
   }
   cbDeleteNewRegistation($event): void {
     // console.log('in call back', $event );
@@ -196,15 +204,17 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   updateRegister(toBeEdited: UserItem): void {
     let sub = this.registerService.update$(toBeEdited)
-      .subscribe(data => {
-        this.refreshFilters();
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.refreshFilters();
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+        },
+        error: (error: AppError) => {
           if (error instanceof NoChangesMadeError) {
             this.showSnackBar(SnackbarTexts.NoChanges);
           } else { throw error; }
-        });
+        }
+      });
     this.registerSubscription(sub);
   }
 
@@ -217,26 +227,29 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
       },
     })
       .afterClosed()
-      .subscribe(result => {
-        if (result)
-          this.updateRegister(toBeEdited);
+      .subscribe({
+        next: result => {
+          if (result)
+            this.updateRegister(toBeEdited);
+        }
       });
   }
 
   cbDeleteRegister(toBeDeleted): void {
     let sub = this.registerService.delete$(toBeDeleted.Userid)
-      .subscribe(data => {
-        this.registerList.remove(toBeDeleted.Userid);
-        this.refreshFilters();
-        this.showSnackBar(SnackbarTexts.SuccessDelete);
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.registerList.remove(toBeDeleted.Userid);
+          this.refreshFilters();
+          this.showSnackBar(SnackbarTexts.SuccessDelete);
+        },
+        error: (error: AppError) => {
           console.log('error', error);
           if (error instanceof NotFoundError) {
             this.showSnackBar(SnackbarTexts.NotFound);
           } else { throw error; } // global error handler
         }
-      );
+      });
     this.registerSubscription(sub);
   }
 

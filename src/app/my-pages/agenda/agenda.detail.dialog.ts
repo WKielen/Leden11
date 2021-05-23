@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AgendaItem, DoelgroepValues, OrganisatieValues, TypeValues } from 'src/app/services/agenda.service';
+import { AppError } from 'src/app/shared/error-handling/app-error';
 import { AgendaDialogComponent } from './agenda.dialog';
 
 @Component({
@@ -43,16 +44,22 @@ export class AgendaDetailDialogComponent {
             },
         });
 
-        dialogRef.afterClosed().subscribe((result: AgendaItem) => {
-            if (result) {
-                this.data.data = result;
-                this.data.method = actiontype;
-                this.dialogRef.close(this.data);
-            }
-            else {
-                this.data.method = 'Cancel';
-                this.dialogRef.close(this.data);
-            }
-        });
+        dialogRef.afterClosed()
+        .subscribe({
+          next: (data: AgendaItem) => {
+            if (data) {
+              this.data.data = data;
+              this.data.method = actiontype;
+              this.dialogRef.close(this.data);
+          }
+          else {
+              this.data.method = 'Cancel';
+              this.dialogRef.close(this.data);
+          }
+        },
+          error: (error: AppError) => {
+            console.log("error", error);
+          }
+        })
     }
 }

@@ -36,16 +36,17 @@ export class TestComponent
     //this.paramService.readParamData$("getinstantwebsitetext").subscribe();
 
     let sub = this.paramService.readParamData$("ladderstand")
-      .subscribe(data => {
-        let result = data as string;
-        // this.dataSource.data = this.createDummyData().LadderItems;
-        let tmp = JSON.parse(result);
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          let result = data as string;
+          // this.dataSource.data = this.createDummyData().LadderItems;
+          let tmp = JSON.parse(result);
+        },
+        error: (error: AppError) => {
           console.log("error", error);
         }
-      )
-      this.registerSubscription(sub);
+      })
+    this.registerSubscription(sub);
   }
 
   onClick2() {
@@ -56,16 +57,16 @@ export class TestComponent
         error: (e) => console.error(e)
       });
 
-      // .subscribe(data => {
-      //   let result = data as string;
-      //   // this.dataSource.data = this.createDummyData().LadderItems;
-      //   let tmp = JSON.parse(result);
-      // },
-      //   (error: AppError) => {
-      //     console.log("error", error);
-      //   }
-      // )
-      this.registerSubscription(sub);
+    // .subscribe(data => {
+    //   let result = data as string;
+    //   // this.dataSource.data = this.createDummyData().LadderItems;
+    //   let tmp = JSON.parse(result);
+    // },
+    //   (error: AppError) => {
+    //     console.log("error", error);
+    //   }
+    // )
+    this.registerSubscription(sub);
   }
 
 

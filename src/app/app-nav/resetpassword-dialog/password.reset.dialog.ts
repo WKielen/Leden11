@@ -57,20 +57,22 @@ export class ResetPasswordDialogComponent extends BaseComponent {
     user.ProposedPassword = this.password1.value;
     this.registerSubscription(
       this.userService.storeNewPassword$(user)
-        .subscribe(data => {
+      .subscribe({
+        next: (data) => {
           this.error = false;
           this.responseText = "Je ontvangt een mail met een link. Als je op deze link klikt dan wordt je nieuwe password geactiveerd."
         },
-          (error: AppError) => {
-            this.error = true;
-            if (error instanceof NoChangesMadeError) {
-              this.responseText = "Je hebt dit verzoek al een keer gestuurd."
-            } else if (error instanceof NotFoundError) {
-              this.responseText = "Gebruikersnaam is onbekend."
-            } else {
-              throw error;
-            }
-          })
+        error: (error: AppError) => {
+          this.error = true;
+          if (error instanceof NoChangesMadeError) {
+            this.responseText = "Je hebt dit verzoek al een keer gestuurd."
+          } else if (error instanceof NotFoundError) {
+            this.responseText = "Gebruikersnaam is onbekend."
+          } else {
+            throw error;
+          }
+      }
+      })
     );
   }
 

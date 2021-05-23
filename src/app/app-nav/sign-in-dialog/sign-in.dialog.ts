@@ -8,6 +8,7 @@ import { RegisterDialogComponent } from '../register-dialog/register.dialog';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { ResetPasswordDialogComponent } from '../resetpassword-dialog/password.reset.dialog';
 import { ROUTE } from 'src/app/services/website.service';
+import { AppError } from 'src/app/shared/error-handling/app-error';
 
 @Component({
   selector: 'app-signin-dialog',
@@ -57,8 +58,9 @@ export class SignInDialogComponent extends BaseComponent {
       'database': environment.databaseName, 'keepsignedin': this.loginForm.value['keepSignedIn'] ? 'true' : 'false'
     };
     this.authService.login$(credentials)
-      .subscribe(result => {
-        if (result) {
+    .subscribe({
+      next: (data) => {
+        if (data) {
           const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
           this.router.navigate([returnUrl || ROUTE.dashboardPageRoute]);
           this.dialogRef.close(true);
@@ -66,10 +68,10 @@ export class SignInDialogComponent extends BaseComponent {
           this.responseText = "De combinatie van Userid en Wachtwoord bestaat niet";
         }
       },
-        err => {
-          this.responseText = "De combinatie van Userid en Wachtwoord bestaat niet";
-        });
-
+      error: (error: AppError) => {
+        this.responseText = "De combinatie van Userid en Wachtwoord bestaat niet";
+      }
+    })
   }
 
   /***************************************************************************************************

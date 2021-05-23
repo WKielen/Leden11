@@ -180,14 +180,16 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
     this.paramItem.Value = JSON.stringify(this.contributieBedragen);
 
     let sub = this.paramService.saveParamData$("ContributieBedragen", JSON.stringify(this.contributieBedragen), 'Contributie bedragen')
-      .subscribe(data => {
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+        },
+        error: (error: AppError) => {
           if (error instanceof NoChangesMadeError) {
             this.showSnackBar(SnackbarTexts.NoChanges, '');
           } else { throw error; }
-        });
+        }
+      })
     this.registerSubscription(sub);
   }
 
@@ -247,12 +249,14 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
   }
   saveSecondaryParams(): void {
     let sub = this.paramService.saveParamData$("SecondaryFeeParams", JSON.stringify(this.secondaryFeeParams), 'Extra contributie parameters')
-      .subscribe(data => {
+    .subscribe({
+      next: (data) => {
       },
-        (error: AppError) => {
-          if (error instanceof NoChangesMadeError) {
-          } else { throw error; }
-        });
+      error: (error: AppError) => {
+        if (error instanceof NoChangesMadeError) {
+        } else { throw error; }
+    }
+    })
     this.registerSubscription(sub);
   }
 
@@ -281,11 +285,15 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
       data: mailDialogInputMessage
     });
 
-    dialogRef.afterClosed().subscribe((result: any) => {
-      if (result) {  // in case of cancel the result will be false
-        console.log('result', result);
-      }
-    });
+    dialogRef
+      .afterClosed()
+      .subscribe({
+        next: (result: any) => {
+          if (result) {  // in case of cancel the result will be false
+            console.log('result', result);
+          }
+        }
+      });
   }
 
   /***************************************************************************************************

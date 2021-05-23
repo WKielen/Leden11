@@ -1,5 +1,5 @@
-import {FocusMonitor} from '@angular/cdk/a11y';
-import {coerceBooleanProperty} from '@angular/cdk/coercion';
+import { FocusMonitor } from '@angular/cdk/a11y';
+import { coerceBooleanProperty } from '@angular/cdk/coercion';
 import {
   Component,
   ElementRef,
@@ -19,8 +19,8 @@ import {
   NgControl,
   Validators
 } from '@angular/forms';
-import {MAT_FORM_FIELD, MatFormField, MatFormFieldControl} from '@angular/material/form-field';
-import {Subject} from 'rxjs';
+import { MAT_FORM_FIELD, MatFormField, MatFormFieldControl } from '@angular/material/form-field';
+import { Subject } from 'rxjs';
 
 /** @title Form field with custom telephone number input control. */
 @Component({
@@ -39,7 +39,7 @@ export class MyTel {
     public area: string,
     public exchange: string,
     public subscriber: string
-  ) {}
+  ) { }
 }
 
 /** Custom `MatFormFieldControl` for telephone number input. */
@@ -65,8 +65,8 @@ export class MyTelInput
   focused = false;
   controlType = 'example-tel-input';
   id = `example-tel-input-${MyTelInput.nextId++}`;
-  onChange = (_: any) => {};
-  onTouched = () => {};
+  onChange = (_: any) => { };
+  onTouched = () => { };
 
   get empty() {
     const {
@@ -155,13 +155,16 @@ export class MyTelInput
       ]
     });
 
-    _focusMonitor.monitor(_elementRef, true).subscribe(origin => {
-      if (this.focused && !origin) {
-        this.onTouched();
-      }
-      this.focused = !!origin;
-      this.stateChanges.next();
-    });
+    _focusMonitor.monitor(_elementRef, true)
+      .subscribe({
+        next: origin => {
+          if (this.focused && !origin) {
+            this.onTouched();
+          }
+          this.focused = !!origin;
+          this.stateChanges.next();
+        }
+      });
 
     if (this.ngControl != null) {
       this.ngControl.valueAccessor = this;

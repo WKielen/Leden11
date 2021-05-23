@@ -60,7 +60,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     //   .toPromise()
     //   .then(response => response as string);
     const tmpJson = await lastValueFrom(this.ledenService.getNewLidnr$())
-    .then(response => response as string);
+      .then(response => response as string);
     // -------------------------------------------------------- :o)
 
     const toBeAdded = new LedenItem();
@@ -183,27 +183,29 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
       disableClose: true
     });
 
-    dialogRef.afterClosed().subscribe({
-      next: (result: LedenItemExt) => {
-        if (result) {  // in case of cancel the result will be false
-          this.registerSubscription(
-            this.ledenService.update$(result).subscribe({
-              next: (data) => {
-                result.Naam = LedenItem.getFullNameAkCt(result.Voornaam, result.Tussenvoegsel, result.Achternaam);
-                result.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(result.GeboorteDatum);
-                this.refreshTableLayout();
-                this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-              }, //next
-              error: (error) => {
-                if (error instanceof NoChangesMadeError) {
-                  this.showSnackBar(SnackbarTexts.NoChanges);
-                } else { throw error; }
-              } // error
-            })  // subscribe
-          ); //register
+    dialogRef.afterClosed()
+      .subscribe({
+        next: (result: LedenItemExt) => {
+          if (result) {  // in case of cancel the result will be false
+            this.registerSubscription(
+              this.ledenService.update$(result)
+                .subscribe({
+                  next: (data) => {
+                    result.Naam = LedenItem.getFullNameAkCt(result.Voornaam, result.Tussenvoegsel, result.Achternaam);
+                    result.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(result.GeboorteDatum);
+                    this.refreshTableLayout();
+                    this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+                  }, //next
+                  error: (error) => {
+                    if (error instanceof NoChangesMadeError) {
+                      this.showSnackBar(SnackbarTexts.NoChanges);
+                    } else { throw error; }
+                  } // error
+                })  // subscribe
+            ); //register
+          }
         }
-      }
-    }) // dialog
+      }) // dialog
   }
 
   /***************************************************************************************************

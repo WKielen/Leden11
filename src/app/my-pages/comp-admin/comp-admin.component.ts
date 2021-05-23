@@ -144,27 +144,28 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
       data: { 'method': 'Wijzigen', 'data': toBeEdited }
     });
 
-    dialogRef.afterClosed().subscribe({
-      next: (result: LedenItem) => {
-        // console.log('received in OnEdit from dialog');
-        if (result) {  // in case of cancel the result will be false
-          let sub = this.ledenService.update$(result)
-            .subscribe({
-              next: (data) => {
-                this.readnasComplijst();
-                this.readLedenLijst();
-                this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-              },
-              error: (error: AppError) => {
-                if (error instanceof NoChangesMadeError) {
-                  this.showSnackBar(SnackbarTexts.NoChanges);
-                } else { throw error; }
-              }
-            });
-          this.registerSubscription(sub);
+    dialogRef.afterClosed()
+      .subscribe({
+        next: (result: LedenItem) => {
+          // console.log('received in OnEdit from dialog');
+          if (result) {  // in case of cancel the result will be false
+            let sub = this.ledenService.update$(result)
+              .subscribe({
+                next: (data) => {
+                  this.readnasComplijst();
+                  this.readLedenLijst();
+                  this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+                },
+                error: (error: AppError) => {
+                  if (error instanceof NoChangesMadeError) {
+                    this.showSnackBar(SnackbarTexts.NoChanges);
+                  } else { throw error; }
+                }
+              });
+            this.registerSubscription(sub);
+          }
         }
-      }
-    });
+      });
   }
 
   /***************************************************************************************************

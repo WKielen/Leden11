@@ -178,23 +178,28 @@ export class SyncNttbComponent extends ParentComponent implements OnInit {
       data: { 'method': 'Wijzigen', 'data': toBeEdited }
     });
 
-    dialogRef.afterClosed().subscribe((result: LedenItem) => {
-      // console.log('received in OnEdit from dialog');
-      if (result) {  // in case of cancel the result will be false
-        let sub = this.ledenService.update$(result)
-          .subscribe(data => {
-            this.readNasLedenLijst();
-            this.readLedenLijst();
-            this.showSnackBar(SnackbarTexts.SuccessFulSaved);
-          },
-            (error: AppError) => {
-              if (error instanceof NoChangesMadeError) {
-                this.showSnackBar(SnackbarTexts.NoChanges);
-              } else { throw error; }
-            });
-        this.registerSubscription(sub);
-      }
-    });
+    dialogRef.afterClosed()
+      .subscribe({
+        next: (result: LedenItem) => {
+          // console.log('received in OnEdit from dialog');
+          if (result) {  // in case of cancel the result will be false
+            let sub = this.ledenService.update$(result)
+              .subscribe({
+                next: (data) => {
+                  this.readNasLedenLijst();
+                  this.readLedenLijst();
+                  this.showSnackBar(SnackbarTexts.SuccessFulSaved);
+                },
+                error: (error: AppError) => {
+                  if (error instanceof NoChangesMadeError) {
+                    this.showSnackBar(SnackbarTexts.NoChanges);
+                  } else { throw error; }
+                }
+              })
+            this.registerSubscription(sub);
+          }
+        }
+      });
 
   }
 
@@ -205,10 +210,11 @@ export class SyncNttbComponent extends ParentComponent implements OnInit {
     this.paramService.saveParamData$('nasLedenlijst' + this.authService.userId,
       JSON.stringify(this.nasLedenItems),
       'NAS Ledenlijst' + this.authService.userId)
-      .subscribe(data => {
-        this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
-      },
-        (error: AppError) => {
+      .subscribe({
+        next: (data) => {
+          this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
+        },
+        error: (error: AppError) => {
           if (error instanceof NotFoundError) {
             this.showSnackBar(SnackbarTexts.NotFound, '');
           }
@@ -222,7 +228,8 @@ export class SyncNttbComponent extends ParentComponent implements OnInit {
           else {
             this.showSnackBar(SnackbarTexts.UpdateError, '');
           }
-        });
+        }
+      })
   }
 
   /***************************************************************************************************
