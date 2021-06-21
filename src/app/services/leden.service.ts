@@ -16,12 +16,15 @@ export class LedenService extends DataService {
     super(environment.baseUrl + '/lid', http);
   }
 
-  /***************************************************************************************************
-  / Geeft alle leden terug exclusief opgezegde leden. Als the INCLIBAN param op true staat komen ook
-  / de IBAN's mee. Dit is alleen voor de penningmeester
-  / Tevens worden er enkele velden aan het record toegevoegd. Deze moeten bij de update weer worden
-  / verwijderd.
-  /***************************************************************************************************/
+  /**
+   * Geeft alle leden terug exclusief opgezegde leden. Als the INCLIBAN param op true staat komen ook
+   * de IBAN's mee. Dit is alleen voor de penningmeester
+   * Tevens worden er enkele velden aan het record toegevoegd. Deze moeten bij de update weer worden
+   * verwijderd.
+   * Gets active members$
+   * @param [inclIBAN]  include the IBAN in the response
+   * @returns current active members as Obserable
+   */
   getActiveMembers$(inclIBAN?: boolean): Observable<Array<LedenItemExt>> {
     let subUrl = '/lid/getonlyactivemembers';
     if (inclIBAN) {
@@ -54,10 +57,15 @@ export class LedenService extends DataService {
       );
   }
 
-  /***************************************************************************************************
-  / Ik heb deze attributen bij het inlezen toegevoegd. Voor de update moeten ze er af.
-  /***************************************************************************************************/
+  /**
+   * Update lid
+   * @param element
+   * @returns update$
+   */
   update$(element): Observable<Object> {
+
+    // Ik heb attributen bij het inlezen toegevoegd. Voor de update moeten ze er af omdat het back-end
+    // bji onbekende attributen de gehele call weigert
     delete element['Naam'];
     delete element['VolledigeNaam'];
     delete element['LeeftijdCategorieBond'];
@@ -73,6 +81,11 @@ export class LedenService extends DataService {
   /***************************************************************************************************
   / Get a role of a member
   /***************************************************************************************************/
+
+  /**
+   * Gets rol$
+   * @returns rol$
+   */
   getRol$(): Observable<Object> {
     return this.http.get(environment.baseUrl + '/lid/getrol')
       .pipe(
