@@ -152,6 +152,13 @@ function setBackgroundColor(type: string, organiser: string): string[] {
     return [boxcolor, textcolor];
   }
 
+  if (type == '') {
+    boxcolor = 'white';
+    textcolor = 'red'
+    return [boxcolor, textcolor];
+  }
+
+
   switch (organiser) {
     case "0":
       return ["orange", "white"];

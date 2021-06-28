@@ -16,7 +16,7 @@ export class AgendaDetailDialogComponent {
         public dialog: MatDialog,
     ) {
     }
-    public showButtons: boolean = this.data.data.Type != 'A';
+    public showButtons: boolean = this.data.data.Type != 'A' && this.data.data.Type != '';
     public organisatie: string = OrganisatieValues.GetLabel(this.data.data.Extra1);
     public doelGroep: string = DoelgroepValues.GetLabel(this.data.data.DoelGroep);
     public type: string = TypeValues.GetLabel(this.data.data.Type);

@@ -43,10 +43,10 @@ export class LedenService extends DataService {
           localdata.forEach(element => {
             element.Naam = LedenItem.getFullNameAkCt(element.Voornaam, element.Tussenvoegsel, element.Achternaam);
             element.VolledigeNaam = LedenItem.getFullNameVtA(element.Voornaam, element.Tussenvoegsel, element.Achternaam);
-            element.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(element.GeboorteDatum);
-            element.LeeftijdCategorie = DateRoutines.LeeftijdCategorie(element.GeboorteDatum);
+            element.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(new Date(element.GeboorteDatum));
+            element.LeeftijdCategorie = DateRoutines.LeeftijdCategorie(new Date(element.GeboorteDatum));
             element.LeeftijdCategorieWithSex = DateRoutines.LeeftijdCategorieWithSex(element);
-            element.Leeftijd = DateRoutines.Age(element.GeboorteDatum);
+            element.Leeftijd = DateRoutines.Age(new Date(element.GeboorteDatum));
             if (element.ExtraA == '_ExtraA') element.ExtraA = '';
             element.Trainingsgroepen = element.ExtraA ? element.ExtraA.split(',') : [];
             if (element.LidType === '0') { element.LidType = ''; }
@@ -159,7 +159,7 @@ export class LedenService extends DataService {
           let localdata = value;
           localdata.forEach(element => {
             element.Naam = LedenItem.getFullNameAkCt(element.Voornaam, element.Tussenvoegsel, element.Achternaam);
-            element.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(element.GeboorteDatum);
+            element.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(new Date(element.GeboorteDatum));
           });
           return localdata;
         })
@@ -208,7 +208,7 @@ export class LedenItem {
   Telefoon?: string = '';
   BondsNr?: string = '';
   Geslacht?: string = '';
-  GeboorteDatum?: Date = new Date();
+  GeboorteDatum?: string = '';
   Email1?: string = '';
   Email2?: string = '';
   IBAN?: string = '';
@@ -405,16 +405,26 @@ export class DateRoutines {
 
     return yearsOld;
   }
+  /**
+   * Calculate coming birth day
+   * @param birthDate
+   * @returns IBirthDay
+   */
+  public static ComingBirthDay(birthDate: Date): IBirthDay {
 
-  // public static DateTime ComingBirthDay (DateTime birthdate)
-  // {
-  //     DateTime now = DateTime.Now;
-  //     int dd = birthdate.Day;
-  //     int mm = birthdate.Month;
-  //     int yy = now.Year;
-  //     if (mm < now.Month || (mm == now.Month && dd < now.Day)) yy++;
-  //     return new DateTime(yy, mm, dd, 9, 0, 0);
-  // }
+    let today = new Date();
+    let yy = today.getFullYear() + 1;
+    let mm = today.getMonth() - birthDate.getMonth();
+    let dd = birthDate.getDay();
+    let age = yy - birthDate.getFullYear();
+    if (mm < 0 || (mm === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+      yy--;
+    }
+    let birthDay = new Date(yy, birthDate.getMonth(), birthDate.getDate());
+
+    return { 'BirthDay': birthDay, 'Age': age }
+  }
 
   /***************************************************************************************************
   /
@@ -433,7 +443,7 @@ export class DateRoutines {
   / JM = Jeugd Man, VV = Volwassen Vrouw, JV en VM
   /***************************************************************************************************/
   public static LeeftijdCategorieWithSex(lid: LedenItem): string {
-    const yearsOld = this.BondsLeeftijd(lid.GeboorteDatum);
+    const yearsOld = this.BondsLeeftijd(new Date(lid.GeboorteDatum));
     if (yearsOld <= LidTypeValues.MAXYOUTHAGE && lid.Geslacht === LidTypeValues.MALE) {
       return LidTypeValues.YOUTH + LidTypeValues.MALE;
     }
@@ -476,29 +486,36 @@ export class DateRoutines {
 
   public static InnerHtmlLabelLeeftijdsCategorie(leeftijdsCategorie: string) {
     switch (leeftijdsCategorie) {
-      case 'Onder11/-2' : return 'Onder 11 <sup>-2</sup>';
-      case 'Onder11/-1' : return 'Onder 11 <sup>-1</sup>';
-      case 'Onder11/0'  : return 'Onder 11 <sup>0</sup>';
-      case 'Onder11/1'  : return 'Onder 11 <sup>1</sup>';
-      case 'Onder11/2'  : return 'Onder 11 <sup>2</sup>';
-      case 'Onder13/1'  : return 'Onder 13 <sup>1</sup>';
-      case 'Onder13/2'  : return 'Onder 13 <sup>2</sup>';
-      case 'Onder15/1'  : return 'Onder 15 <sup>1</sup>';
-      case 'Onder15/2'  : return 'Onder 15 <sup>2</sup>';
-      case 'Onder17/1'  : return 'Onder 17 <sup>1</sup>';
-      case 'Onder17/2'  : return 'Onder 17 <sup>2</sup>';
-      case 'Onder19/1'  : return 'Onder 19 <sup>1</sup>';
-      case 'Onder19/2'  : return 'Onder 19 <sup>2</sup>';
+      case 'Onder11/-2': return 'Onder 11 <sup>-2</sup>';
+      case 'Onder11/-1': return 'Onder 11 <sup>-1</sup>';
+      case 'Onder11/0': return 'Onder 11 <sup>0</sup>';
+      case 'Onder11/1': return 'Onder 11 <sup>1</sup>';
+      case 'Onder11/2': return 'Onder 11 <sup>2</sup>';
+      case 'Onder13/1': return 'Onder 13 <sup>1</sup>';
+      case 'Onder13/2': return 'Onder 13 <sup>2</sup>';
+      case 'Onder15/1': return 'Onder 15 <sup>1</sup>';
+      case 'Onder15/2': return 'Onder 15 <sup>2</sup>';
+      case 'Onder17/1': return 'Onder 17 <sup>1</sup>';
+      case 'Onder17/2': return 'Onder 17 <sup>2</sup>';
+      case 'Onder19/1': return 'Onder 19 <sup>1</sup>';
+      case 'Onder19/2': return 'Onder 19 <sup>2</sup>';
       case 'Senior1/O23': return 'Senior/O23 <sup>1</sup>';
-      case 'Senior/O23' : return 'Senior/O23';
-      case 'Senior'     : return 'Senior';
-      case '65-Plus'    : return '65-Plus';
+      case 'Senior/O23': return 'Senior/O23';
+      case 'Senior': return 'Senior';
+      case '65-Plus': return '65-Plus';
     }
     return '';
   }
 
 
 }
+
+
+export interface IBirthDay {
+  BirthDay: Date,
+  Age: Number
+}
+
 
       // public static string LeeftijdCategorieBond(DateTime birthdate, bool longversion)
       // {

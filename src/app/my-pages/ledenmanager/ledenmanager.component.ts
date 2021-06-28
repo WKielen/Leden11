@@ -192,7 +192,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
                 .subscribe({
                   next: (data) => {
                     result.Naam = LedenItem.getFullNameAkCt(result.Voornaam, result.Tussenvoegsel, result.Achternaam);
-                    result.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(result.GeboorteDatum);
+                    result.LeeftijdCategorieBond = DateRoutines.LeeftijdCategorieBond(new Date(result.GeboorteDatum));
                     this.refreshTableLayout();
                     this.showSnackBar(SnackbarTexts.SuccessFulSaved);
                   }, //next

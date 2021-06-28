@@ -141,7 +141,7 @@ export function CreateDownloadReportDetailLine(lid: LedenItemExt, berekendeBedra
     berekeningOverzicht.LidNr = lid.LidNr;
     berekeningOverzicht.VolledigeNaam = lid.VolledigeNaam;
     berekeningOverzicht.LeeftijdCategorie = lid.LeeftijdCategorie;
-    berekeningOverzicht.GeboorteDatum = lid.GeboorteDatum;
+    berekeningOverzicht.GeboorteDatum = new Date(lid.GeboorteDatum);
     berekeningOverzicht.LidType = LidTypeValues.GetLabel(lid.LidType);
 
     berekeningOverzicht.BetaalWijze = BetaalWijzeValues.GetLabel(lid.BetaalWijze);
