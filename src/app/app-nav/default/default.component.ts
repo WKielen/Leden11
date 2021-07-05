@@ -19,16 +19,21 @@ import { map } from 'rxjs/operators';
 })
 export class DefaultComponent implements OnInit {
 
-  sideBarOpen: boolean = true;
+  sideBarOpen: boolean = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
   ) { }
 
   ngOnInit() {
-    // this.setUserInfo();
+    // Als het een mobiel is start ik op met menu gesloten. Geen mobiel dan open ik met menu.
+    this.isHandset$.subscribe({
+      next: (data) => this.sideBarSetVisibilty(!data),
+      error: (error) => console.log('error', error)
+    });
   }
 
+  //BreakpointObserver is a utility for evaluating media queries and reacting to changes in the results of those queries.
   isHandset = false;
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
     .pipe(
