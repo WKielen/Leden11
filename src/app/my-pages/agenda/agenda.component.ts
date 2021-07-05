@@ -16,6 +16,7 @@ import { addHolidaysToEvents, agendaToEvent, setEventProps } from "../agenda/eve
 import { ActionItem, ActionService, ACTIONSTATUS } from "src/app/services/action.service";
 import { catchError, map, switchMap } from "rxjs/operators";
 import { Observable, forkJoin, of } from "rxjs";
+import { DateRoutines, IBirthDay, LedenItem, LedenItemExt, LedenService } from "src/app/services/leden.service";
 
 
 // TODO:Select Multiple dates into vakantie
@@ -31,6 +32,7 @@ export class AgendaComponent
   constructor(
     private agendaService: AgendaService,
     private actionService: ActionService,
+    private ledenService: LedenService,
     public authService: AuthService,
     public dialog: MatDialog,
     protected snackBar: MatSnackBar
@@ -56,23 +58,34 @@ export class AgendaComponent
 
   private subAgenda: Observable<Object>;
   private subAction: Observable<Object>;
+  private subMembers: Observable<Object>;
 
   private loadData() {
     this.subAgenda = this.agendaService.getAll$()
       .pipe(
         catchError(err => of(new Array<AgendaItem>()))
       );
-    this.subAction = this.actionService.getAllActions$().pipe(
-      catchError(err => of(new Array<ActionItem>()))
-    );
+    this.subAction = this.actionService.getAllActions$()
+      .pipe(
+        catchError(err => of(new Array<ActionItem>()))
+      );
+
+    this.subMembers = this.ledenService.getActiveMembers$()
+      .pipe(
+        catchError(err => of(new Array<ActionItem>()))
+      );
+
 
     this.registerSubscription(
-      forkJoin([this.subAgenda, this.subAction])
+      forkJoin([this.subAgenda, this.subAction, this.subMembers])
         .subscribe({
           next: (data) => {
             this.fillEventsWithAgenda(data[0] as Array<AgendaItem>);
             this.fillEventsWithActions(data[1] as Array<ActionItem>);
-            this.calendarOptions.events = this.events;
+            this.fillEventsWithMembers(data[2] as Array<LedenItem>);
+
+            this.calendarOptions.events = this.events.concat(addHolidaysToEvents());
+            console.log("loadData --> this.events", this.events);
           },
           error: (error: AppError) => {
             console.error("TrainingDeelnameComponent --> loadData --> error", error);
@@ -121,7 +134,24 @@ export class AgendaComponent
 
   }
 
+  fillEventsWithMembers(ledenList: Array<LedenItemExt>) {
+    ledenList.forEach((item) => {
 
+      let birthdayEvent: EventInput = new Object();
+      let birthDay: IBirthDay = DateRoutines.ComingBirthDay(new Date(item.GeboorteDatum));
+      birthdayEvent.title = item.VolledigeNaam + ' ('+ birthDay.Age + ')';
+      birthdayEvent.start = birthDay.BirthDay;
+      birthdayEvent.end = birthDay.BirthDay;
+      birthdayEvent.borderColor = 'red';
+
+      let agendaItem: AgendaItem = new AgendaItem();
+      agendaItem.EvenementNaam = 'Verjaardag ' + item.VolledigeNaam + ' ('+ birthDay.Age + ')';;
+      agendaItem.Datum = birthDay.BirthDay.to_YYYY_MM_DD();
+      birthdayEvent.extendedProps = { agendaItem: agendaItem };
+
+      this.events.push(birthdayEvent);
+    });
+  }
 
 
   // Voor deze lifecycle hook is the calendar component nog niet geinitialiseerd.

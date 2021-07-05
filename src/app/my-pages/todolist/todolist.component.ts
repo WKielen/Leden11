@@ -38,11 +38,11 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   headerToggleChecked: boolean = false;
   actionList: Dictionary = new Dictionary([]);
 
-  columnsOpenToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
-  columnsFinishedToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
-  columnsArchiveToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
-  columnsRepeatingToDisplay: string[] = ['Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
-  columnsDecisionsToDisplay: string[] = ['Title', 'StartDate', 'actions2'];
+  columnsOpenToDisplay: string[] = ['Id', 'Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
+  columnsFinishedToDisplay: string[] = ['Id', 'Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
+  columnsArchiveToDisplay: string[] = ['Id', 'Title', 'HolderName', 'StartDate', 'EndDate', 'actions2'];
+  columnsRepeatingToDisplay: string[] = ['Id', 'Title', 'HolderName', 'StartDate', 'TargetDate', 'actions3'];
+  columnsDecisionsToDisplay: string[] = ['Id', 'Title', 'StartDate', 'actions2'];
 
   filterOpenValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.OPEN };
   filterFininshedValues = { Voornaam: '', ShowOnlyBestuur: false, Status: ACTIONSTATUS.CLOSED };

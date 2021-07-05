@@ -11,6 +11,11 @@ mat-card {
   }
 }
 
+.mat-column-Id {
+  @include s.mat-text-column-wrap-stuff;
+  flex: 0 0 5% !important;
+  width: 5% !important;
+}
 
 .mat-column-Title {
   @include s.mat-text-column-wrap-stuff;
