@@ -78,13 +78,13 @@ export class MailDialogComponent extends ParentComponent {
   processLid(mailItem: MailItem): boolean {
     let returnBoolean = true;
 
+    if (this.developmentMode) {
+      mailItem.To = "wim_kielen@hotmail.com";
+    }
+
     if (this.ckbTest) {
 
-      if (this.developmentMode) {
-        this.output += 'To: wim_kielen@hotmail.com\r\n';
-      } else {
-        this.output += 'To: ' + mailItem.To + '\r\n';
-      }
+      this.output += 'To: ' + mailItem.ToName + " <" + mailItem.To + '>\r\n';
 
       this.output += 'Subject: ' + mailItem.Subject + '\r\n';
       this.output += '\r\n';
@@ -93,10 +93,6 @@ export class MailDialogComponent extends ParentComponent {
       this.output += "-----------------------------------------------------------------------------------------\r\n";
     }
     else {
-      if (this.developmentMode) {
-        mailItem.ToName = mailItem.To;
-        mailItem.To = "wim_kielen@hotmail.com";
-      }
 
       let mailItems = new Array<MailItem>();
       mailItems.push(mailItem);
@@ -108,8 +104,9 @@ export class MailDialogComponent extends ParentComponent {
             console.log('result van mailService', result);
           },
           error: (error: AppError) => {
+            console.log("MailDialogComponent --> processLid --> error", error);
             returnBoolean = false;
-            console.log('error', error instanceof ServiceUnavailableError);
+            // console.log('error', error instanceof ServiceUnavailableError);
 
             if (error instanceof ServiceUnavailableError) {
               this.showSnackBar(SnackbarTexts.ServiceNotAvailable);

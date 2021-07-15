@@ -5,6 +5,7 @@ import { DataService } from './data.service';
 import { retry, tap, map } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/internal/Observable';
+import { MailItemTo } from './mail.service';
 
 @Injectable({
   providedIn: 'root'
@@ -271,26 +272,25 @@ export class LedenItem {
   /***************************************************************************************************
   / Geef alle mails van een lid
   /***************************************************************************************************/
-  public static GetEmailList(lid: LedenItemExt, primary: boolean = false): Array<string> {
-    let emails: Array<string> = []
+  public static GetEmailList(lid: LedenItemExt, primary: boolean = false): Array<MailItemTo> {
+    let emails: Array<MailItemTo> = []
     if (lid.Ouder1_Email1) {
-      emails.push("Ouders van " + lid.Voornaam + "<" + lid.Ouder1_Email1 + ">");
+      emails.push({ "To": lid.Ouder1_Email1, "ToName": "Ouders van " + lid.Voornaam });
       if (primary) return emails;
     }
     if (lid.Ouder1_Email2) {
-      emails.push("Ouders van " + lid.Voornaam + "<" + lid.Ouder1_Email2 + ">");
+      emails.push({ "To": lid.Ouder1_Email2, "ToName": "Ouders van " + lid.Voornaam });
       if (primary) return emails;
     }
     if (lid.Email1) {
-      emails.push(lid.Email1);
+      emails.push({ "To": lid.Email1, "ToName": lid.Voornaam });
       if (primary) return emails;
     }
     if (lid.Email2) {
-      emails.push(lid.Email2);
+      emails.push({ "To": lid.Email2, "ToName": lid.Voornaam });
     }
     return emails;
   }
-
 }
 
 /***************************************************************************************************

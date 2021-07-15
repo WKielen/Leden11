@@ -15,7 +15,7 @@ import { MailDialogComponent } from '../mail/mail.dialog';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
-import { ExternalMailApiRecord, MailItem, MailService } from 'src/app/services/mail.service';
+import { ExternalMailApiRecord, MailItem, MailItemTo, MailService } from 'src/app/services/mail.service';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
@@ -165,13 +165,14 @@ export class MailComponent extends ParentComponent implements OnInit {
     mailDialogInputMessage.MailItems = new Array<MailItem>();
 
     this.itemsToMail.forEach(lid => {
-      let mailAddresses: Array<string> = LedenItem.GetEmailList(lid);
+      let mailAddresses: Array<MailItemTo> = LedenItem.GetEmailList(lid);
 
       mailAddresses.forEach(element => {
         let itemToMail = new MailItem();
         itemToMail.Message = ReplaceKeywords(lid, this.HtmlContent.value);
         itemToMail.Subject = this.EmailSubject.value;
-        itemToMail.To = element;
+        itemToMail.To = element.To;
+        itemToMail.ToName = element.ToName;
         mailDialogInputMessage.MailItems.push(itemToMail);
       });
     });

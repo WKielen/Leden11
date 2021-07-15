@@ -141,13 +141,18 @@ export class ExternalMailApiRecord {
   FromName: string = '';
   MailItems: MailItem[] = [];
 }
+/**
+ * Contains email adres and To name
+ */
+export class MailItemTo {
+  To: string = '';
+  ToName: string = '';
+}
 
 /***************************************************************************************************
 / An email
 /***************************************************************************************************/
-export class MailItem {
-  To: string = '';
-  ToName: string = '';
+export class MailItem extends MailItemTo {
   // CC: string = '';
   // BCC: string = '';
   Subject: string = '';

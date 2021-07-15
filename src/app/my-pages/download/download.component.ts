@@ -126,7 +126,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
       }
       case this.ledenSelectieKeuzes[2]: {  // Alleen jeugd
         this.ledenArray.forEach((element: LedenItemExt) => {
-          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH) {
+          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
             localList.push(element);
           }
         });
@@ -176,7 +176,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
       }
       case this.ledenSelectieKeuzes[2]: {  // Alle Jeugd
         this.ledenArray.forEach((element: LedenItemExt) => {
-          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH) {
+          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
             const emailList = LedenItem.GetEmailList(element);
             emailList.forEach(element => {
               localList += element + ';';
@@ -195,6 +195,25 @@ export class DownloadComponent extends ParentComponent implements OnInit {
     dynamicDownload.dynamicDownloadTxt(localList, fileName, 'txt');
     // dynamicDownload.dynamicDownloadJson(ledenArray, fileName); Voorbeeld voor JSON export
   }
+
+  /**
+   * Creates a list with gray members
+   */
+  async onGrijzeLeden(): Promise<void> {
+    let localList: string = '';
+    let fileName: string = 'Grijze leden'
+
+    this.ledenArray.forEach((element: LedenItemExt) => {
+      if (!element.BondsNr || !element.LidBond.toBoolean())
+        localList += element.VolledigeNaam + ',' + element.BondsNr + '\n';
+    });
+
+    let dynamicDownload = new DynamicDownload();
+    fileName += new Date().to_YYYY_MM_DD();
+    dynamicDownload.dynamicDownloadTxt(localList, fileName, 'txt');
+  }
+
+
 
   //***************************************************************************************************/
   //                                                                                                  */
@@ -373,7 +392,7 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
       if (actionItem.Status == ACTIONSTATUS.DECISION) {
         let line: Array<string> =
           [actionItem.Id,
-           actionItem.StartDate,
+          actionItem.StartDate,
           actionItem.Title,
           actionItem.Description];
         data.push(line);
@@ -401,7 +420,7 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
       if (actionItem.Status == ACTIONSTATUS.CLOSED) {
         let line: Array<string> =
           [actionItem.Id,
-            actionItem.StartDate,
+          actionItem.StartDate,
           actionItem.TargetDate,
           actionItem.HolderName,
           actionItem.Title,

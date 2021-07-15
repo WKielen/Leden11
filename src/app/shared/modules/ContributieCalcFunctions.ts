@@ -3,7 +3,7 @@ import { BerekeningOverzicht } from "../classes/BerekeningOverzicht";
 import { DirectDebit } from "../classes/DirectDebit";
 import { formatDate } from "@angular/common";
 import { ReplaceCharacters } from "./ReplaceCharacters";
-import { MailItem } from "src/app/services/mail.service";
+import { MailItem, MailItemTo } from "src/app/services/mail.service";
 import { BerekendeBedragen } from "../classes/BerekendeBedragen";
 import { ContributieBedragen } from "../classes/ContributieBedragen";
 
@@ -251,10 +251,9 @@ export function CreateContributieMail(lid: LedenItemExt, contributieBedragen: Co
     // TODO: create html mail
 
     // mailItem.To = LedenItem.GetEmailList(lid, true)[0];
-    mailItem.To = 'wim_kielen@hotmail.com'
-    mailItem.ToName = LedenItem.GetEmailList(lid, true)[0];
-
-
+    const myMail:MailItemTo = LedenItem.GetEmailList(lid, true)[0];
+    mailItem.To = myMail.To;
+    mailItem.ToName = myMail.ToName;
 
     mailItem.Subject = "Aankondiging contributie TTVN - " + lid.Voornaam;
     if (lid.LeeftijdCategorieWithSex.substring(0, 1) == 'J') {

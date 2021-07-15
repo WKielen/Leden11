@@ -137,7 +137,7 @@ Run `http-server -p 8080 -c-1 dist/ttvn -o` for the production version with pwa
 ## Build for production
 
 Run `ng build --prod --base-href=/app/` for the production build
-
+Run `ng build --configuration production --base-href=/app/` for the production build
 
 ## Development server
 

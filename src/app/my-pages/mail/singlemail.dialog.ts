@@ -4,7 +4,7 @@ import { LedenItem } from 'src/app/services/leden.service';
 import { ReadTextFileService } from 'src/app/services/readtextfile.service';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { MailDialogComponent } from './mail.dialog';
-import { ExternalMailApiRecord, MailItem } from 'src/app/services/mail.service';
+import { ExternalMailApiRecord, MailItem, MailItemTo } from 'src/app/services/mail.service';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { BaseComponent } from 'src/app/shared/base.component';
 
@@ -97,12 +97,13 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
     let mailDialogInputMessage = new ExternalMailApiRecord();
     mailDialogInputMessage.MailItems = new Array<MailItem>();
 
-    let mailAddresses: Array<string> = LedenItem.GetEmailList(this.singleMailInputDialog.Lid);
+    let mailAddresses: Array<MailItemTo> = LedenItem.GetEmailList(this.singleMailInputDialog.Lid);
     mailAddresses.forEach(element => {
       let itemToMail = new MailItem();
       itemToMail.Message = this.mailText;
       itemToMail.Subject = this.mailSubject;
-      itemToMail.To = element;
+      itemToMail.To = element.To;
+      itemToMail.ToName = element.ToName;
       mailDialogInputMessage.MailItems.push(itemToMail);
     });
 
