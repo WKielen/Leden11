@@ -83,7 +83,7 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
 
     let tmp;
     const dialogRef = this.dialog.open(WebsiteDialogComponent, {
-      data: { 'method': 'Wijzigen', 'data': toBeEdited }
+      data: { 'method': 'Wijzigen', 'data': toBeEdited, maxwidth: '300px' }
     });
 
     dialogRef
