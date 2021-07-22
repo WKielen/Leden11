@@ -7,6 +7,8 @@ import { AuthService } from 'src/app/services/auth.service';
 import { LedenItem } from 'src/app/services/leden.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ACTIVATIONSTATUS, UserItem, UserService } from 'src/app/services/user.service';
+import { WaitingButtonComponent } from 'src/app/shared/components/waiting-button.component';
+import { IHoldableResponse } from 'src/app/shared/directives/holdable.directive';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
@@ -126,12 +128,18 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
       });
   }
 
-  onDoneNewRegistration($event, index: number): void {
-    this.newRegistrationSpinner = $event;  // openRegisterSpinner wordt gelezen door spinner
-    if ($event == 0) {  // first time call
+  onDoneNewRegistration($event: IHoldableResponse, index: number): void {
+    console.log("RegistrationComponent --> onDoneNewRegistration --> $event", $event);
+    this.newRegistrationSpinner = $event.HoldTime;  // openRegisterSpinner wordt gelezen door spinner
+
+    if ($event.Status == 'start') {
       this.setCallBackParameters(index, this.dataSourceNewRegistrations, this.cbDoneNewRegistration)
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
   }
+
   cbDoneNewRegistration($event): void {
     let toBeEdited: UserItem = this.registerList.get($event.Userid)
     toBeEdited.Activated = ACTIVATIONSTATUS.ACTIVATED;
@@ -162,11 +170,15 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
   }
 
 
-  onDeleteNewRegistation($event, index: number): void {
-    this.newRegistrationSpinner = $event;
-    if ($event == 0) {  // first time call
-      this.setCallBackParameters(index, this.dataSourceNewRegistrations, this.cbDeleteNewRegistation); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
+  onDeleteNewRegistation($event: IHoldableResponse, index: number): void {
+    this.newRegistrationSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
+      this.setCallBackParameters(index, this.dataSourceNewRegistrations, this.cbDeleteNewRegistation);
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
+
   }
   cbDeleteNewRegistation($event): void {
     // console.log('in call back', $event );
@@ -188,10 +200,13 @@ export class RegistrationComponent extends ParentComponent implements OnInit {
     this.updateRegistrationWithDialog(toBeEdited);
   }
 
-  onDeleteExistingRegistation($event, index: number): void {
-    this.existingRegistrationSpinner = $event;
-    if ($event == 0) {  // first time call
+  onDeleteExistingRegistation($event: IHoldableResponse, index: number): void {
+    this.existingRegistrationSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceExistingRegistrations, this.cbDeleteRegister)
+    }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
     }
   }
 

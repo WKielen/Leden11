@@ -9,7 +9,9 @@ Use as:
   */
 
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { fakeAsync } from '@angular/core/testing';
 import { BaseComponent } from '../base.component';
+import { IHoldableResponse } from '../directives/holdable.directive';
 
 @Component({
   selector: 'mat-waiting-button',
@@ -19,21 +21,32 @@ import { BaseComponent } from '../base.component';
             `
 })
 export class WaitingButtonComponent extends BaseComponent {
+
   @Input('icon') icon: string;
   @Input('color') color: string = "primary";
   @Input() public myCallback: Function;
-  @Output('holdTime')  time = new EventEmitter();
+  @Output('holdTime') time = new EventEmitter();
 
-/**
- * De holdable directive zorgt voor het oplopen van de tijd.
- * Geef de wachttijd die je van de holdable directive ontvangt verder aan het aanroepende compone
- * @param $event
- */
-onHoldTimeChanged($event): void {
+  /**
+   * De holdable directive zorgt voor het oplopen van de tijd.
+   * Geef de wachttijd die je van de holdable directive ontvangt verder aan het aanroepende compone
+   * @param $event
+   */
+  onHoldTimeChanged($event: IHoldableResponse): void {
     this.time.emit($event);
-    if ($event == 1000 && this.myCallback) {
+    if ($event.HoldTime == 1000 && this.myCallback) {
       this.myCallback();
     }
   }
+
+  // static CanceledEarly($event: IHoldableResponse): boolean {
+  // console.log("WaitingButtonComponent --> CanceledEarly --> $event", $event);
+
+  //   if ($event.Status == 'cancel' && $event.HoldTime > 0)
+  //     return true;
+  //   else
+  //     return false;
+  // }
+
 }
 

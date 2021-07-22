@@ -8,18 +8,23 @@ import { takeUntil, tap, filter } from 'rxjs/operators';
 export class HoldableDirective {
 
   @Input() targetTime: number = 1000;
-  @Output() holdTime: EventEmitter<number> = new EventEmitter();
-  
-  state: Subject<string> = new Subject();
-  
-  cancel: Observable<string>;
-  
-  constructor() { 
+  @Output() holdTime: EventEmitter<IHoldableResponse> = new EventEmitter();
+
+  private state: Subject<string> = new Subject();
+
+  private cancel: Observable<string>;
+
+  private savedHoldTime: number = 0;
+
+  constructor() {
     this.cancel = this.state.pipe(
-      filter (v => v === 'cancel'),
+      filter(v => v === 'cancel'),
       tap(v => {
         console.log('%cstopped hold', 'color: #ec6969; font-weight: bold;');
-        this.holdTime.emit(0);
+        if (this.savedHoldTime < this.targetTime) {
+          this.holdTime.emit({ Status: 'early', HoldTime: this.savedHoldTime });  // De knop is te vroeg los gelaten
+        }
+        this.holdTime.emit({ Status: 'finish', HoldTime: 0 });  //Hier moet hij nul zijn omdat er op wordt getest
       }),
     );
 
@@ -34,13 +39,18 @@ export class HoldableDirective {
     interval(n).pipe(
       takeUntil(this.cancel),
       tap(v => {
-        this.holdTime.emit(v * n);
-        if ((v * n) == this.targetTime) {
+        this.savedHoldTime = v * n;
+        if (this.savedHoldTime == 0) {
+          this.holdTime.emit({ Status: 'start', HoldTime: this.savedHoldTime });
+        } else {
+          this.holdTime.emit({ Status: 'run', HoldTime: this.savedHoldTime });
+        }
+        if (this.savedHoldTime == this.targetTime) {
           this.onExit();
         }
       }),
     )
-    .subscribe();
+      .subscribe();
   }
 
   @HostListener('touchend', ['$event'])
@@ -53,3 +63,7 @@ export class HoldableDirective {
 
 }
 
+export interface IHoldableResponse {
+  Status: string,
+  HoldTime: number
+}

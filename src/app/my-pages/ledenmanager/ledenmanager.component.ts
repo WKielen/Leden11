@@ -15,6 +15,7 @@ import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-mad
 import { NotificationService } from 'src/app/services/notification.service';
 import { ROLES } from 'src/app/services/website.service';
 import { lastValueFrom } from 'rxjs';
+import { IHoldableResponse } from 'src/app/shared/directives/holdable.directive';
 
 @Component({
   selector: 'app-leden',
@@ -118,11 +119,14 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
   /
   /***************************************************************************************************/
   public theBoundCallback: Function;
-  onDelete($event, index: number): void {
-    this.progress = $event;
-    if ($event == 0) {  // first time call
+  onDelete($event: IHoldableResponse, index: number): void {
+    this.progress = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       const data = { 'record': this.dataSource.data[index], 'index': index };
       this.theBoundCallback = this.cbOnDelete.bind(this, data);
+    }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
     }
   }
 

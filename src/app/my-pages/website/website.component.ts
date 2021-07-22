@@ -9,6 +9,7 @@ import { WebsiteDialogComponent } from './website.dialog';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
+import { IHoldableResponse } from 'src/app/shared/directives/holdable.directive';
 
 @Component({
   selector: 'app-website',
@@ -61,10 +62,13 @@ export class WebsiteComponent extends ParentComponent implements OnInit {
   /
   /***************************************************************************************************/
   public theBoundCallback: Function;
-  onDelete($event, index: number): void {
-    this.progress = $event;
-    if ($event == 0) {  // first time call
+  onDelete($event: IHoldableResponse, index: number): void {
+    this.progress = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.theBoundCallback = this.cbOnDelete.bind(this, index);
+    }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
     }
   }
 

@@ -17,6 +17,7 @@ import { TodoListDialogComponent } from './todolist.dialog';
 import * as moment from 'moment';
 import { DecisionDialogComponent } from './decision.dialog';
 import { ROLES } from 'src/app/services/website.service';
+import { IHoldableResponse } from 'src/app/shared/directives/holdable.directive';
 
 @Component({
   selector: 'app-todolist',
@@ -181,11 +182,15 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / Open Actions Table Done Knop
   /***************************************************************************************************/
-  onDoneOpenAction($event, index: number): void {
-    this.openActionSpinner = $event;  // openActionSpinner wordt gelezen door spinner
-    if ($event == 0) {  // first time call
+  onDoneOpenAction($event: IHoldableResponse, index: number): void {
+    this.openActionSpinner = $event.HoldTime;  // openActionSpinner wordt gelezen door spinner
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceOpenActions, this.cbDoneOpenAction)
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
+
   }
 
   /***************************************************************************************************
@@ -251,12 +256,15 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Open Actions Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
-  onDeleteOpenAction($event, index: number): void {
-    this.openActionSpinner = $event;
-    if ($event == 0) {  // first time call
+  onDeleteOpenAction($event: IHoldableResponse, index: number): void {
+    this.openActionSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceOpenActions, this.cbDeleteOpenAction); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
-      // console.log('set call back', index );
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
+
   }
 
   cbDeleteOpenAction($event): void {
@@ -285,12 +293,16 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Finished Actions Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
-  onDeleteFinishedAction($event, index: number): void {
-    this.finishedActionSpinner = $event;
-    if ($event == 0) {  // first time call
+  onDeleteFinishedAction($event: IHoldableResponse, index: number): void {
+    this.finishedActionSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceFinishedActions, this.cbDeleteFinishedAction)
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
   }
+
   cbDeleteFinishedAction($event): void {
     let toBeDeleted: ActionItem = this.actionList.get($event.Id)
     toBeDeleted.Status = ACTIONSTATUS.ARCHIVED;
@@ -318,10 +330,13 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / Repeating Actions Table Done Knop
   /***************************************************************************************************/
-  onDoneRepeatingAction($event, index: number): void {
-    this.repeatingActionSpinner = $event;  // RepeatingActionSpinner wordt gelezen door spinner
-    if ($event == 0) {  // first time call
+  onDoneRepeatingAction($event: IHoldableResponse, index: number): void {
+    this.repeatingActionSpinner = $event.HoldTime;  // RepeatingActionSpinner wordt gelezen door spinner
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceRepeatingActions, this.cbDoneRepeatingAction)
+    }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
     }
   }
 
@@ -348,11 +363,13 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Repeating Actions Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
-  onDeleteRepeatingAction($event, index: number): void {
-    this.repeatingActionSpinner = $event;
-    if ($event == 0) {  // first time call
+  onDeleteRepeatingAction($event: IHoldableResponse, index: number): void {
+    this.repeatingActionSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceRepeatingActions, this.deleteAction); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
-      // console.log('set call back', index );
+    }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
     }
   }
 
@@ -384,11 +401,15 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Archived Actions Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
-  onDeleteArchiveAction($event, index: number): void {
-    this.archivedActionSpinner = $event;
-    if ($event == 0) {  // first time call
+  onDeleteArchiveAction($event: IHoldableResponse, index: number): void {
+    this.archivedActionSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceArchiveActions, this.deleteAction)
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
+
   }
 
   deleteAction(toBeDeleted: ActionItem): void {
@@ -433,12 +454,15 @@ export class TodolistComponent extends ParentComponent implements OnInit {
   / Decision Table Delete Knop
   / De actie zelf gaat via het event uit de header onHoldAction
   /***************************************************************************************************/
-  onDeleteDecision($event, index: number): void {
-    this.decisionSpinner = $event;
-    if ($event == 0) {  // first time call
+  onDeleteDecision($event: IHoldableResponse, index: number): void {
+    this.decisionSpinner = $event.HoldTime;
+    if ($event.Status == 'start') {  // first time call
       this.setCallBackParameters(index, this.dataSourceDecisions, this.deleteAction); // wordt 2x aangeroepen omdat na de callback de waarde weer op nul wordt gezet
-      // console.log('set call back', index );
     }
+    if ($event.Status == 'early') {
+      this.showSnackBar(SnackbarTexts.ReleasedToEarly);
+    }
+
   }
 
   /***************************************************************************************************

@@ -5,7 +5,7 @@
   "background_color": "#FBC02D",
   "display": "standalone",
   "scope": "/",
-  "start_url": "https://www.ttvn.nl/app/index.html",
+  "start_url": "/app/index.html",
   "shortcuts": [
     {
       "name": "Ledenlijst",
