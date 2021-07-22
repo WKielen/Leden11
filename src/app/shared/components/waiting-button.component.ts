@@ -1,6 +1,13 @@
-//
-// use as: <app-select-lid-dropdown [leden-array]="ledenArray" (valueSelected)="onValueSelected($event)"></app-select-lid-dropdown>
-//
+/**
+Use as:
+  <mat-waiting-button icon="done" color="warn" (holdTime)="onDoneNewRegistration($event, i)" [myCallback]="theBoundCallback"></mat-waiting-button>
+
+  Dit component renders een Material icon button. je moet deze button een seconde vasthouden voordat hij een event gooit.
+  Het component geeft steeds het aantal miliseconden terug zodat de caller er iets mee kan doen.
+  Na een seconde wordt via een callback een functie bij de caller aangeroepen.
+  De seconde wordt berekent binnen de holdable directive
+  */
+
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { BaseComponent } from '../base.component';
 
@@ -15,12 +22,14 @@ export class WaitingButtonComponent extends BaseComponent {
   @Input('icon') icon: string;
   @Input('color') color: string = "primary";
   @Input() public myCallback: Function;
-  @Output('holdTime') time = new EventEmitter();
+  @Output('holdTime')  time = new EventEmitter();
 
-  /***************************************************************************************************
-  / Geef de wachttijd die je van de holdable directive ontvangt verder aan het aanroepende component
-  /***************************************************************************************************/
-  onHoldTimeChanged($event): void {
+/**
+ * De holdable directive zorgt voor het oplopen van de tijd.
+ * Geef de wachttijd die je van de holdable directive ontvangt verder aan het aanroepende compone
+ * @param $event
+ */
+onHoldTimeChanged($event): void {
     this.time.emit($event);
     if ($event == 1000 && this.myCallback) {
       this.myCallback();

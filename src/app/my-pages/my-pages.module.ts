@@ -9,7 +9,6 @@ import { LadderComponent } from './../my-pages/ladder/ladder.component';
 import { MultiUpdateComponent } from './../my-pages/multi-update/multi-update.component';
 import { ContrBedragenComponent } from './../my-pages/contr-bedragen/contr-bedragen.component';
 import { OudLedenComponent } from './../my-pages/oud-leden/oud-leden.component';
-import { UsersComponent } from './../my-pages/users/users.component';
 import { SyncNttbComponent } from './../my-pages/syncnttb/syncnttb.component';
 import { TrainingDeelnameComponent } from './../my-pages/trainingdeelname/trainingdeelname.component';
 import { TrainingOverzichtComponent } from './../my-pages/trainingoverzicht/trainingoverzicht.component';
@@ -69,7 +68,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     MultiUpdateComponent,
     ContrBedragenComponent,
     OudLedenComponent,
-    UsersComponent,
     SyncNttbComponent,
     TrainingDeelnameComponent,
     TrainingOverzichtComponent,
