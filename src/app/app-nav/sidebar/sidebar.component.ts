@@ -14,7 +14,7 @@ export class SidebarComponent extends BaseComponent implements OnInit {
 
   // We gebruiken de 'isHandset' om te bepalen of het een mobiel is. Als het een mobiel is dan
   // sluiten we het menu direct nadat er een menu-item is gekozen.
-  @Input('isHandset') isHandset: boolean;
+  @Input() isHandset: boolean;
 
   // Deze output wordt gebruikt om in de default component het menu te sluiten.
   @Output() displaySideBar: EventEmitter<any> = new EventEmitter();

@@ -10,7 +10,7 @@ import { NotFoundError } from '../../shared/error-handling/not-found-error';
 import { DuplicateKeyError } from '../../shared/error-handling/duplicate-key-error';
 
 @Component({
-  selector: 'notification-dialog',
+  selector: 'app-notification-dialog',
   templateUrl: './notification.dialog.html',
 })
 export class NotificationDialogComponent extends ParentComponent implements OnInit {

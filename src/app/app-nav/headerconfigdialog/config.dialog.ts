@@ -13,7 +13,7 @@ import { ParentComponent } from '../../shared/parent.component';
 import { NoChangesMadeError } from '../../shared/error-handling/no-changes-made-error';
 
 @Component({
-  selector: 'config-dialog',
+  selector: 'app-config-dialog',
   templateUrl: './config.dialog.html',
   styles: ['mat-form-field {display: block;}']
 })

@@ -186,8 +186,7 @@ export class LedenService extends DataService {
 /***************************************************************************************************/
 function isJeugdlidFilter() {
   return function (item: LedenItemExt) {
-    if (item.LeeftijdCategorieWithSex.substring(0, 1) === LidTypeValues.YOUTH) return true;
-    if (item.LeeftijdCategorieBond === 'Senior1') return true;
+    if (item.LeeftijdCategorieWithSex.substring(0, 1) === LidTypeValues.YOUTH || item.LeeftijdCategorieBond.startsWith('Senior1')) return true;
     return false;
   }
 }
