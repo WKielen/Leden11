@@ -28,7 +28,6 @@ export class CompAdminComponent extends ParentComponent implements OnInit {
   }
 
   private bondsNummers = [];
-  private nasLedenItems = [];
   private ledenLijst: LedenItemExt[] = [];
 
   @ViewChild(MatTable, { static: false }) table: MatTable<any>;

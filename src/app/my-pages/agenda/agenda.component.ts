@@ -14,7 +14,7 @@ import { NoChangesMadeError } from "src/app/shared/error-handling/no-changes-mad
 import { NotFoundError } from "src/app/shared/error-handling/not-found-error";
 import { addHolidaysToEvents, agendaToEvent, setEventProps } from "../agenda/event-utils";
 import { ActionItem, ActionService, ACTIONSTATUS } from "src/app/services/action.service";
-import { catchError, map, switchMap } from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 import { Observable, forkJoin, of } from "rxjs";
 import { DateRoutines, IBirthDay, LedenItem, LedenItemExt, LedenService } from "src/app/services/leden.service";
 

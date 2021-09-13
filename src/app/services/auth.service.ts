@@ -1,4 +1,3 @@
-import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { JwtHelperService } from '@auth0/angular-jwt';
@@ -32,10 +31,10 @@ export class AuthService {
           localData = response;
           if (localData && localData.Token) {
 
-            // We kunnen alleen inloggen als er een rol is. Ingebouwd omdat ik andere rollen wil gebruiken voor de jeugdapp. 
+            // We kunnen alleen inloggen als er een rol is. Ingebouwd omdat ik andere rollen wil gebruiken voor de jeugdapp.
             const localRoles = this.jwtHelper.decodeToken(localData.Token).role;
-            if (localRoles.indexOf(ROLES.BESTUUR) === -1 && localRoles.indexOf(ROLES.JC) === -1 && localRoles.indexOf(ROLES.TRAINER) === -1 && 
-            localRoles.indexOf(ROLES.LEDENADMIN) === -1 && localRoles.indexOf(ROLES.PENNINGMEESTER) === -1 && localRoles.indexOf(ROLES.ADMIN) === -1 && 
+            if (localRoles.indexOf(ROLES.BESTUUR) === -1 && localRoles.indexOf(ROLES.JC) === -1 && localRoles.indexOf(ROLES.TRAINER) === -1 &&
+            localRoles.indexOf(ROLES.LEDENADMIN) === -1 && localRoles.indexOf(ROLES.PENNINGMEESTER) === -1 && localRoles.indexOf(ROLES.ADMIN) === -1 &&
             localRoles.indexOf(ROLES.TEST) === -1 ) return false;
 
 
