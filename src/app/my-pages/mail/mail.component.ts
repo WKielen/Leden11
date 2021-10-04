@@ -177,9 +177,9 @@ export class MailComponent extends ParentComponent implements OnInit {
         itemToMail.To = element.To;
         itemToMail.ToName = element.ToName;
 
-        itemToMail.Attachment = this.attachmentcontent;
-        itemToMail.Type = this.fileToUpload.type;
-        itemToMail.FileName = this.fileToUpload.name;
+        itemToMail.Attachment = this.attachmentcontent ?? '';
+        itemToMail.Type = this.fileToUpload?.type ?? '';
+        itemToMail.FileName = this.fileToUpload?.name ?? '';
 
         mailDialogInputMessage.MailItems.push(itemToMail);
       });
