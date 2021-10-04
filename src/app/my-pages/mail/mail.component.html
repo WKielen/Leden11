@@ -1,6 +1,6 @@
 <div class="flexcontainer">
   <div style="flex-basis: 65%;">
-    
+
     <mat-card>
       <form [formGroup]="mailForm" novalidate>
         <mat-card-header>
@@ -8,47 +8,54 @@
         </mat-card-header>
         <mat-card-content>
 
-            <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="space-evenly start">
-              <div fxFlex="0 0 30%">
-                <mat-form-field>
-                  <mat-select placeholder="Bewaarde mails" formControlName="SavedMails"
-                    (selectionChange)="onMailNameChanged($event)">
-                    <mat-option *ngFor="let item of savedMailNames.MailNameItems" [value]="item">{{item}}</mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-
-              <div fxFlex="0 0 66%">
-                <div fxLayout="column">
-
-                  <mat-form-field id="EmailName">
-                    <input matInput type="text" placeholder="Naam mail" formControlName="EmailName"
-                      [formControl]="EmailName">
-                    <mat-error *ngIf="EmailName.hasError('required')">
-                      Veld is verplicht
-                    </mat-error>
-                  </mat-form-field>
-
-                  <mat-form-field id="EmailSubject">
-                    <input matInput type="text" placeholder="Onderwerp" formControlName="EmailSubject"
-                      [formControl]="EmailSubject">
-                    <mat-error *ngIf="EmailSubject.hasError('required')">
-                      Veld is verplicht
-                    </mat-error>
-                  </mat-form-field>
-
-                  <angular-editor formControlName="HtmlContent" [config]="editorConfig"
-                    [placeholder]="'Enter text here...'"></angular-editor>
-
-                </div>
-              </div>
-
+          <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="space-evenly start">
+            <div fxFlex="0 0 30%">
+              <mat-form-field>
+                <mat-select placeholder="Bewaarde mails" formControlName="SavedMails"
+                  (selectionChange)="onMailNameChanged($event)">
+                  <mat-option *ngFor="let item of savedMailNames.MailNameItems" [value]="item">{{item}}</mat-option>
+                </mat-select>
+              </mat-form-field>
             </div>
-          </mat-card-content>
 
-          <mat-card-actions>
-          <button mat-raised-button color="primary" (click)='onSaveEmail()'
-            [disabled]='!mailForm.valid'>Save</button>
+            <div fxFlex="0 0 66%">
+              <div fxLayout="column">
+
+                <mat-form-field id="EmailName">
+                  <input matInput type="text" placeholder="Naam mail" formControlName="EmailName"
+                    [formControl]="EmailName">
+                  <mat-error *ngIf="EmailName.hasError('required')">
+                    Veld is verplicht
+                  </mat-error>
+                </mat-form-field>
+
+                <mat-form-field id="EmailSubject">
+                  <input matInput type="text" placeholder="Onderwerp" formControlName="EmailSubject"
+                    [formControl]="EmailSubject">
+                  <mat-error *ngIf="EmailSubject.hasError('required')">
+                    Veld is verplicht
+                  </mat-error>
+                </mat-form-field>
+
+                <angular-editor formControlName="HtmlContent" [config]="editorConfig"
+                  [placeholder]="'Enter text here...'"></angular-editor>
+
+                <!-- <div class="attachmentbox">
+                  <button mat-raised-button color="primary" (click)="fileInput.click()" id="attachmentbutton">
+                    <span>Kies bijlage</span>
+                    <input #fileInput type="file" (change)="onFileSelected($event.target.files)"
+                      style="display:none; margin: 0px 15px 0px 0px;" />
+                  </button>
+                  {{ fileToUpload?.name }}
+                </div> -->
+              </div>
+            </div>
+
+          </div>
+        </mat-card-content>
+
+        <mat-card-actions>
+          <button mat-raised-button color="primary" (click)='onSaveEmail()' [disabled]='!mailForm.valid'>Save</button>
           <button mat-raised-button color="primary" (click)='onDeleteMail()'>Delete</button>
         </mat-card-actions>
 
@@ -91,32 +98,31 @@
       <mat-card-title>Leden</mat-card-title>
     </mat-card-header>
     <mat-card-content>
-    <table mat-table #table [dataSource]="dataSource">
+      <table mat-table #table [dataSource]="dataSource">
 
         <ng-container matColumnDef="Naam">
           <th mat-header-cell *matHeaderCellDef> Naam </th>
           <td mat-cell *matCellDef="let element"> {{ element.Naam }} </td>
         </ng-container>
-  
+
         <!-- Checkbox Column -->
         <ng-container matColumnDef="actions1">
           <th mat-header-cell *matHeaderCellDef>
             <mat-checkbox (change)="$event ? masterToggle() : null" color="primary"
-                          [checked]="selection.hasValue() && isAllSelected()"
-                          [indeterminate]="selection.hasValue() && !isAllSelected()"
-                          [aria-label]="checkboxLabel()">
+              [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let element" class="cell-padding">
-  
-            <mat-checkbox (click)="$event.stopPropagation()" (change)="onCheckboxChange($event, element)" color='primary'
-              [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
+
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="onCheckboxChange($event, element)"
+              color='primary' [checked]="selection.isSelected(element)" [aria-label]="checkboxLabel(element)">
             </mat-checkbox>
           </td>
         </ng-container>
-  
+
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;" >
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;">
         </tr>
 
       </table>

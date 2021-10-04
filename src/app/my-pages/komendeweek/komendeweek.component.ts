@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { AgendaItem, AgendaService } from 'src/app/services/agenda.service';
+import { AgendaItem, AgendaService, TypeValues } from 'src/app/services/agenda.service';
 import { Dictionary } from 'src/app/shared/modules/Dictionary';
 import * as moment from 'moment';
 import { ActionItem, ActionService, ACTIONSTATUS } from 'src/app/services/action.service';
@@ -91,13 +91,16 @@ export class KomendeWeekComponent extends BaseComponent implements OnInit {
     if (agendaDate < moment().startOf("day").toDate() || overEenWeek <= agendaDate) return;
     let dagnaam: string = agendaDate.to_YYYY_MM_DD();
 
-    switch (agendaItem.Type) {
-      case 'T': agendaItem.Type = 'Toernooi'; break;
-      case 'C': agendaItem.Type = 'Competitie'; break;
-      case 'V': agendaItem.Type = 'Vergadering'; break;
-      case 'S': agendaItem.Type = 'Actie start datum'; break;
-      case 'E': agendaItem.Type = 'Actie uiterste datum'; break;
-    }
+    agendaItem.Type = TypeValues.GetLabel(agendaItem.Type);
+
+
+    // switch (agendaItem.Type) {
+    //   case 'T': agendaItem.Type = 'Toernooi'; break;
+    //   case 'C': agendaItem.Type = 'Competitie'; break;
+    //   case 'V': agendaItem.Type = 'Vergadering'; break;
+    //   case 'S': agendaItem.Type = 'Actie start datum'; break;
+    //   case 'E': agendaItem.Type = 'Actie uiterste datum'; break;
+    // }
 
     if (!this.dagen.containsKey(dagnaam)) {
       this.dagen.addSorted(dagnaam, [])

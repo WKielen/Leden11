@@ -157,6 +157,9 @@ export class MailItem extends MailItemTo {
   // BCC: string = '';
   Subject: string = '';
   Message: string = '';
+  Attachment: string = '';
+  Type: string = '';
+  FileName: string = '';
 }
 
 /***************************************************************************************************

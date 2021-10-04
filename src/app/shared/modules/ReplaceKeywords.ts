@@ -16,7 +16,7 @@ export function ReplaceKeywords(lid: LedenItemExt, body: string): string {
   body = Replace(body, /%email1%/gi, lid.Email1);
   body = Replace(body, /%email2%/gi, lid.Email2);
 
-  if (lid.GeboorteDatum != null && lid.GeboorteDatum != '')
+  if (lid.GeboorteDatum != null && lid.LidTot != '')
     body = Replace(body, /%geboortedatum%/gi, formatDate(lid.GeboorteDatum, 'dd-MM-yyyy', 'nl'));
 
   if (lid.LidTot != null && lid.GeboorteDatum != '')

@@ -15,6 +15,7 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { lastValueFrom } from 'rxjs';
 import { AppError } from 'src/app/shared/error-handling/app-error';
+import { MailItemTo } from 'src/app/services/mail.service';
 @Component({
   selector: 'app-download-page',
   templateUrl: './download.component.html',
@@ -154,8 +155,8 @@ export class DownloadComponent extends ParentComponent implements OnInit {
       case this.ledenSelectieKeuzes[0]: {  // Alle Leden
         this.ledenArray.forEach((element: LedenItemExt) => {
           const emailList = LedenItem.GetEmailList(element);
-          emailList.forEach(element => {
-            localList += element + ';';
+          emailList.forEach((element:MailItemTo) => {
+            localList += element.ToName + '<' + element.To + '>' + ';';
           });
         });
         fileName = "TTVN Leden Maillijst ";
@@ -165,8 +166,8 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         this.ledenArray.forEach((element: LedenItemExt) => {
           if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.ADULT) {
             const emailList = LedenItem.GetEmailList(element);
-            emailList.forEach(element => {
-              localList += element + ';';
+            emailList.forEach((element:MailItemTo) => {
+              localList += element.ToName + '<' + element.To + '>' + ';';
             });
           }
         });
@@ -178,8 +179,8 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         this.ledenArray.forEach((element: LedenItemExt) => {
           if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
             const emailList = LedenItem.GetEmailList(element);
-            emailList.forEach(element => {
-              localList += element + ';';
+            emailList.forEach((element:MailItemTo) => {
+              localList += element.ToName + '<' + element.To + '>' + ';';
             });
           }
         });

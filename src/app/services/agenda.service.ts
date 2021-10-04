@@ -133,6 +133,10 @@ export class TypeValues {
     { Value: 'T', Label: 'Toernooi' },
     { Value: 'C', Label: 'Competitie' },
     { Value: 'V', Label: 'Vergadering' },
+    { Value: 'H', Label: 'Activiteit' },
+    { Value: 'B', Label: 'Bestuursactiviteit' },
+    { Value: 'S', Label: 'Actie start datum' },
+    { Value: 'E', Label: 'Actie uiterste datum' }
   ];
   public static GetLabel(value: string): string {
     if (!value) {
@@ -142,4 +146,5 @@ export class TypeValues {
       return 'Actie';
     return this.table.find(x => x.Value === value).Label;
   }
+
 }

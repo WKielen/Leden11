@@ -18,9 +18,10 @@ import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-mad
 import { ExternalMailApiRecord, MailItem, MailItemTo, MailService } from 'src/app/services/mail.service';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
-  selector: 'mail',
+  selector: 'app-mail',
   templateUrl: './mail.component.html',
   styleUrls: ['./mail.component.scss']
 })
@@ -156,10 +157,12 @@ export class MailComponent extends ParentComponent implements OnInit {
     // this.checkPresenceMailServer();
   }
 
+  private attachmentcontent: string = '';
   /***************************************************************************************************
   / Verstuur de email
   /***************************************************************************************************/
-  onSendMail($event): void {
+  async onSendMail($event): Promise<void> {
+
     let mailDialogInputMessage = new ExternalMailApiRecord();
 
     mailDialogInputMessage.MailItems = new Array<MailItem>();
@@ -173,6 +176,11 @@ export class MailComponent extends ParentComponent implements OnInit {
         itemToMail.Subject = this.EmailSubject.value;
         itemToMail.To = element.To;
         itemToMail.ToName = element.ToName;
+
+        itemToMail.Attachment = this.attachmentcontent;
+        itemToMail.Type = this.fileToUpload.type;
+        itemToMail.FileName = this.fileToUpload.name;
+
         mailDialogInputMessage.MailItems.push(itemToMail);
       });
     });
@@ -300,6 +308,64 @@ export class MailComponent extends ParentComponent implements OnInit {
       );
     }
   }
+
+  /**
+   * Bijlage kiezen
+   * @param files
+   */
+  fileToUpload: File | null = null;
+  onFileSelected(files: FileList) {
+    this.fileToUpload = files.item(0);
+    this.convertFile(this.fileToUpload).subscribe({
+      next: (data) => {
+        this.attachmentcontent = data;
+        console.log("MailComponent --> this.convertFile --> data", data);
+      },
+      error: (error: AppError) => {
+      }
+
+    });
+    // const reader = new FileReader();
+    // // const type = this.fileToUpload.type;
+    // reader.onloadend = (e) => {
+    //   // let x = reader.result as string;
+    //   // console.log("MailComponent --> onFileSelected --> u(x)", unescape(x));
+
+    //   let result = reader.result as string;
+    //   // console.log("MailComponent --> onFileSelected --> u(x)",result);
+
+
+    //   this.attachmentcontent = btoa(result);
+    //   // console.log("MailComponent --> onFileSelected --> u(x)",this.attachmentcontent);
+    // }
+    // // reader.readAsText(this.fileToUpload);
+    // reader.readAsText(this.fileToUpload);
+  }
+
+
+  convertFile(file: File): Observable<string> {
+    const result = new ReplaySubject<string>(1);
+    const reader = new FileReader();
+    reader.readAsBinaryString(file);
+    reader.onload = (event) => result.next(btoa(event.target.result.toString()));
+    return result;
+  }
+
+
+
+
+
+
+
+  // utf8_to_b64( str ) {
+  //   // return window.btoa(unescape(encodeURIComponent( str )));
+
+
+  //   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
+  //     return String.fromCharCode( p1);
+  // }));
+  // }
+
 
   /***************************************************************************************************
   / Hier controleren of de mail server aanwezig is
