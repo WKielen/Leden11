@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { LedenService, LedenItem, LedenItemExt } from '../../services/leden.service';
+import { LedenService, LedenItem, LedenItemExt, DateRoutines } from '../../services/leden.service';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -28,24 +28,16 @@ import { Observable, ReplaySubject } from 'rxjs';
 
 export class MailComponent extends ParentComponent implements OnInit {
 
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
+  // @ViewChild(MatTable, { static: false }) table: MatTable<any>;
 
-  dataSource = new MatTableDataSource<LedenItemExt>();
+  // dataSource = new MatTableDataSource<LedenItemExt>();
+  ledenLijst: Array<LedenItemExt> = [];
+
   itemsToMail: Array<LedenItemExt> = [];
   selection = new SelectionModel<LedenItem>(true, []); //used for checkboxes
-  displayedColumns: string[] = ['actions1', 'Naam'];
-  filterValues = {
-    LeeftijdCategorieJ: '',
-    LeeftijdCategorieV: '',
-  };
 
   mailBoxParam = new MailBoxParam();
   savedMailNames = new MailNameList();
-
-  ckbVolwassenen: boolean = true;
-  ckbJeugd: boolean = true;
-  showPw: boolean = false;
-  mailServiceIsOkay: boolean = true;
 
   mailboxparamForm = new FormGroup({
     EmailAddress: new FormControl(
@@ -144,17 +136,11 @@ export class MailComponent extends ParentComponent implements OnInit {
       this.ledenService.getActiveMembers$()
         .subscribe({
           next: (data: Array<LedenItemExt>) => {
-            this.dataSource.data = data;
+            this.ledenLijst = data;
           }
         }));
 
-    this.dataSource.filterPredicate = this.createFilter();
-    this.filterValues.LeeftijdCategorieV = 'volwassenen';
-    this.filterValues.LeeftijdCategorieJ = 'jeugd';
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
     this.readMailList();
-    // this.checkPresenceMailServer();
   }
 
   private attachmentcontent: string = '';
@@ -206,35 +192,13 @@ export class MailComponent extends ParentComponent implements OnInit {
       });
   }
 
+
   /***************************************************************************************************
+  / De selectie is gewijzigd in het childcomponent.
   / Hier bepaal ik naar wie er een mail moet worden gestuurd.
-  / Het issue is dat ik niet fatsoenlijk vast kan stellen welke regels er checked zijn binnen
-  / de gefilterde regels.
   /***************************************************************************************************/
-  private determineMailToSend(): void {
-    var filteredData = this.dataSource.filteredData ? this.dataSource.filteredData : new LedenItemExt()[0];
-    var selectedData = this.selection.selected ? this.selection.selected : new LedenItemExt()[0];;
-
-    this.itemsToMail = [];
-    for (let i = 0; i < filteredData.length; i++) {
-      for (let j = 0; j < selectedData.length; j++) {
-        if (filteredData[i].LidNr === selectedData[j].LidNr) {
-          this.itemsToMail.push(filteredData[i])
-        }
-      }
-    }
-  }
-
-  /***************************************************************************************************
-  / Een checkbox van de ledenlijst is gewijzigd.
-  /***************************************************************************************************/
-  onCheckboxChange(event, row): void {
-    if (event) {
-      this.selection.toggle(row);
-    } else {
-      return null;
-    }
-    this.determineMailToSend();
+  onSelectionChanged($event) {
+    this.itemsToMail = $event;
   }
 
   /***************************************************************************************************
@@ -325,24 +289,13 @@ export class MailComponent extends ParentComponent implements OnInit {
       }
 
     });
-    // const reader = new FileReader();
-    // // const type = this.fileToUpload.type;
-    // reader.onloadend = (e) => {
-    //   // let x = reader.result as string;
-    //   // console.log("MailComponent --> onFileSelected --> u(x)", unescape(x));
-
-    //   let result = reader.result as string;
-    //   // console.log("MailComponent --> onFileSelected --> u(x)",result);
-
-
-    //   this.attachmentcontent = btoa(result);
-    //   // console.log("MailComponent --> onFileSelected --> u(x)",this.attachmentcontent);
-    // }
-    // // reader.readAsText(this.fileToUpload);
-    // reader.readAsText(this.fileToUpload);
   }
 
-
+  /**
+   * Converts file
+   * @param file
+   * @returns file
+   */
   convertFile(file: File): Observable<string> {
     const result = new ReplaySubject<string>(1);
     const reader = new FileReader();
@@ -351,51 +304,6 @@ export class MailComponent extends ParentComponent implements OnInit {
     return result;
   }
 
-
-
-
-
-
-
-  // utf8_to_b64( str ) {
-  //   // return window.btoa(unescape(encodeURIComponent( str )));
-
-
-  //   return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function(match, p1) {
-  //     return String.fromCharCode( p1);
-  // }));
-  // }
-
-
-  /***************************************************************************************************
-  / Hier controleren of de mail server aanwezig is
-  /***************************************************************************************************/
-  /*
-  private checkPresenceMailServer(): void {
-    this.setMailPresenceStatus();
-    const source = interval(60000);
-    const subscribe = source.subscribe(val => {
-      this.setMailPresenceStatus();
-    })
-    this.registerSubscription(subscribe);
-  }
-
-  private setMailPresenceStatus() {
-    console.log('send status request message');
-    this.mailService.status$().subscribe(result => {
-      if (result['status'] == 'alive') {
-        this.mailServiceIsOkay = true;
-      } else {
-        this.mailServiceIsOkay = false;
-        console.log(result['status']);
-      }
-    },
-      (error: AppError) => {
-        this.mailServiceIsOkay = false;
-        console.log(error);
-      });
-  }
-*/
   /***************************************************************************************************
   / Lees het bewaard mail overzicht uit de Param tabel
   /***************************************************************************************************/
@@ -489,76 +397,7 @@ export class MailComponent extends ParentComponent implements OnInit {
   get HtmlContent() {
     return this.mailForm.get('HtmlContent');
   }
-  /***************************************************************************************************
-  / Whether the number of selected elements matches the total number of rows.
-  /***************************************************************************************************/
-  isAllSelected(): boolean {
-    const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
-    return numSelected === numRows;
-  }
 
-  /***************************************************************************************************
-  / Selects all rows if they are not all selected; otherwise clear selection.
-  /***************************************************************************************************/
-  masterToggle(): void {
-    this.isAllSelected() ?
-      this.selection.clear() :
-      this.dataSource.data.forEach(row => this.selection.select(row));
-    this.determineMailToSend();
-  }
-
-  /***************************************************************************************************
-  / The label for the checkbox on the passed row. Voor als de regel wordt geklikt
-  /***************************************************************************************************/
-  checkboxLabel(row?: LedenItemExt): string {
-    if (!row) {
-      return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
-    }
-    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.LidNr}`;
-  }
-
-  /***************************************************************************************************
-  / De senioren zijn verwijderd uit de selectie omdat xxxxxxx geen categorie is
-  /***************************************************************************************************/
-  onChangeckbVolwassenen($event): void {
-    this.filterValues.LeeftijdCategorieV = $event.checked ? 'volwassenen' : 'xxxxxxxxxxxxyz';
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    this.dataSource.data.forEach(row => {
-      if (row.LeeftijdCategorie === "volwassenen") {
-        this.selection.deselect(row)
-      }
-    });
-    this.determineMailToSend();
-  }
-
-  /***************************************************************************************************
-  / De jeugd is verwijderd uit de selectie omdat xxxxxxx geen jeugdcategorie is
-  /***************************************************************************************************/
-  onChangeckbJeugd($event): void {
-    this.filterValues.LeeftijdCategorieJ = $event.checked ? 'jeugd' : 'xxxxxxxxxxxxxxyz';
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-
-    this.dataSource.data.forEach(row => {
-      if (row.LeeftijdCategorie === "jeugd") {
-        this.selection.deselect(row)
-      }
-    });
-    this.determineMailToSend();
-  }
-
-  /***************************************************************************************************
-  / This filter is created at initialize of the page.
-  /***************************************************************************************************/
-  private createFilter(): (data: any, filter: string) => boolean {
-    let filterFunction = function (data, filter): boolean {
-      let searchTerms = JSON.parse(filter);
-      return data.LeeftijdCategorie.toLowerCase().indexOf(searchTerms.LeeftijdCategorieV) !== -1
-        || data.LeeftijdCategorie.toLowerCase().indexOf(searchTerms.LeeftijdCategorieJ) !== -1
-    }
-    return filterFunction;
-  }
 }
 
 /***************************************************************************************************

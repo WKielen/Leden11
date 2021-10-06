@@ -5,6 +5,7 @@ import { CustomMaterialModule } from 'src/app/material.module';
 import { MailComponent } from './mail.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { SharedComponentsModule } from 'src/app/shared/components/component.module';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AngularEditorModule,
     CustomMaterialModule,
     FormsModule,
-    ReactiveFormsModule, 
+    ReactiveFormsModule,
+    SharedComponentsModule,
   ]
 })
 

@@ -1,4 +1,5 @@
 import { CommonModule } from '@angular/common';
+
 import { NgModule } from '@angular/core';
 import { CustomMaterialModule } from 'src/app/material.module';
 import { A2hsComponent } from './a2hs/a2hs.component';
@@ -10,6 +11,9 @@ import { WaitingButtonComponent } from './waiting-button.component';
 import { HoldableModule } from '../directives/directives.module';
 import { CheckboxListComponent } from './checkbox.list.component';
 import { DialogMessageBoxComponent } from './dialog.message.box';
+import { MemberSelectionBoxComponent } from './member.selectionbox.component';
+import { MemberSelectionBoxWrapperComponent } from './member.selectionbox.wrapper.component';
+import { FormsModule } from '@angular/forms';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -20,10 +24,13 @@ const componentList = [
   WaitingButtonComponent,
   CheckboxListComponent,
   DialogMessageBoxComponent,
+  MemberSelectionBoxComponent,
+  MemberSelectionBoxWrapperComponent,
 ]
 @NgModule({
   imports: [
     CommonModule,
+    FormsModule,
     CustomMaterialModule,
     HoldableModule,
   ],
