@@ -32,7 +32,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
   progress: number = 0;  // for the progress-spinner in de header
 
   constructor(private ledenService: LedenService,
-    protected notificationService: NotificationService,
+    // protected notificationService: NotificationService,
     protected snackBar: MatSnackBar,
     public dialog: MatDialog) {
     super(snackBar)
@@ -69,6 +69,7 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
     toBeAdded.LidNr = Number(tmpJson['maxlidnr']) + 1;
     toBeAdded.LidType = 'N';  // default lidtype
     toBeAdded.BetaalWijze = 'I';  // defualt betaalwijze Incasso
+    console.log("LedenManagerComponent --> onAdd --> toBeAdded", toBeAdded);
 
     // let tmp;
     this.dialog.open(LedenDialogComponent, {
@@ -100,8 +101,8 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
                       this.showMailDialog(toBeAdded, 'add');
                     }
 
-                    let message = "Nieuw lid: " + result.VolledigeNaam + " , " + result.Leeftijd + " jaar"
-                    this.notificationService.sendNotificationsForRole([ROLES.BESTUUR], "Ledenadministratie", message);
+                    // let message = "Nieuw lid: " + result.VolledigeNaam + " , " + result.Leeftijd + " jaar"
+                    // this.notificationService.sendNotificationsForRole([ROLES.BESTUUR], "Ledenadministratie", message);
                   },
                   error: (error) => {
                     if (error instanceof DuplicateKeyError) {
@@ -160,8 +161,8 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
                       this.showMailDialog(toBeDeleted, 'delete');
                     }
 
-                    let message = "Lid Opgezegd: " + LedenItem.getFullNameVtA(toBeDeleted.Voornaam, toBeDeleted.Tussenvoegsel, toBeDeleted.Achternaam);
-                    this.notificationService.sendNotificationsForRole([ROLES.BESTUUR], "Ledenadministratie", message);
+                    // let message = "Lid Opgezegd: " + LedenItem.getFullNameVtA(toBeDeleted.Voornaam, toBeDeleted.Tussenvoegsel, toBeDeleted.Achternaam);
+                    // this.notificationService.sendNotificationsForRole([ROLES.BESTUUR], "Ledenadministratie", message);
                   },
                   error: (error: AppError) => {
                     if (error instanceof NotFoundError) {

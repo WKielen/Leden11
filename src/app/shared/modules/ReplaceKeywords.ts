@@ -2,6 +2,7 @@ import { LedenItemExt } from "src/app/services/leden.service";
 import { formatDate } from '@angular/common';
 
 export function ReplaceKeywords(lid: LedenItemExt, body: string): string {
+  console.log("ReplaceKeywords --> lid", lid);
 
   body = Replace(body, /%voornaam%/gi, lid.Voornaam);
   body = Replace(body, /%tussen%/gi, lid.Tussenvoegsel);
@@ -16,10 +17,10 @@ export function ReplaceKeywords(lid: LedenItemExt, body: string): string {
   body = Replace(body, /%email1%/gi, lid.Email1);
   body = Replace(body, /%email2%/gi, lid.Email2);
 
-  if (lid.GeboorteDatum != null && lid.LidTot != '')
+  if (lid.GeboorteDatum != null && lid.GeboorteDatum != '')
     body = Replace(body, /%geboortedatum%/gi, formatDate(lid.GeboorteDatum, 'dd-MM-yyyy', 'nl'));
 
-  if (lid.LidTot != null && lid.GeboorteDatum != '')
+  if (lid.LidTot != null && lid.LidTot != '')
     body = Replace(body, /%lidtot%/gi, formatDate(lid.LidTot, 'dd MMMM yyyy', 'nl'));
 
   body = Replace(body, /%geslacht%/gi, lid.Geslacht);
