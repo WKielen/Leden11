@@ -10,6 +10,7 @@ import { BaseComponent } from '../base.component';
 @Component({
   selector: 'app-member-selection-box-wrapper',
   template: `
+  <small class="development" *ngIf="developmentMode">{{ me }}</small><div>
   <ng-template #selectionWrapperTemplate>
     <mat-card>
       <mat-card-header>

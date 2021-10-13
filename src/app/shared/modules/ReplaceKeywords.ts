@@ -2,7 +2,6 @@ import { LedenItemExt } from "src/app/services/leden.service";
 import { formatDate } from '@angular/common';
 
 export function ReplaceKeywords(lid: LedenItemExt, body: string): string {
-  console.log("ReplaceKeywords --> lid", lid);
 
   body = Replace(body, /%voornaam%/gi, lid.Voornaam);
   body = Replace(body, /%tussen%/gi, lid.Tussenvoegsel);

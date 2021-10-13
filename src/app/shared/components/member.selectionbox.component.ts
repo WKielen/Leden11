@@ -7,6 +7,7 @@ import { BaseComponent } from '../base.component';
 @Component({
   selector: 'app-member-selection-box',
   template: `
+  <small class="development" *ngIf="developmentMode">{{ me }}</small><div>
   <ng-container *ngTemplateOutlet="selectionTemplate;"></ng-container>
   <mat-card>
     <mat-card-header>

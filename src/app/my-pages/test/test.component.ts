@@ -41,16 +41,17 @@ export class TestComponent
 
 
   onClick() {
-    let lid = new LedenItem();
+    let lid = this.ledenLijst[0];
     let output = ReplaceKeywords(lid, '');
-
-
+    console.log("onClick --> output", output);
   }
 
   onClick2() {
   }
 
-
+  onSelectionChanged($event) {
+    console.log("onSelectionChanged --> $event", $event);
+  }
 
 
 }

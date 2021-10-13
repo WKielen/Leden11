@@ -1,12 +1,19 @@
 <mat-card>
+  <mat-card-header title="Kopje pagina"></mat-card-header>
+  <mat-card-content>
+    <app-member-selection-box-wrapper [ledenLijst]='ledenLijst' (selectedMemberList)="onSelectionChanged($event)">
+    </app-member-selection-box-wrapper>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
   <mat-card-header-spinner title="Kopje pagina"></mat-card-header-spinner>
 
   <mat-card-content>
     <app-a2hs></app-a2hs>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button (click)="onClick()" color="primary">Doe iets</button>
+    <button mat-raised-button (click)="onClick()" color="primary">Replace fields</button>
     <button mat-raised-button (click)="onClick2()" color="primary">Doe iets anders</button>
   </mat-card-actions>
 </mat-card>
-

@@ -416,7 +416,7 @@ export class DateRoutines {
     let mm = today.getMonth() - birthDate.getMonth();
     let dd = birthDate.getDay();
     let age = yy - birthDate.getFullYear();
-    if (mm < 0 || (mm === 0 && today.getDate() < birthDate.getDate())) {
+    if (mm < 0 || (mm === 0 && today.getDate() <= birthDate.getDate())) {
       age--;
       yy--;
     }
