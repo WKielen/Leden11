@@ -13,7 +13,8 @@ import { CheckboxListComponent } from './checkbox.list.component';
 import { DialogMessageBoxComponent } from './dialog.message.box';
 import { MemberSelectionBoxComponent } from './member.selectionbox.component';
 import { MemberSelectionBoxWrapperComponent } from './member.selectionbox.wrapper.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -30,9 +31,11 @@ const componentList = [
 @NgModule({
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     FormsModule,
     CustomMaterialModule,
     HoldableModule,
+    FlexLayoutModule,
   ],
   declarations: [
     ...componentList

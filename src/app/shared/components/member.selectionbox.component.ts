@@ -1,7 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, Output, EventEmitter, TemplateRef, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { LedenItemExt } from 'src/app/services/leden.service';
+import { DateRoutines, LedenItemExt } from 'src/app/services/leden.service';
 import { BaseComponent } from '../base.component';
 
 @Component({
@@ -19,6 +20,19 @@ import { BaseComponent } from '../base.component';
         <ng-container matColumnDef="Naam">
           <th mat-header-cell *matHeaderCellDef> Naam </th>
           <td mat-cell *matCellDef="let element"> {{ element.Naam }} </td>
+        </ng-container>
+        <ng-container matColumnDef="Leeftijd">
+          <th mat-header-cell *matHeaderCellDef class='lastcolumnshrink'>
+            <div class="mat-cell">
+              <strong>Leeftijd</strong>
+
+            </div>
+            <mat-form-field class="filter" floatLabel="never" style="width:60px">
+              <mat-label>Zoek</mat-label>
+              <input matInput id="zoek2" [formControl]="ageFilter">
+            </mat-form-field>
+          </th>
+          <td mat-cell *matCellDef="let element" class='lastcolumnshrink'><div [innerHTML]="InnerHtmlLabelLeeftijdsCategorie(element.LeeftijdCategorieBond)"></div></td>
         </ng-container>
 
         <!-- Checkbox Column -->
@@ -54,7 +68,7 @@ import { BaseComponent } from '../base.component';
   styles: []
 })
 
-export class MemberSelectionBoxComponent extends BaseComponent implements OnChanges {
+export class MemberSelectionBoxComponent extends BaseComponent implements OnInit, OnChanges {
 
   @Input()
   ledenLijst: Array<LedenItemExt> = [];
@@ -66,14 +80,36 @@ export class MemberSelectionBoxComponent extends BaseComponent implements OnChan
   selectedMemberList = new EventEmitter<Event>();
 
   selection = new SelectionModel<LedenItemExt>(true, []); //used for checkboxes
-  displayedColumns: string[] = ['actions1', 'Naam'];
+  displayedColumns: string[] = ['actions1', 'Naam', 'Leeftijd'];
+  ageFilter = new FormControl('');
+  filterValues = {
+    Leeftijd: '',
+  };
   dataSource = new MatTableDataSource<LedenItemExt>();
+
+
+  ngOnInit(): void {
+    /***************************************************************************************************
+  / Er is een key ingetypt op de leeftijd categorie filter
+  /***************************************************************************************************/
+    this.registerSubscription(
+      this.ageFilter.valueChanges
+        .subscribe({
+          next: age => {
+            this.filterValues.Leeftijd = age;
+            this.dataSource.filter = JSON.stringify(this.filterValues);
+          }
+        })
+    );
+  }
 
   /***************************************************************************************************
   / De selection of the memberlist has changed in the parent component.
   /***************************************************************************************************/
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource.data = this.ledenLijst;
+    this.dataSource.filterPredicate = this.createFilter();
+    console.log('eerste', this.dataSource.data[0]);
   }
 
   /***************************************************************************************************
@@ -94,7 +130,7 @@ export class MemberSelectionBoxComponent extends BaseComponent implements OnChan
       this.emitSelected();
       return;
     }
-    this.selection.select(...this.dataSource.data);
+    this.selection.select(...this.dataSource.filteredData);
     this.emitSelected();
   }
 
@@ -127,4 +163,19 @@ export class MemberSelectionBoxComponent extends BaseComponent implements OnChan
     this.selectedMemberList.emit(this.selection.selected as any);
   }
 
+
+  InnerHtmlLabelLeeftijdsCategorie(value: string): string {
+    return DateRoutines.InnerHtmlLabelLeeftijdsCategorie(value);
+  }
+
+  /***************************************************************************************************
+  /  Deze filter wordt bij initialisatie geinitieerd
+  /***************************************************************************************************/
+  private createFilter(): (data: any, filter: string) => boolean {
+    let filterFunction = function (data, filter): boolean {
+      let searchTerms = JSON.parse(filter);
+      return data.LeeftijdCategorieBond.toString().toLowerCase().indexOf(searchTerms.Leeftijd.toLowerCase()) !== -1
+    }
+    return filterFunction;
+  }
 }
