@@ -15,6 +15,8 @@ import { MemberSelectionBoxComponent } from './member.selectionbox.component';
 import { MemberSelectionBoxWrapperComponent } from './member.selectionbox.wrapper.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { HtmlEditorComponent } from './html.editor.component';
+import { AngularEditorModule } from '@kolkov/angular-editor';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -27,6 +29,7 @@ const componentList = [
   DialogMessageBoxComponent,
   MemberSelectionBoxComponent,
   MemberSelectionBoxWrapperComponent,
+  HtmlEditorComponent,
 ]
 @NgModule({
   imports: [
@@ -36,6 +39,8 @@ const componentList = [
     CustomMaterialModule,
     HoldableModule,
     FlexLayoutModule,
+    AngularEditorModule,
+
   ],
   declarations: [
     ...componentList

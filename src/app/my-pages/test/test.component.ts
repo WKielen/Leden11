@@ -25,6 +25,9 @@ export class TestComponent
 
   ledenLijst: Array<LedenItemExt> = [];
 
+  htmlContent: string="<b>Dit is mijn tekst</b>";
+  htmlOutput: string = '';
+
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
   /***************************************************************************************************/
@@ -53,5 +56,7 @@ export class TestComponent
     console.log("onSelectionChanged --> $event", $event);
   }
 
-
+  onHtmlOutputChange($event) {
+    this.htmlOutput = $event
+  }
 }

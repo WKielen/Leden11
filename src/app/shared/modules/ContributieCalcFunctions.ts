@@ -66,10 +66,7 @@ export function BerekenContributie(lid: LedenItemExt,
 /***************************************************************************************************
 / Contributie berekening OUDE methode
 /***************************************************************************************************/
-export function BerekenContributieOudeMethode(lid: LedenItemExt,
-    contributieBedragen: ContributieBedragen,
-    description: string)
-    : BerekendeBedragen {
+export function BerekenContributieOudeMethode(lid: LedenItemExt, contributieBedragen: ContributieBedragen, description: string) : BerekendeBedragen {
 
     let berekendeBedragen = new BerekendeBedragen();
     if (lid.LidType == LidTypeValues.CONTRIBUTIEVRIJ) {       // contributie vrij
@@ -95,12 +92,6 @@ export function BerekenContributieOudeMethode(lid: LedenItemExt,
         if (String(lid.CompGerechtigd).toBoolean()) {
             berekendeBedragen.CompetitieBijdrage = contributieBedragen.CompetitieBijdrageJeugd;
         }
-        if (String(lid.LidBond).toBoolean()) {
-            berekendeBedragen.Bondsbijdrage = contributieBedragen.HalfjaarBondBijdrage;
-        }
-    }
-    if (lid.LeeftijdCategorieBond.substring(0, 3) == 'Wel' || lid.LeeftijdCategorieBond.substring(0, 3) == 'Pup') {
-        berekendeBedragen.BasisContributie -= 2.50;
     }
     if (lid.LeeftijdCategorieBond.substring(0, 3) == '65-') {
         berekendeBedragen.BasisContributie -= 2;
