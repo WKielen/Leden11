@@ -272,6 +272,7 @@ export class ContrBedragenComponent extends ParentComponent implements OnInit {
 
       if (lid.LidType == LidTypeValues.CONTRIBUTIEVRIJ) return; // Contributie vrij
       let mailItem = CreateContributieMail(lid, this.contributieBedragen, this.Omschrijving.value, this.OudeBerekenMethode.value, formatDate(date, 'dd-MM-yyyy', 'nl-NL'));
+      if (!mailItem) return;
       if (this.secondaryFeeParams.ExtraText != '') {
         mailItem.Message += '<br>';
         mailItem.Message += this.secondaryFeeParams.ExtraText;

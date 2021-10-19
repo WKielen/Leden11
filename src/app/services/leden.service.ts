@@ -414,7 +414,6 @@ export class DateRoutines {
     let today = new Date();
     let yy = today.getFullYear() + 1;
     let mm = today.getMonth() - birthDate.getMonth();
-    let dd = birthDate.getDay();
     let age = yy - birthDate.getFullYear();
     if (mm < 0 || (mm === 0 && today.getDate() <= birthDate.getDate())) {
       age--;
@@ -506,6 +505,33 @@ export class DateRoutines {
     return '';
   }
 
+  /**
+   * Calculate coming birth day
+   * @param memberSince
+   * @returns IBirthDay
+   */
+   public static ComingAnniversary(memberSince: Date): IBirthDay {
+    const jubilea: Array<number> = [50, 40, 25, 10];
+
+    let today = new Date();
+    let endThisYear:Date = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+
+    for (let index = 0; index < jubilea.length; index++) {
+      const element = jubilea[index];
+      let anniversaryDay: Date = this.CalculateAnniversary(memberSince, element);
+      if (anniversaryDay >= today && anniversaryDay < endThisYear) {
+        return { 'BirthDay': anniversaryDay, 'Age': element }
+      }
+
+    }
+  }
+
+  private static CalculateAnniversary(memberSince: Date, years:number): Date {
+    let yy = memberSince.getFullYear() + years;
+    let mm = memberSince.getMonth();
+    let dd = memberSince.getDate();
+    return new Date(yy, mm, dd);
+  }
 
 }
 

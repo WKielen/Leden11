@@ -239,10 +239,12 @@ export function CreateContributieMail(lid: LedenItemExt, contributieBedragen: Co
     let mailItem = new MailItem;
     let string = '';
 
-    // TODO: create html mail
-
-    // mailItem.To = LedenItem.GetEmailList(lid, true)[0];
     const myMail:MailItemTo = LedenItem.GetEmailList(lid, true)[0];
+    if (!myMail) {
+      console.log('Letop: ', lid.VolledigeNaam,' heeft geen email adres waar ik de mail heen kan sturen');
+      return null;
+    }
+
     mailItem.To = myMail.To;
     mailItem.ToName = myMail.ToName;
 

@@ -150,6 +150,24 @@ export class AgendaComponent
       birthdayEvent.extendedProps = { agendaItem: agendaItem };
 
       this.events.push(birthdayEvent);
+
+      // check for anniversary
+      let anniversary: IBirthDay = DateRoutines.ComingAnniversary(new Date(item.LidVanaf));
+      if (!anniversary) return; // er is geen jubileum
+      let anniversaryEvent: EventInput = new Object();
+      anniversaryEvent.title = item.VolledigeNaam + ' ('+ anniversary.Age + ')';
+      anniversaryEvent.start = anniversary.BirthDay;
+      anniversaryEvent.end = anniversary.BirthDay;
+      anniversaryEvent.borderColor = 'blue';
+
+      agendaItem = new AgendaItem();
+      agendaItem.EvenementNaam = 'Jubileum ' + item.VolledigeNaam + ' ('+ anniversary.Age + ')';;
+      agendaItem.Datum = anniversary.BirthDay.to_YYYY_MM_DD();
+      anniversaryEvent.extendedProps = { agendaItem: agendaItem };
+
+      this.events.push(anniversaryEvent);
+
+
     });
   }
 
