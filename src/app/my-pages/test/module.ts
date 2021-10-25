@@ -4,11 +4,11 @@ import { RouterModule } from '@angular/router';
 
 import { TestComponent } from './test.component';
 import { CustomMaterialModule } from 'src/app/material.module';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { SharedComponentsModule } from 'src/app/shared/components/component.module';
 import { HoldableModule } from 'src/app/shared/directives/directives.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldCustomControlExample, MyTelInput } from './telephone/telephone.field.component';
+
 
 @NgModule({
   declarations: [
@@ -25,7 +25,6 @@ import { FormFieldCustomControlExample, MyTelInput } from './telephone/telephone
     ]),
     CommonModule,
     CustomMaterialModule,
-    MatProgressBarModule,
     HoldableModule,
     SharedComponentsModule,
     FormsModule,

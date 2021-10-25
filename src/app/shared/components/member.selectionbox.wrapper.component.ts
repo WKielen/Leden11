@@ -2,7 +2,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, Output, EventEmitter, ViewChild, OnInit, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { LedenItemExt } from 'src/app/services/leden.service';
+import { LedenItemExt, LedenService } from 'src/app/services/leden.service';
 import { BaseComponent } from '../base.component';
 
 // De html in de template wordt doorgegeven aan het child component. De events worden echter hier afgehandeld.
@@ -25,14 +25,11 @@ import { BaseComponent } from '../base.component';
       </mat-card-content>
     </mat-card>
   </ng-template>
-  <app-member-selection-box [selectionTemplate]='selectionWrapperTemplate' [ledenLijst]='ledenLijst' (selectedMemberList)="onSelectionChanged($event)"></app-member-selection-box>
+  <app-member-selection-box [selectionTemplate]='selectionWrapperTemplate' [ledenLijst]='this.dataSource.filteredData' (selectedMemberList)="onSelectionChanged($event)"></app-member-selection-box>
 `,
   styles: []
 })
-export class MemberSelectionBoxWrapperComponent extends BaseComponent implements OnInit, OnChanges {
-
-  @Input()
-  ledenLijst: Array<LedenItemExt> = [];
+export class MemberSelectionBoxWrapperComponent extends BaseComponent implements OnInit {
 
   @Output()
   selectedMemberList = new EventEmitter<Event>();
@@ -49,20 +46,29 @@ export class MemberSelectionBoxWrapperComponent extends BaseComponent implements
     LeeftijdCategorieS1: '',
   };
 
+  constructor(
+    protected ledenService: LedenService,
+  ) {
+    super();
+  }
+
+
   ngOnInit(): void {
+
+    this.registerSubscription(
+      this.ledenService.getActiveMembers$()
+        .subscribe({
+          next: (data: Array<LedenItemExt>) => {
+            this.dataSource.data = data;
+          }
+        }));
+
     this.dataSource.filterPredicate = this.createFilter();
     this.filterValues.LeeftijdCategorieV = 'volwassenen';
     this.filterValues.LeeftijdCategorieJ = 'jeugd';
     this.filterValues.LeeftijdCategorieS1 = 'Senior1/O23';
 
     this.dataSource.filter = JSON.stringify(this.filterValues);
-  }
-
-  /***************************************************************************************************
-  / The memberlist has changed in the parent component
-  /***************************************************************************************************/
-  ngOnChanges(changes: SimpleChanges) {
-    this.dataSource.data = this.ledenLijst;
   }
 
   /***************************************************************************************************
@@ -78,7 +84,6 @@ export class MemberSelectionBoxWrapperComponent extends BaseComponent implements
   onChangeckbVolwassenen($event): void {
     this.filterValues.LeeftijdCategorieV = $event.checked ? 'volwassenen' : 'xxxxxxxxxxxxyz';
     this.dataSource.filter = JSON.stringify(this.filterValues);
-    this.ledenLijst = this.dataSource.filteredData;
   }
 
   /***************************************************************************************************
@@ -87,7 +92,6 @@ export class MemberSelectionBoxWrapperComponent extends BaseComponent implements
   onChangeckbJeugd($event): void {
     this.filterValues.LeeftijdCategorieJ = $event.checked ? 'jeugd' : 'xxxxxxxxxxxxxxyz';
     this.dataSource.filter = JSON.stringify(this.filterValues);
-    this.ledenLijst = this.dataSource.filteredData;
   }
 
   /***************************************************************************************************

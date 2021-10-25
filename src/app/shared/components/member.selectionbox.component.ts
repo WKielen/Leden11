@@ -109,7 +109,6 @@ export class MemberSelectionBoxComponent extends BaseComponent implements OnInit
   ngOnChanges(changes: SimpleChanges): void {
     this.dataSource.data = this.ledenLijst;
     this.dataSource.filterPredicate = this.createFilter();
-    console.log('eerste', this.dataSource.data[0]);
   }
 
   /***************************************************************************************************

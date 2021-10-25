@@ -1,15 +1,14 @@
-import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 import { BaseComponent } from '../base.component';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-html-editor',
   template: `
-  <small class="development" *ngIf="developmentMode">{{ me }}</small><div>
+  <small class="development" *ngIf="developmentMode">{{ me }}</small>
   <angular-editor [(ngModel)]="htmlInputContent" [config]="editorConfig" (ngModelChange)="onChange($event)"
                   [placeholder]="'Schrijf hier je mail ...'"></angular-editor>
-`,
-  styles: []
+`
 })
 
 export class HtmlEditorComponent extends BaseComponent implements OnChanges {
@@ -74,7 +73,6 @@ export class HtmlEditorComponent extends BaseComponent implements OnChanges {
     ]
   };
 
-
   /***************************************************************************************************
   / De input is vanuit de parent aangepast
   /***************************************************************************************************/
@@ -88,6 +86,4 @@ export class HtmlEditorComponent extends BaseComponent implements OnChanges {
   onChange($event): void {
     this.htmlOutputContent.emit($event);
   }
-
-
 }
