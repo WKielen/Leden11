@@ -2,7 +2,7 @@ import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
-import { tap, map, retry } from 'rxjs/operators';
+import { tap, map, retry, catchError } from 'rxjs/operators';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
@@ -64,6 +64,22 @@ export class AgendaService extends DataService {
     delete element['DatumWijziging'];
     return super.update$(element);
   }
+
+
+  /***************************************************************************************************
+  / Read the Parameter and CREATE one in the database if it doesn't exist. After this read only an
+  / update statement is needed.
+  /***************************************************************************************************/
+  get$(Id: number): Observable<any> {
+    return this.http.get(environment.baseUrl + '/agenda/get?Id=' + Id)
+    .pipe(
+      retry(3),
+      tap({ // Log the result or error
+        next: data => console.log('Received: ', data),
+        error: error => console.log('Oeps: ', error)
+      }))
+    }
+
 }
 
 /***************************************************************************************************
@@ -129,22 +145,33 @@ export class DoelgroepValues {
 /
 /***************************************************************************************************/
 export class TypeValues {
+  public static Action: string = "A";
+  public static Toernooi: string = "T";
+  public static Competitie: string = "C";
+  public static Vergadering: string = "V";
+  public static Activiteit: string = "H";
+  public static Bestuursactiviteit: string = "B";
+  public static ActieStartDatum: string = "S";
+  public static ActieUitersteDatum: string = "E";
+
   public static table: any[] = [
-    { Value: 'T', Label: 'Toernooi' },
-    { Value: 'C', Label: 'Competitie' },
-    { Value: 'V', Label: 'Vergadering' },
-    { Value: 'H', Label: 'Activiteit' },
-    { Value: 'B', Label: 'Bestuursactiviteit' },
-    { Value: 'S', Label: 'Actie start datum' },
-    { Value: 'E', Label: 'Actie uiterste datum' }
+    { Value: TypeValues.Toernooi, Label: 'Toernooi' },
+    { Value: TypeValues.Competitie, Label: 'Competitie' },
+    { Value: TypeValues.Vergadering, Label: 'Vergadering' },
+    { Value: TypeValues.Activiteit, Label: 'Activiteit' },
+    { Value: TypeValues.Bestuursactiviteit, Label: 'Bestuursactiviteit' },
+    { Value: TypeValues.ActieStartDatum, Label: 'Actie start datum' },
+    { Value: TypeValues.ActieUitersteDatum, Label: 'Actie uiterste datum' }
   ];
   public static GetLabel(value: string): string {
     if (!value) {
       return '';
     }
-    if (value == 'A')
+    if (value == TypeValues.Action)
       return 'Actie';
     return this.table.find(x => x.Value === value).Label;
   }
+
+
 
 }

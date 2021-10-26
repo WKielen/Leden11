@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { BaseComponent } from '../base.component';
 
 @Component({
-  selector: 'mat-dialog-header-detail',
+  selector: 'app-mat-dialog-header-detail',
   template: `
   <h2 mat-dialog-title>{{ title }}
     <div id="left">
@@ -15,6 +15,7 @@ import { BaseComponent } from '../base.component';
       <button *ngIf="showButtons" mat-icon-button color="warn" (click)="onClickDelete($event)">
         <mat-icon>delete</mat-icon>
       </button>
+      <ng-container *ngTemplateOutlet="extraButtonsTemplate"></ng-container>
       <button mat-icon-button color="white" cdkFocusInitial mat-dialog-close>
         <mat-icon>close</mat-icon>
       </button>
@@ -30,11 +31,12 @@ import { BaseComponent } from '../base.component';
 
 export class CardHeaderDetailComponent extends BaseComponent{
 
-  @Input('title') title: string;
-  @Input('showButtons') showButtons: boolean = true;
+  @Input() title: string;
+  @Input() showButtons: boolean = true;
+  @Input() extraButtonsTemplate: TemplateRef<any>;
 
   @Output('onClickModify') modify = new EventEmitter();
-  @Output('onClickCopy') copy = new EventEmitter();
+  @Output('onClickCopy') createcopy = new EventEmitter();
   @Output('onClickDelete') delete = new EventEmitter();
 
 
@@ -43,7 +45,7 @@ export class CardHeaderDetailComponent extends BaseComponent{
     this.modify.emit($event);
   }
   onClickCopy($event) {
-    this.copy.emit($event);
+    this.createcopy.emit($event);
   }
   onClickDelete($event) {
     this.delete.emit($event);
