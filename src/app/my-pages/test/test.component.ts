@@ -1,10 +1,13 @@
 import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { AuthService } from "src/app/services/auth.service";
 import { LedenItem, LedenItemExt, LedenService } from "src/app/services/leden.service";
+import { MailService } from "src/app/services/mail.service";
 import { ParamService } from "src/app/services/param.service";
 import { AppError } from "src/app/shared/error-handling/app-error";
 import { ReplaceKeywords } from "src/app/shared/modules/ReplaceKeywords";
 import { ParentComponent } from "src/app/shared/parent.component";
+import { MailNameList, MailSaveItem } from "../mail/mail.component";
 
 @Component({
   selector: "app-test",
@@ -13,12 +16,14 @@ import { ParentComponent } from "src/app/shared/parent.component";
   // providers: [{ provide: 'param', useValue: 'progress' }]
 })
 export class TestComponent
-  extends ParentComponent
-  implements OnInit {
+  extends ParentComponent implements OnInit {
+
   constructor(
     protected snackBar: MatSnackBar,
     protected paramService: ParamService,
     protected ledenService: LedenService,
+    protected authService: AuthService,
+    protected mailService: MailService,
   ) {
     super(snackBar);
   }
@@ -27,6 +32,7 @@ export class TestComponent
 
   htmlContent: string="<b>Dit is mijn tekst</b>";
   htmlOutput: string = '';
+  eventlist = new MailNameList();
 
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
@@ -59,4 +65,5 @@ export class TestComponent
   onHtmlOutputChange($event) {
     this.htmlOutput = $event
   }
+
 }

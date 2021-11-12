@@ -98,6 +98,39 @@ export class LedenService extends DataService {
       );
   }
 
+
+  /***************************************************************************************************
+  / Get an member item
+  /***************************************************************************************************/
+  get$(Id: number): Observable<any> {
+    return this.http.get(environment.baseUrl + '/lid/get?Id=' + Id)
+    .pipe(
+      retry(3),
+      tap({ // Log the result or error
+        next: data => console.log('Received: ', data),
+        error: error => console.log('Oeps: ', error)
+      }))
+    }
+
+  /***************************************************************************************************
+  / Get the name of a member
+  /***************************************************************************************************/
+  getname$(Id: number): Observable<any> {
+    return this.http.get(environment.baseUrl + '/lid/getname?Id=' + Id)
+    .pipe(
+      retry(3),
+      tap({ // Log the result or error
+        next: data => console.log('Received: ', data),
+        error: error => console.log('Oeps: ', error)
+      }),
+      map(function (value: LedenItemExt) {
+        value.Naam = LedenItem.getFullNameAkCt(value.Voornaam, value.Tussenvoegsel, value.Achternaam);
+        value.VolledigeNaam = LedenItem.getFullNameVtA(value.Voornaam, value.Tussenvoegsel, value.Achternaam);
+        return value;
+      })
+      )
+    }
+
   /***************************************************************************************************
   / Get a membernumber for a new member
   /***************************************************************************************************/

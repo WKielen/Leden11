@@ -1,17 +1,12 @@
-<mat-card>
-  <mat-card-header title="Html Editor"></mat-card-header>
-  <mat-card-content>
-    <app-html-editor [htmlInputContent]="htmlContent" (htmlOutputContent)='onHtmlOutputChange($event)'></app-html-editor>
-    {{htmlOutput}}
-    </mat-card-content>
-</mat-card>
 
-
+<app-html-editor-evenement-wrapper></app-html-editor-evenement-wrapper>
 
 <mat-card>
-  <mat-card-header title="Kopje pagina"></mat-card-header>
+  <mat-card-header>
+    <mat-card-title>Editor</mat-card-title>
+  </mat-card-header>
   <mat-card-content>
-    <app-member-selection-box-wrapper [ledenLijst]='ledenLijst' (selectedMemberList)="onSelectionChanged($event)">
+    <app-member-selection-box-wrapper (selectedMemberList)="onSelectionChanged($event)">
     </app-member-selection-box-wrapper>
   </mat-card-content>
 </mat-card>

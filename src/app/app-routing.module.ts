@@ -30,6 +30,7 @@ import { TrainingGroupsComponent } from './my-pages/trainingsgroep/trainingsgroe
 const routes: Routes = [
   { path: ROUTE.loginPageRoute, component: LoginComponent },
   { path: ROUTE.offlinePageRoute, component: OfflineComponent },
+  { path: ROUTE.subscribeeventPageRoute, loadChildren: () => import('./my-pages/subscribe-event/module').then(m => m.Module), data: { roles: PAGEROLES.testPageRoles } },
   {
     path: '', component: DefaultComponent,canActivate: [AuthGuard],
     children: [
@@ -57,7 +58,6 @@ const routes: Routes = [
       { path: ROUTE.downloadPageRoute, loadChildren: () => import('./my-pages/download/module').then(m => m.Module), canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.downloadPageRoles } },
       { path: ROUTE.mailPageRoute, loadChildren: () => import('./my-pages/mail/module').then(m => m.Module), canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.mailPageRoles } },
       { path: ROUTE.testPageRoute, loadChildren: () => import('./my-pages/test/module').then(m => m.Module), canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.testPageRoles } },
-      { path: ROUTE.subscribeeventPageRoute, loadChildren: () => import('./my-pages/subscribe-event/module').then(m => m.Module), canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.testPageRoles } },
       { path: ROUTE.compadminPageRoute, loadChildren: () => import('./my-pages/comp-admin/module').then(m => m.Module), canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.testPageRoles } },
       { path: '**', component: DashboardComponent, canActivate: [AuthGuard] }
     ]
