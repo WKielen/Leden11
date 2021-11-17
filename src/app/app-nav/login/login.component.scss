@@ -1,4 +1,4 @@
-@import 'src/mixins.scss';
+@use 'src/mixins.scss' as mix;
 
 $padding: 15px;
 $borders: 15px;
@@ -13,7 +13,7 @@ body {
         position: absolute;
         z-index: -1;
 
-        @include desktop {
+        @include mix.desktop {
             clip-path: polygon(0 0, 75% 0, 55% 100%, 0% 100%);
         }
     }
@@ -22,8 +22,8 @@ body {
 
 main {
 
-    padding-top: 30px;    
-    @include desktop {
+    padding-top: 30px;
+    @include mix.desktop {
         display: grid;
         grid-template-columns: 50% auto;
         grid-template-areas: "primary card";
@@ -37,7 +37,7 @@ main {
         box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         width: 80%;
 
-        @include desktop {
+        @include mix.desktop {
             grid-area: card;
             height: fit-content;
             align-self: center;
@@ -75,7 +75,7 @@ main {
         padding: $padding;
         text-align: center;
 
-        @include desktop {
+        @include mix.desktop {
             grid-area: primary;
             text-align: left;
             margin: 4em 0 0 4em;
@@ -86,7 +86,7 @@ main {
             margin-top: 10px;
             text-transform: uppercase;
 
-            @include desktop {
+            @include mix.desktop {
                 width: 30%;
                 font-size: 4em;
                 line-height: 0.9em;
