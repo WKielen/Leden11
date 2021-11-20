@@ -99,7 +99,7 @@ body {
 //
 // Flex-Contrainer: Voor KLEINE schermen, hebben we een kolommen onder elkaar
 //
-@media (max-width: var.$desktop - 1px) {
+@media (max-width: (var.$desktop - 1px)) {
   .flexcontainer {
     display: flex;
     flex-direction: column !important;

@@ -26,6 +26,10 @@
           </mat-error>
         </mat-form-field>
 
+        <mat-form-field class="mat-form-max-width">
+          <textarea matInput placeholder="Extra informatie" formControlName="extrainformatie" rows='5'
+            [formControl]="extrainformatie"></textarea>
+        </mat-form-field>
       </div>
     </div>
   </mat-card-content>
@@ -35,3 +39,4 @@
       (click)="onSubmit()">Ik schrijf me in</button>
   </mat-dialog-actions>
 </mat-card>
+

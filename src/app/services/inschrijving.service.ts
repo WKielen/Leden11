@@ -39,4 +39,5 @@ export class InschrijvingItem {
   Agenda_Id?: number = 0;
   Email?: string = '';
   Naam?: string = '';
+  ExtraInformatie?: string = '';
 }

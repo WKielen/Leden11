@@ -33,6 +33,7 @@ export class SubscribeEventPageComponent
       [Validators.required]
     ),
     email: new FormControl(),
+    extrainformatie: new FormControl(),
   });
 
   constructor(
@@ -103,7 +104,8 @@ export class SubscribeEventPageComponent
   onSubmit() {
     let inschrijvingitem: InschrijvingItem = new InschrijvingItem();
     inschrijvingitem.Email = this.email.value;
-    inschrijvingitem.Naam = this.email.value;
+    inschrijvingitem.Naam = this.naam.value;
+    inschrijvingitem.ExtraInformatie = this.extrainformatie.value;
     inschrijvingitem.Agenda_Id = this.agenda_Id;
     this.showSubmitButton = 'none';
 
@@ -112,8 +114,6 @@ export class SubscribeEventPageComponent
         .subscribe({
           next: (addResult) => {
             this.responseText = 'Je inschrijving is geregistreerd!';
-            this.showSnackBar(SnackbarTexts.SuccessNewRecord);
-
           },
           error: (error) => {
             this.responseError = true;
@@ -141,5 +141,7 @@ export class SubscribeEventPageComponent
     return this.subscribeForm.get('email');
   }
 
-
+  get extrainformatie() {
+    return this.subscribeForm.get('extrainformatie');
+  }
 }

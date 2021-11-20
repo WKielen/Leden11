@@ -30,7 +30,7 @@ import { TrainingGroupsComponent } from './my-pages/trainingsgroep/trainingsgroe
 const routes: Routes = [
   { path: ROUTE.loginPageRoute, component: LoginComponent },
   { path: ROUTE.offlinePageRoute, component: OfflineComponent },
-  { path: ROUTE.subscribeeventPageRoute, loadChildren: () => import('./my-pages/subscribe-event/module').then(m => m.Module), data: { roles: PAGEROLES.testPageRoles } },
+  { path: ROUTE.subscribeeventPageRoute, loadChildren: () => import('./my-pages/evenementen/subscribe-event/module').then(m => m.Module), data: { roles: PAGEROLES.testPageRoles } },
   {
     path: '', component: DefaultComponent,canActivate: [AuthGuard],
     children: [
