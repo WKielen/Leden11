@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MailNameList, MailSaveItem } from 'src/app/my-pages/mail/mail.component';
@@ -77,6 +77,7 @@ import { ParentComponent } from '../parent.component';
       <mat-card-actions>
         <button mat-raised-button color="primary" (click)='onSaveEmail()' [disabled]='!mailForm.valid'>Save</button>
         <button mat-raised-button color="primary" (click)='onDeleteMail()' [disabled]='!mailForm.valid'>Delete</button>
+        <ng-container *ngTemplateOutlet="extraButtonsTemplate"></ng-container>
       </mat-card-actions>
 
     </mat-card>
@@ -91,6 +92,15 @@ import { ParentComponent } from '../parent.component';
 
 export class HtmlEditorEvenementWrapperComponent extends ParentComponent implements OnInit {
 
+  @Input()
+  htmlOutput: string = "<b>Dit is mijn tekst</b>";  // Input voor html editor
+
+  @Input()
+  subject: string = 'mijn onderwerp';
+
+  @Input()
+  extraButtonsTemplate: TemplateRef<any>;
+
   @Output()
   htmlContent = new EventEmitter<string>();
 
@@ -103,7 +113,6 @@ export class HtmlEditorEvenementWrapperComponent extends ParentComponent impleme
 
   // attachmentcontent: string = '';
   savedMailNames = new MailNameList();
-  htmlOutput: string = "<b>Dit is mijn tekst</b>";  // Input voor html editor
 
   mailForm = new FormGroup({
     EmailName: new FormControl(
@@ -126,6 +135,8 @@ export class HtmlEditorEvenementWrapperComponent extends ParentComponent impleme
     super(snackBar);
   }
   ngOnInit(): void {
+    if (this.subject)
+      this.EmailSubject.setValue(this.subject);
     this.readMailList();
   }
 

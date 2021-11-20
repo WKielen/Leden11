@@ -1,5 +1,14 @@
+<ng-template #extrabuttons>
+  <button  mat-icon-button [style.display]="showExtraButtons" color="white" (click)="onClickSendInvitation()">
+    <mat-icon>mail_outline</mat-icon>
+  </button>
+  <button  mat-icon-button [style.display]="showExtraButtons" color="white" (click)="onClickModify()">
+    <mat-icon>how_to_reg</mat-icon>
+  </button>
+</ng-template>
+
 <app-mat-dialog-header-detail (onClickModify)="onClickModify()" (onClickCopy)="onClickCopy()"
-  (onClickDelete)="onClickDelete()" [showButtons]="showButtons">
+  [extraButtonsTemplate]='extrabuttons' (onClickDelete)="onClickDelete()" [showButtons]="showButtons" >
 </app-mat-dialog-header-detail>
 
 <mat-dialog-content>

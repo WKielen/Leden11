@@ -15,3 +15,8 @@ export function calcBetweenDates(LastDate, FirstDate) {
 
     return {'days': days, 'weeks': weeks};
 }
+
+export function ConvertToReadableDate(YYYY_MM_DD: string) : string {
+  const date:Date = new Date(YYYY_MM_DD);
+  return date.toLocaleDateString('nl-NL', {weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+}

@@ -1,11 +1,8 @@
-import { TypeValues, OrganisatieValues, DoelgroepValues, AgendaItem } from '../../services/agenda.service';
 import { Component, Inject, OnInit, Input } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { FormValueToDutchDateString } from 'src/app/shared/modules/DateRoutines';
-import { AppError } from 'src/app/shared/error-handling/app-error';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LedenItemExt } from 'src/app/services/leden.service';
-
+import { Clipboard } from '@angular/cdk/clipboard';
+import { ConvertToReadableDate } from 'src/app/shared/modules/DateRoutines';
 
 @Component({
   selector: 'app-send-inventation-dialog',
@@ -16,13 +13,10 @@ import { LedenItemExt } from 'src/app/services/leden.service';
 })
 export class SendInventationDialogComponent implements OnInit {
   constructor(
+    private clipboard: Clipboard,
     public dialogRef: MatDialogRef<SendInventationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
-    // public dialog: MatDialog,
-
-    // private adapter: DateAdapter<any>
   ) {
-    // this.adapter.setLocale('nl');
   }
 
   public itemsToMail: Array<LedenItemExt> = [];
@@ -33,7 +27,33 @@ export class SendInventationDialogComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('', );
+    this.htmlContent = "Beste %voornaam%, <br> <br>Hierbij de uitnodiging voor inschrijving op ";
+    this.emailSubject = "Uitnodiging tot inschrijving voor " + this.data.data['EvenementNaam'];
+
+    let eventData = this.data.data.EvenementNaam + "<br>";
+    if (this.data.data.Datum !== '')
+      eventData += "Datum: " + ConvertToReadableDate(this.data.data.Datum) + "<br>";
+
+    if (this.data.data.Tijd !== '')
+      eventData += "Tijd: " + this.data.data.Tijd + "<br>";
+
+    if (this.data.data.Lokatie !== '')
+      eventData += "Lokatie: " + this.data.data.Lokatie + "<br>";
+
+    if (this.data.data.Toelichting !== '')
+      eventData += "Toelichting: " + this.data.data.Toelichting + "<br>";
+
+    if (this.data.data.Inschrijfgeld !== '0' && this.data.data.Inschrijfgeld !== '')
+      eventData += "Inschrijfgeld: " + (Number(this.data.data.Inschrijfgeld)).AmountFormatHTML() + "<br>";
+
+    this.htmlContent = this.htmlContent + '<br>' + eventData;
+
+
+
+
+
+
+
   }
 
   /***************************************************************************************************
@@ -49,7 +69,6 @@ export class SendInventationDialogComponent implements OnInit {
 
   onHtmlContentChanged($event) {
     this.htmlContent = $event;
-    console.log("SendInventationDialogComponent --> onHtmlContentChanged --> this.htmlContent", this.htmlContent);
   }
   onEmailSubjectChanged($event) {
     this.emailSubject = $event;
@@ -58,8 +77,10 @@ export class SendInventationDialogComponent implements OnInit {
   onAttachmentFileChanged($event) {
     this.attachmentFile = $event;
   }
-
-
-
-
+  onCreateLink() {
+    let link: string = btoa(JSON.stringify({ 'evenement': this.data.data['Id'] }));
+    let linkcontent = "<a href='" + "http://localhost:4200/#/inschrijven?evenement=" + link + "'>" + "Hier inschrijven voor " + this.data.data['EvenementNaam'] + "</a>"
+    this.htmlContent = this.htmlContent + '<br>' + linkcontent;
+    this.clipboard.copy(linkcontent);
+  }
 }
