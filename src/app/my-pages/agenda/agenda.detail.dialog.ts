@@ -83,10 +83,18 @@ export class AgendaDetailDialogComponent implements OnInit{
 
     const dialogRef = this.dialog.open(SendInventationDialogComponent, {
       // autoFocus: false,
-      height: '90vh',
-      //maxHeight: '100vh',
-      // width: '100vw',
-      // minHeight: 900,
+      // height: '90vh !important',
+      // width: '400px !important',
+      data: {
+        data: this.data.data,
+      },
+    });
+  }
+
+  onClickEventSubscriptions() {
+
+    const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent, {
+      // panelClass: 'width-800px-dialog',
       data: {
         data: this.data.data,
       },
@@ -108,37 +116,6 @@ export class AgendaDetailDialogComponent implements OnInit{
     //       console.log("error", error);
     //     }
     //   })
-  }
-
-  onClickEventSubscriptions() {
-
-    const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent, {
-      // autoFocus: false,
-      height: '90vh',
-      //maxHeight: '100vh',
-      // width: '100vw',
-      // minHeight: 900,
-      data: {
-        data: this.data.data,
-      },
-    });
-
-    dialogRef.afterClosed()
-      .subscribe({
-        next: (data: AgendaItem) => {
-          if (data) {
-            this.data.data = data;
-            this.dialogRef.close(this.data);
-          }
-          else {
-            this.data.method = 'Cancel';
-            this.dialogRef.close(this.data);
-          }
-        },
-        error: (error: AppError) => {
-          console.log("error", error);
-        }
-      })
   }
 
 

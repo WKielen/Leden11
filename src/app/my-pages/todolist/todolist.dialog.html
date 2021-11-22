@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{data.method}}</h2>
+<app-mat-dialog-header-detail title='{{data.method}}'></app-mat-dialog-header-detail>
 <small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-dialog-content [formGroup]="actionItemForm" novalidate>
   <mat-form-field class="mat-form-max-width">

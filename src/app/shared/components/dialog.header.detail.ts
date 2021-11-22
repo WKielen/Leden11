@@ -4,8 +4,11 @@ import { BaseComponent } from '../base.component';
 @Component({
   selector: 'app-mat-dialog-header-detail',
   template: `
-  <h2 mat-dialog-title>{{ title }}
-    <div id="left">
+  <h2 mat-dialog-title>
+    <mat-toolbar class="task-header">
+      <span> {{ title }}</span>
+      <span class="fx-spacer"></span>
+
       <button *ngIf="showButtons" mat-icon-button color="white" (click)="onClickModify($event)">
         <mat-icon>edit</mat-icon>
       </button>
@@ -19,27 +22,35 @@ import { BaseComponent } from '../base.component';
       <button mat-icon-button color="white" cdkFocusInitial mat-dialog-close>
         <mat-icon>close</mat-icon>
       </button>
-    </div>
+    </mat-toolbar>
   </h2>
+
   <small class="development" *ngIf="developmentMode">{{ me }}</small>
   `,
   styles: [
     'h2 { margin: 0px; }',
-    '#left { display: flex; justify-content: flex-end; }'
+    '#left { display: flex; justify-content: flex-end; }',
+    `.task-header {
+      background-color: transparent;
+      color: white;
+      padding: 0;
+      height: 25px;
+    }`,
+    `.fx-spacer {
+      flex: 1 1 auto;
+    }`
   ]
 })
 
 export class CardHeaderDetailComponent extends BaseComponent{
 
   @Input() title: string;
-  @Input() showButtons: boolean = true;
+  @Input() showButtons: boolean = false;
   @Input() extraButtonsTemplate: TemplateRef<any>;
 
   @Output('onClickModify') modify = new EventEmitter();
   @Output('onClickCopy') createcopy = new EventEmitter();
   @Output('onClickDelete') delete = new EventEmitter();
-
-
 
   onClickModify($event) {
     this.modify.emit($event);

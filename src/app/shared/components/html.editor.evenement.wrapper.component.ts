@@ -20,7 +20,6 @@ import { ParentComponent } from '../parent.component';
   template: `
   <small class="development" *ngIf="developmentMode">{{ me }}</small><div>
     <mat-card>
-    <mat-card>
       <mat-card-header>
         <mat-card-title>Mail bericht</mat-card-title>
       </mat-card-header>

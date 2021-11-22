@@ -1,13 +1,14 @@
 import { Component, OnInit } from "@angular/core";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "src/app/services/auth.service";
-import { LedenItem, LedenItemExt, LedenService } from "src/app/services/leden.service";
+import { LedenItemExt, LedenService } from "src/app/services/leden.service";
 import { MailService } from "src/app/services/mail.service";
 import { ParamService } from "src/app/services/param.service";
-import { AppError } from "src/app/shared/error-handling/app-error";
 import { ReplaceKeywords } from "src/app/shared/modules/ReplaceKeywords";
 import { ParentComponent } from "src/app/shared/parent.component";
-import { MailNameList, MailSaveItem } from "../mail/mail.component";
+import { EventSubscriptionsDialogComponent } from "../evenementen/event-subscriptions-dialog/event-subscribtions.dialog";
+import { MailNameList } from "../mail/mail.component";
 
 @Component({
   selector: "app-test",
@@ -24,13 +25,14 @@ export class TestComponent
     protected ledenService: LedenService,
     protected authService: AuthService,
     protected mailService: MailService,
-  ) {
+    public dialogRef: MatDialogRef<EventSubscriptionsDialogComponent>,
+    public dialog: MatDialog,) {
     super(snackBar);
   }
 
   ledenLijst: Array<LedenItemExt> = [];
 
-  htmlContent: string="<b>Dit is mijn tekst</b>";
+  htmlContent: string = "<b>Dit is mijn tekst</b>";
   htmlOutput: string = '';
   eventlist = new MailNameList();
 
@@ -56,6 +58,11 @@ export class TestComponent
   }
 
   onClick2() {
+    const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent,
+      {
+        // panelClass: 'width-800px-dialog',
+      });
+
   }
 
   onSelectionChanged($event) {

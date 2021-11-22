@@ -1,4 +1,4 @@
-<h2 mat-dialog-title>{{data.method}}</h2>
+<app-mat-dialog-header-detail title='{{data.method}}'></app-mat-dialog-header-detail>
 <mat-dialog-content [formGroup]="websiteItemForm" novalidate>
   <div>
     <mat-form-field style="width: 40%">
@@ -40,5 +40,4 @@
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [disabled]='!websiteItemForm.valid' (click)="onSubmit()">Save</button>
-  <button mat-raised-button color="accent" mat-dialog-close>Cancel</button>
 </mat-dialog-actions>

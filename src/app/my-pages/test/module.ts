@@ -8,13 +8,14 @@ import { SharedComponentsModule } from 'src/app/shared/components/component.modu
 import { HoldableModule } from 'src/app/shared/directives/directives.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldCustomControlExample, MyTelInput } from './telephone/telephone.field.component';
+import { MatDialogRef } from '@angular/material/dialog';
 
 
 @NgModule({
   declarations: [
     TestComponent,
     MyTelInput,
-    FormFieldCustomControlExample
+    FormFieldCustomControlExample,
   ],
   imports: [
     RouterModule.forChild([
@@ -34,7 +35,13 @@ import { FormFieldCustomControlExample, MyTelInput } from './telephone/telephone
     TestComponent,
     FormFieldCustomControlExample,
     MyTelInput,
-  ]
+  ],
+  providers: [
+    {
+      provide: MatDialogRef,
+      useValue: {}
+    },
+ ],
 })
 
 export class Module { }

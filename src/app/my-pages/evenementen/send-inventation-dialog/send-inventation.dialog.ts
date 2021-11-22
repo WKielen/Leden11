@@ -7,9 +7,7 @@ import { ConvertToReadableDate } from 'src/app/shared/modules/DateRoutines';
 @Component({
   selector: 'app-send-inventation-dialog',
   templateUrl: './send-inventation.dialog.html',
-  styles: [
-    '[hidden] { display: none!important; }',
-  ]
+  styles: []
 })
 export class SendInventationDialogComponent implements OnInit {
   constructor(
