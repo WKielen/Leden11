@@ -8,7 +8,7 @@ import { ConvertToReadableDate } from 'src/app/shared/modules/DateRoutines';
   selector: 'app-send-inventation-dialog',
   templateUrl: './send-inventation.dialog.html',
   styles: [
-    '[hidden] { display: none!important; }'
+    '[hidden] { display: none!important; }',
   ]
 })
 export class SendInventationDialogComponent implements OnInit {
@@ -25,6 +25,7 @@ export class SendInventationDialogComponent implements OnInit {
   public emailSubject: string = '';
   public htmlContent: string = '';
 
+  public theBoundCallback: Function;
 
   ngOnInit(): void {
     this.htmlContent = "Beste %voornaam%, <br> <br>Hierbij de uitnodiging voor inschrijving op ";
@@ -46,15 +47,10 @@ export class SendInventationDialogComponent implements OnInit {
     if (this.data.data.Inschrijfgeld !== '0' && this.data.data.Inschrijfgeld !== '')
       eventData += "Inschrijfgeld: " + (Number(this.data.data.Inschrijfgeld)).AmountFormatHTML() + "<br>";
 
-    this.htmlContent = this.htmlContent + '<br>' + eventData;
+    this.htmlContent += '<br>' + eventData;
+    this.htmlContent += '<br>' + '%link%';
 
-
-
-
-
-
-
-  }
+    this.theBoundCallback = this.theCallback.bind(this);  }
 
   /***************************************************************************************************
   / Sluit dialog
@@ -79,8 +75,18 @@ export class SendInventationDialogComponent implements OnInit {
   }
   onCreateLink() {
     let link: string = btoa(JSON.stringify({ 'evenement': this.data.data['Id'] }));
-    let linkcontent = "<a href='" + "http://localhost:4200/#/inschrijven?evenement=" + link + "'>" + "Hier inschrijven voor " + this.data.data['EvenementNaam'] + "</a>"
+    let linkcontent = this.createLink(link);
     this.htmlContent = this.htmlContent + '<br>' + linkcontent;
     this.clipboard.copy(linkcontent);
   }
+
+  theCallback(lid: LedenItemExt) {
+    let link: string = btoa(JSON.stringify({ 'evenement': this.data.data['Id'], 'lidnr':lid.LidNr }));
+    return this.createLink(link);
+  }
+
+  createLink(link: string): string {
+    return "<a href='" + "http://localhost:4200/#/inschrijven?evenement=" + link + "'>" + "Hier inschrijven voor " + this.data.data['EvenementNaam'] + "</a>"
+  }
+
 }

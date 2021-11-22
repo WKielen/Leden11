@@ -3,7 +3,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { AgendaItem, DoelgroepValues, OrganisatieValues, TypeValues } from 'src/app/services/agenda.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { AgendaDialogComponent } from './agenda.dialog';
-import { SendInventationDialogComponent } from './send-inventation.dialog';
+import { SendInventationDialogComponent } from '../evenementen/send-inventation-dialog/send-inventation.dialog';
+import { EventSubscriptionsDialogComponent } from '../evenementen/event-subscriptions-dialog/event-subscribtions.dialog';
 
 @Component({
   selector: 'app-agenda-detail-dialog',
@@ -24,6 +25,10 @@ export class AgendaDetailDialogComponent implements OnInit{
   public inschrijfGeld: string = Number(this.data.data.Inschrijfgeld).AmountFormat();
   public toelichting: string = this.data.data.Toelichting.replace(new RegExp('\n', 'g'), "<br>")
   public showExtraButtons: string = 'none';
+
+// Think for yourself, or
+// others will think for you
+// without thinking of you
 
   ngOnInit() {
     if (['T', 'V', 'H'].indexOf(this.data.data.Type) == -1) {
@@ -69,7 +74,7 @@ export class AgendaDetailDialogComponent implements OnInit{
           }
         },
         error: (error: AppError) => {
-          console.log("error", error);
+            console.log("error", error);
         }
       })
   }
@@ -77,6 +82,42 @@ export class AgendaDetailDialogComponent implements OnInit{
   onClickSendInvitation() {
 
     const dialogRef = this.dialog.open(SendInventationDialogComponent, {
+      // autoFocus: false,
+      height: '90vh',
+      //maxHeight: '100vh',
+      // width: '100vw',
+      // minHeight: 900,
+      data: {
+        data: this.data.data,
+      },
+    });
+
+    // dialogRef.afterClosed()
+    //   .subscribe({
+    //     next: (data: AgendaItem) => {
+    //       if (data) {
+    //         this.data.data = data;
+    //         this.dialogRef.close(this.data);
+    //       }
+    //       else {
+    //         this.data.method = 'Cancel';
+    //         this.dialogRef.close(this.data);
+    //       }
+    //     },
+    //     error: (error: AppError) => {
+    //       console.log("error", error);
+    //     }
+    //   })
+  }
+
+  onClickEventSubscriptions() {
+
+    const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent, {
+      // autoFocus: false,
+      height: '90vh',
+      //maxHeight: '100vh',
+      // width: '100vw',
+      // minHeight: 900,
       data: {
         data: this.data.data,
       },
@@ -99,4 +140,8 @@ export class AgendaDetailDialogComponent implements OnInit{
         }
       })
   }
+
+
+
+
 }

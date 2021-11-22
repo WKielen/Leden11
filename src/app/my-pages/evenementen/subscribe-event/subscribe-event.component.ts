@@ -79,7 +79,6 @@ export class SubscribeEventPageComponent
               );
 
               if (this.lidnr != undefined) {
-                console.log("ngOnInit --> this.lidnr", this.lidnr);
                 this.registerSubscription(
                   this.ledenService.getname$(this.lidnr)
                     .subscribe({

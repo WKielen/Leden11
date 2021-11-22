@@ -43,7 +43,7 @@ export function ReplaceKeywords(lid: LedenItemExt, body: string): string {
 }
 
 
-function Replace(body: string, re, to): string {
+export function Replace(body: string, re, to): string {
   // console.log('Replace', re, to);
 
   if (body === null || re === null || to === null) return;

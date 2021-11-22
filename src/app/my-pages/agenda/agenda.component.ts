@@ -85,7 +85,6 @@ export class AgendaComponent
             this.fillEventsWithMembers(data[2] as Array<LedenItem>);
 
             this.calendarOptions.events = this.events.concat(addHolidaysToEvents());
-            console.log("loadData --> this.events", this.events);
           },
           error: (error: AppError) => {
             console.error("TrainingDeelnameComponent --> loadData --> error", error);

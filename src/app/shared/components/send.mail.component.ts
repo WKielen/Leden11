@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MailDialogComponent } from 'src/app/my-pages/mail/mail.dialog';
 import { ParentComponent } from '../parent.component';
-import { ReplaceKeywords } from '../modules/ReplaceKeywords';
+import { Replace, ReplaceKeywords } from '../modules/ReplaceKeywords';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppError } from '../error-handling/app-error';
 
@@ -40,6 +40,10 @@ export class SendMailComponent extends ParentComponent implements OnChanges {
   @Input()
   attachmentFile: File | null = null;
 
+  @Input()
+  public replaceLinkCallback: Function;
+
+
   private attachmentContent: string = '';
 
   constructor(
@@ -72,6 +76,10 @@ export class SendMailComponent extends ParentComponent implements OnChanges {
         itemToMail.Attachment = this.attachmentContent ?? '';
         itemToMail.Type = this.attachmentFile?.type ?? '';
         itemToMail.FileName = this.attachmentFile?.name ?? '';
+
+        let myPersonaliedLink = this.replaceLinkCallback(lid);
+        itemToMail.Message = Replace(itemToMail.Message, /%link%/gi, myPersonaliedLink);
+
 
         mailDialogInputMessage.MailItems.push(itemToMail);
       });

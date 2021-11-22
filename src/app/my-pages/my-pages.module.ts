@@ -47,7 +47,8 @@ import { TodoListDetailDialogComponent } from './todolist/todolist.detail.dialog
 import { TodoListDialogComponent } from './todolist/todolist.dialog';
 import { DecisionDialogComponent } from './todolist/decision.dialog';
 import { TrainingGroupsComponent } from './trainingsgroep/trainingsgroep.component';
-import { SendInventationDialogComponent } from './agenda/send-inventation.dialog';
+import { SendInventationDialogComponent } from './evenementen/send-inventation-dialog/send-inventation.dialog';
+import { EventSubscriptionsDialogComponent } from './evenementen/event-subscriptions-dialog/event-subscribtions.dialog';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -81,6 +82,7 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     WebsiteDialogComponent,
     DecisionDialogComponent,
     SendInventationDialogComponent,
+    EventSubscriptionsDialogComponent,
 
     MasterzComponent,
     KomendeWeekComponent,

@@ -21,6 +21,7 @@ import { HtmlEditorEvenementWrapperComponent } from './html.editor.evenement.wra
 import { SendMailComponent } from './send.mail.component';
 import { SubscribeEventComponent } from './subscribe.event.component';
 import { DisplayAgendaDetailsComponent } from './display.agenda.details.component';
+import { DisplaySubscriptionsAgendaDetailsComponent } from './display.subscribtions.details.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -37,6 +38,7 @@ const componentList = [
   HtmlEditorEvenementWrapperComponent,
   SendMailComponent,
   SubscribeEventComponent,
+  DisplaySubscriptionsAgendaDetailsComponent,
   DisplayAgendaDetailsComponent,
 ]
 @NgModule({
