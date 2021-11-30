@@ -155,7 +155,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
       case this.ledenSelectieKeuzes[0]: {  // Alle Leden
         this.ledenArray.forEach((element: LedenItemExt) => {
           const emailList = LedenItem.GetEmailList(element);
-          emailList.forEach((element:MailItemTo) => {
+          emailList.forEach((element: MailItemTo) => {
             localList += element.ToName + '<' + element.To + '>' + ';';
           });
         });
@@ -166,7 +166,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         this.ledenArray.forEach((element: LedenItemExt) => {
           if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.ADULT) {
             const emailList = LedenItem.GetEmailList(element);
-            emailList.forEach((element:MailItemTo) => {
+            emailList.forEach((element: MailItemTo) => {
               localList += element.ToName + '<' + element.To + '>' + ';';
             });
           }
@@ -179,7 +179,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
         this.ledenArray.forEach((element: LedenItemExt) => {
           if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
             const emailList = LedenItem.GetEmailList(element);
-            emailList.forEach((element:MailItemTo) => {
+            emailList.forEach((element: MailItemTo) => {
               localList += element.ToName + '<' + element.To + '>' + ';';
             });
           }
@@ -504,4 +504,15 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     dynamicDownload.dynamicDownloadTxt(vcardt, fileName, 'vcf');
   }
 
+  /***************************************************************************************************
+  / In het component 'UpdateRatings' worden de nieuwe ratings ingelezen
+  / Als er een update van de rating nodig is dan wordt dit hier gedaan.
+  /***************************************************************************************************/
+  updateRating(lid: LedenItemExt) {
+    this.registerSubscription(
+      this.ledenService.update$(lid)
+        .subscribe()
+    );
+    console.log('lid', lid);
+  }
 }

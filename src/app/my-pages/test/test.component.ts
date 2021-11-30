@@ -5,6 +5,7 @@ import { AuthService } from "src/app/services/auth.service";
 import { LedenItemExt, LedenService } from "src/app/services/leden.service";
 import { MailService } from "src/app/services/mail.service";
 import { ParamService } from "src/app/services/param.service";
+import { RatingService } from "src/app/services/rating.service";
 import { ReplaceKeywords } from "src/app/shared/modules/ReplaceKeywords";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { EventSubscriptionsDialogComponent } from "../evenementen/event-subscriptions-dialog/event-subscribtions.dialog";
@@ -25,6 +26,8 @@ export class TestComponent
     protected ledenService: LedenService,
     protected authService: AuthService,
     protected mailService: MailService,
+    protected ratingService: RatingService,
+
     public dialogRef: MatDialogRef<EventSubscriptionsDialogComponent>,
     public dialog: MatDialog,) {
     super(snackBar);
@@ -41,10 +44,11 @@ export class TestComponent
   /***************************************************************************************************/
   ngOnInit() {
     this.registerSubscription(
-      this.ledenService.getActiveMembers$()
+      this.ledenService.getActiveMembersWithRatings$()
         .subscribe({
           next: (data: Array<LedenItemExt>) => {
             this.ledenLijst = data;
+            console.log("ngOnInit --> this.ledenLijst", this.ledenLijst);
           }
         }));
   }
@@ -58,11 +62,8 @@ export class TestComponent
   }
 
   onClick2() {
-    const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent,
-      {
-        // panelClass: 'width-800px-dialog',
-      });
-
+    var index = this.ledenLijst.findIndex(obj => obj.LidNr == 1378);
+    console.log('x', index);
   }
 
   onSelectionChanged($event) {

@@ -12,8 +12,6 @@ import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { SingleMailDialogComponent, SingleMail } from '../mail/singlemail.dialog';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
-import { NotificationService } from 'src/app/services/notification.service';
-import { ROLES } from 'src/app/services/website.service';
 import { lastValueFrom } from 'rxjs';
 import { IHoldableResponse } from 'src/app/shared/directives/holdable.directive';
 
@@ -145,8 +143,6 @@ export class LedenManagerComponent extends ParentComponent implements OnInit {
       .subscribe({
         next: (result: LedenItem) => {
           if (result) {  // in case of cancel the result will be false
-            console.log('toBeDeleted', toBeDeleted);
-
             toBeDeleted.LidTot = result.LidTot;
             const updateRecord = { 'LidNr': result.LidNr, 'Opgezegd': '1', 'LidTot': result.LidTot };
             this.registerSubscription(

@@ -2,10 +2,13 @@ import { environment } from './../../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
-import { retry, tap, map } from 'rxjs/operators';
+import { retry, tap, map, catchError } from 'rxjs/operators';
 import * as moment from 'moment';
 import { Observable } from 'rxjs/internal/Observable';
 import { MailItemTo } from './mail.service';
+import { forkJoin, of } from 'rxjs';
+import { RatingItem, RatingService } from './rating.service';
+import { AppError } from '../shared/error-handling/app-error';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +16,8 @@ import { MailItemTo } from './mail.service';
 
 export class LedenService extends DataService {
 
-  constructor(http: HttpClient) {
+  constructor(http: HttpClient,
+    protected ratingService: RatingService) {
     super(environment.baseUrl + '/lid', http);
   }
 
@@ -56,6 +60,43 @@ export class LedenService extends DataService {
           return localdata;
         })
       );
+  }
+
+  /***************************************************************************************************
+  / Get the active members enriched with rating figures
+  /***************************************************************************************************/
+  getActiveMembersWithRatings$(): Observable<Array<LedenItemExt>> {
+
+    let subLeden = this.getActiveMembers$()
+      .pipe(
+        catchError(err => of(new Array<LedenItemExt>()))
+      );
+
+    let subRatings = this.ratingService.getRatings$()
+      .pipe(
+        catchError(err => of(new Array<RatingItem>()))
+      );
+
+    return forkJoin([subLeden, subRatings])
+      .pipe(
+        map(
+          function (data) {
+            let ledenLijst = data[0] as Array<LedenItemExt>;
+
+            let ratingLijst = data[1] as Array<RatingItem>;
+            ratingLijst.forEach(ratingItem => {
+              if (isNaN(Number(ratingItem.rating))) return;  // sommige leden hebben een niet numerieke rating --> '---'
+              let index = ledenLijst.findIndex((lid: LedenItemExt) => (lid.BondsNr == ratingItem.bondsnr));
+              if (index == -1) return;  // zou niet voor mogen komen
+
+              ledenLijst[index].Rating = Number(ratingItem.rating);
+              ledenLijst[index].LicentieJun = ratingItem.senjun;
+              ledenLijst[index].LicentieSen = ratingItem.senlic;
+            });
+            return ledenLijst;
+          }
+        )
+      )
   }
 
   /**
@@ -104,32 +145,32 @@ export class LedenService extends DataService {
   /***************************************************************************************************/
   get$(Id: number): Observable<any> {
     return this.http.get(environment.baseUrl + '/lid/get?Id=' + Id)
-    .pipe(
-      retry(3),
-      tap({ // Log the result or error
-        next: data => console.log('Received: ', data),
-        error: error => console.log('Oeps: ', error)
-      }))
-    }
+      .pipe(
+        retry(3),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }))
+  }
 
   /***************************************************************************************************
   / Get the name of a member
   /***************************************************************************************************/
   getname$(Id: number): Observable<any> {
     return this.http.get(environment.baseUrl + '/lid/getname?Id=' + Id)
-    .pipe(
-      retry(3),
-      tap({ // Log the result or error
-        next: data => console.log('Received: ', data),
-        error: error => console.log('Oeps: ', error)
-      }),
-      map(function (value: LedenItemExt) {
-        value.Naam = LedenItem.getFullNameAkCt(value.Voornaam, value.Tussenvoegsel, value.Achternaam);
-        value.VolledigeNaam = LedenItem.getFullNameVtA(value.Voornaam, value.Tussenvoegsel, value.Achternaam);
-        return value;
-      })
+      .pipe(
+        retry(3),
+        tap({ // Log the result or error
+          next: data => console.log('Received: ', data),
+          error: error => console.log('Oeps: ', error)
+        }),
+        map(function (value: LedenItemExt) {
+          value.Naam = LedenItem.getFullNameAkCt(value.Voornaam, value.Tussenvoegsel, value.Achternaam);
+          value.VolledigeNaam = LedenItem.getFullNameVtA(value.Voornaam, value.Tussenvoegsel, value.Achternaam);
+          return value;
+        })
       )
-    }
+  }
 
   /***************************************************************************************************
   / Get a membernumber for a new member
@@ -543,11 +584,11 @@ export class DateRoutines {
    * @param memberSince
    * @returns IBirthDay
    */
-   public static ComingAnniversary(memberSince: Date): IBirthDay {
+  public static ComingAnniversary(memberSince: Date): IBirthDay {
     const jubilea: Array<number> = [50, 40, 25, 10];
 
     let today = new Date();
-    let endThisYear:Date = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+    let endThisYear: Date = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
 
     for (let index = 0; index < jubilea.length; index++) {
       const element = jubilea[index];
@@ -559,7 +600,7 @@ export class DateRoutines {
     }
   }
 
-  private static CalculateAnniversary(memberSince: Date, years:number): Date {
+  private static CalculateAnniversary(memberSince: Date, years: number): Date {
     let yy = memberSince.getFullYear() + years;
     let mm = memberSince.getMonth();
     let dd = memberSince.getDate();

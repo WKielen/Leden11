@@ -19,9 +19,9 @@ import { HtmlEditorComponent } from './html.editor.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { HtmlEditorEvenementWrapperComponent } from './html.editor.evenement.wrapper.component';
 import { SendMailComponent } from './send.mail.component';
-import { SubscribeEventComponent } from './subscribe.event.component';
 import { DisplayAgendaDetailsComponent } from './display.agenda.details.component';
 import { DisplaySubscriptionsAgendaDetailsComponent } from './display.subscribtions.details.component';
+import { UpdateRatingComponent } from './update.ratings.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -37,7 +37,7 @@ const componentList = [
   HtmlEditorComponent,
   HtmlEditorEvenementWrapperComponent,
   SendMailComponent,
-  SubscribeEventComponent,
+  UpdateRatingComponent,
   DisplaySubscriptionsAgendaDetailsComponent,
   DisplayAgendaDetailsComponent,
 ]
