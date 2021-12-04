@@ -5,7 +5,6 @@ import { CustomMaterialModule } from 'src/app/material.module';
 import { A2hsComponent } from './a2hs/a2hs.component';
 import { CardHeaderDetailComponent } from './dialog.header.detail';
 import { CardHeaderSpinnerComponent } from './card.header.spinner';
-import { OldCheckboxListComponent } from './oldcheckbox.list.component';
 import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
 import { WaitingButtonComponent } from './waiting-button.component';
 import { HoldableModule } from '../directives/directives.module';
@@ -21,12 +20,10 @@ import { HtmlEditorEvenementWrapperComponent } from './html.editor.evenement.wra
 import { SendMailComponent } from './send.mail.component';
 import { DisplayAgendaDetailsComponent } from './display.agenda.details.component';
 import { DisplaySubscriptionsAgendaDetailsComponent } from './display.subscribtions.details.component';
-import { UpdateRatingComponent } from './update.ratings.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
   A2hsComponent,
-  OldCheckboxListComponent,
   SelectLidDropdownComponent,
   CardHeaderDetailComponent,
   WaitingButtonComponent,
@@ -37,7 +34,6 @@ const componentList = [
   HtmlEditorComponent,
   HtmlEditorEvenementWrapperComponent,
   SendMailComponent,
-  UpdateRatingComponent,
   DisplaySubscriptionsAgendaDetailsComponent,
   DisplayAgendaDetailsComponent,
 ]

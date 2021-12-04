@@ -16,6 +16,10 @@ import autoTable from 'jspdf-autotable';
 import { lastValueFrom } from 'rxjs';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { MailItemTo } from 'src/app/services/mail.service';
+import { RatingItem, RatingService } from 'src/app/services/rating.service';
+import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
+import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
+import { ExportRatingFile } from 'src/app/shared/modules/ExportRatingFile';
 @Component({
   selector: 'app-download-page',
   templateUrl: './download.component.html',
@@ -40,7 +44,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
     // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
   };
 
-  ledenLijstKeuzes: string[] = ['Volledig', 'E-Mail'];
+  ledenLijstKeuzes: string[] = ['Volledig', 'E-Mail', 'Ratings'];
   ledenLijstKeuze: string = this.ledenLijstKeuzes[0];
   ledenSelectieKeuzes: string[] = ['Alle Leden', 'Volwassenen', 'Jeugd'];
   ledenSelectieKeuze: string = this.ledenSelectieKeuzes[0];
@@ -52,6 +56,7 @@ export class DownloadComponent extends ParentComponent implements OnInit {
     private agendaService: AgendaService,
     private actionService: ActionService,
     public readTextFileService: ReadTextFileService,
+    private ratingService: RatingService,
     protected snackBar: MatSnackBar,
   ) {
     super(snackBar)
@@ -88,12 +93,16 @@ export class DownloadComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************/
   onClickLedenLijst(): void {
     switch (this.ledenLijstKeuze) {
-      case this.ledenLijstKeuzes[0]: {  // Ledenlijst
-        this.createLedenlijst();
+      case this.ledenLijstKeuzes[0]: {
+        this.createLedenlijst('TTVN Ledenlijst');
         break;
       }
-      case this.ledenLijstKeuzes[1]: {  // Create Mail
-        this.createMailLijst();
+      case this.ledenLijstKeuzes[1]: {
+        this.createMailLijst('TTVN Maillijst');
+        break;
+      }
+      case this.ledenLijstKeuzes[2]: {
+        this.createRatingLijst('TTVN Ratinglijst');
         break;
       }
       default: {
@@ -105,97 +114,51 @@ export class DownloadComponent extends ParentComponent implements OnInit {
   /***************************************************************************************************
   / Download ledenlijst
   /***************************************************************************************************/
-  private async createLedenlijst(): Promise<void> {
-    let localList: LedenItemExt[] = [];
-    // let ledenArray: LedenItemExt[] = await this.readLedenLijst();
-
-    switch (this.ledenSelectieKeuze) {
-      case this.ledenSelectieKeuzes[0]: {  // Alle Leden
-        localList = this.ledenArray;
-        this.csvOptions.filename = "TTVN Ledenlijst ";
-        break;
-      }
-      case this.ledenSelectieKeuzes[1]: {   // Alleen volwassenen
-        this.ledenArray.forEach((element: LedenItemExt) => {
-          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.ADULT) {
-            localList.push(element);
-          }
-        });
-        this.csvOptions.filename = "TTVN Volwassenenlijst ";
-
-        break;
-      }
-      case this.ledenSelectieKeuzes[2]: {  // Alleen jeugd
-        this.ledenArray.forEach((element: LedenItemExt) => {
-          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
-            localList.push(element);
-          }
-        });
-        this.csvOptions.filename = "TTVN Jeugdlijst ";
-        break;
-      }
-      default: {
-        this.showSnackBar(SnackbarTexts.SelectionError, '');
-      }
-    }
-
-    this.csvOptions.filename += new Date().to_YYYY_MM_DD();
+  private async createLedenlijst(type: string): Promise<void> {
+    let localList: Array<any> = this.selectLeden();
+    this.csvOptions.filename = type + ' ' + localList[1] + ' ' + new Date().to_YYYY_MM_DD();
     let csvExporter = new ExportToCsv(this.csvOptions);
-    csvExporter.generateCsv(localList);
+    csvExporter.generateCsv(localList[0]);
   }
 
   /***************************************************************************************************
   / Download maillijst
   /***************************************************************************************************/
-  async createMailLijst(): Promise<void> {
-    let localList: string = '';
-    let fileName: string = '';
-    //let ledenArray: LedenItemExt[] = await this.readLedenLijst();
-    switch (this.ledenSelectieKeuze) {
-      case this.ledenSelectieKeuzes[0]: {  // Alle Leden
-        this.ledenArray.forEach((element: LedenItemExt) => {
-          const emailList = LedenItem.GetEmailList(element);
-          emailList.forEach((element: MailItemTo) => {
-            localList += element.ToName + '<' + element.To + '>' + ';';
-          });
-        });
-        fileName = "TTVN Leden Maillijst ";
-        break;
-      }
-      case this.ledenSelectieKeuzes[1]: {  // Alle Volwassenen
-        this.ledenArray.forEach((element: LedenItemExt) => {
-          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.ADULT) {
-            const emailList = LedenItem.GetEmailList(element);
-            emailList.forEach((element: MailItemTo) => {
-              localList += element.ToName + '<' + element.To + '>' + ';';
-            });
-          }
-        });
-        fileName = "TTVN Volwassenen Maillijst ";
+  async createMailLijst(type: string): Promise<void> {
+    let localList: Array<any> = this.selectLeden();
+    let localEmailString: string = '';
+    this.csvOptions.filename = type + ' ' + localList[1] + ' ' + new Date().to_YYYY_MM_DD();
 
-        break;
-      }
-      case this.ledenSelectieKeuzes[2]: {  // Alle Jeugd
-        this.ledenArray.forEach((element: LedenItemExt) => {
-          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
-            const emailList = LedenItem.GetEmailList(element);
-            emailList.forEach((element: MailItemTo) => {
-              localList += element.ToName + '<' + element.To + '>' + ';';
-            });
-          }
-        });
-        fileName = "TTVN Jeugd Maillijst ";
-        break;
-      }
-      default: {
-        this.showSnackBar(SnackbarTexts.SelectionError, '');
-      }
-    }
+    localList[0].forEach((element: LedenItemExt) => {
+      const emailList = LedenItem.GetEmailList(element);
+      emailList.forEach((element: MailItemTo) => {
+        localEmailString += element.ToName + '<' + element.To + '>' + ';';
+      });
+    });
+
     let dynamicDownload = new DynamicDownload();
-    fileName += new Date().to_YYYY_MM_DD();
-    dynamicDownload.dynamicDownloadTxt(localList, fileName, 'txt');
-    // dynamicDownload.dynamicDownloadJson(ledenArray, fileName); Voorbeeld voor JSON export
+    this.csvOptions.filename += new Date().to_YYYY_MM_DD();
+    dynamicDownload.dynamicDownloadTxt(localEmailString, this.csvOptions.filename, 'txt');
   }
+
+
+  /***************************************************************************************************
+  / Create list with ratings
+  /***************************************************************************************************/
+  async createRatingLijst(type: string): Promise<void> {
+    let localList: Array<any> = [];
+    let getLedenSelectie = this.selectLeden();  // * Geeft array terug
+
+
+    getLedenSelectie[0].forEach((lid: LedenItemExt) => {
+      if (lid.Rating == undefined || lid.Rating == 0) return;
+      localList.push(lid);
+    })
+
+    this.csvOptions.filename = type + ' ' + getLedenSelectie[1] + ' ' + new Date().to_YYYY_MM_DD();
+    ExportRatingFile(localList, this.csvOptions.filename);
+  }
+
 
   /**
    * Creates a list with gray members
@@ -213,7 +176,6 @@ export class DownloadComponent extends ParentComponent implements OnInit {
     fileName += new Date().to_YYYY_MM_DD();
     dynamicDownload.dynamicDownloadTxt(localList, fileName, 'txt');
   }
-
 
 
   //***************************************************************************************************/
@@ -503,16 +465,77 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
     let fileName = 'Vcard_' + this.selectedLid.VolledigeNaam.split(' ').join('_');
     dynamicDownload.dynamicDownloadTxt(vcardt, fileName, 'vcf');
   }
+  /**
+   * Determines whether click update ratings on
+   */
+  onClickUpdateRatings(): void {
+    this.registerSubscription(
+      this.ratingService.getRatings$()
+        .subscribe({
+          next: (ratingItems: Array<RatingItem>) => {
+            ratingItems.forEach((ratingItem: RatingItem) => {
+              let index = this.ledenArray.findIndex((lid: LedenItemExt) => (lid.BondsNr == ratingItem.bondsnr));
+              if (index == -1) return;  // zou niet voor mogen komen
+              if (isNaN(Number(ratingItem.rating))) return;  // sommige leden hebben een niet numerieke rating --> '---'
+              let lid = this.ledenArray[index];
+              if (lid.Rating == Number(ratingItem.rating)) return;
+              let obj = { "LidNr": lid.LidNr, "Rating": ratingItem.rating, "LicentieJun": ratingItem.junlic, "LicentieSen": ratingItem.senlic };
+              this.registerSubscription(
+                this.ledenService.update$(obj)
+                  .subscribe({
+                    error: (error: AppError) => {
+                      console.error(error);
+                      if (error instanceof NoChangesMadeError) {
+                        console.error(SnackbarTexts.NoChanges);
+                      } else if (error instanceof NotFoundError) {
+                        console.error(SnackbarTexts.NotFound);
+                      } else {
+                        throw error;
+                      }
+                    }
+                  })
+              );
+            });
+            this.showSnackBar('Ratings aagepast', '');
+          },
+          error: (error: AppError) => {
+            throw error;
+          }
+        })
+    );
+  }
 
   /***************************************************************************************************
-  / In het component 'UpdateRatings' worden de nieuwe ratings ingelezen
-  / Als er een update van de rating nodig is dan wordt dit hier gedaan.
+  / Select alle leden voor de lijst
   /***************************************************************************************************/
-  updateRating(lid: LedenItemExt) {
-    this.registerSubscription(
-      this.ledenService.update$(lid)
-        .subscribe()
-    );
-    console.log('lid', lid);
+  private selectLeden(): Array<any> {
+    let localList: LedenItemExt[] = [];
+    let selectie = '';
+
+    switch (this.ledenSelectieKeuze) {
+      case this.ledenSelectieKeuzes[0]: {  // Alle Leden
+        localList = this.ledenArray;
+        break;
+      }
+      case this.ledenSelectieKeuzes[1]: {   // Alleen volwassenen
+        this.ledenArray.forEach((element: LedenItemExt) => {
+          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.ADULT) {
+            localList.push(element);
+          }
+        });
+        selectie = 'Volwassenen';
+        break;
+      }
+      case this.ledenSelectieKeuzes[2]: {  // Alleen jeugd
+        this.ledenArray.forEach((element: LedenItemExt) => {
+          if (element.LeeftijdCategorieWithSex.charAt(0) == LidTypeValues.YOUTH || element.LeeftijdCategorieBond.startsWith('Senior1')) {
+            localList.push(element);
+          }
+        });
+        selectie = 'Jeugd';
+        break;
+      }
+    }
+    return [localList, selectie];
   }
 }

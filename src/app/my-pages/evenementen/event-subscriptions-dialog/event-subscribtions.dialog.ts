@@ -4,12 +4,10 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { InschrijvingItem, InschrijvingService } from 'src/app/services/inschrijving.service';
 import { LedenItemExt, LedenService } from 'src/app/services/leden.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
-import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
-import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
 import { ParentComponent } from 'src/app/shared/parent.component';
-import { ExportToCsv } from 'export-to-csv';
 import { AgendaItem } from 'src/app/services/agenda.service';
-import { LidDifference } from '../../syncnttb/syncnttb.component';
+import { catchError, forkJoin, of } from 'rxjs';
+import { ExportRatingFile } from 'src/app/shared/modules/ExportRatingFile';
 
 @Component({
   selector: 'app-event-subscribtions-dialog',
@@ -29,103 +27,56 @@ export class EventSubscriptionsDialogComponent extends ParentComponent implement
   }
 
   public subscriptions: Array<InschrijvingItem> = [];
-  public ledenLijst: LedenItemExt[] = [];
+  public reportList: Array<LedenItemExt> = [];
   public event: AgendaItem = this.data.data as AgendaItem;
 
-  csvOptions = {
-    fieldSeparator: ';',
-    quoteStrings: '"',
-    decimalSeparator: ',',
-    showLabels: true,
-    showTitle: false,
-    title: 'Ledenlijst',
-    useTextFile: false,
-    useBom: true,
-    useKeysAsHeaders: true,
-    filename: ''
-    // headers: ['Column 1', 'Column 2', etc...] <-- Won't work with useKeysAsHeaders present!
-  };
-
   ngOnInit(): void {
-    this.registerSubscription(
-      this.inschrijvingService.getSubscriptionsEvent$(this.data.data.Id)
-        .subscribe({
-          next: (data: Array<InschrijvingItem>) => {
-            this.subscriptions = data;
-            console.log("EventSubscriptionsDialogComponent --> ngOnInit --> this.subscriptions", this.subscriptions);
-          },
-          error: (error: AppError) => {
-            console.log("error", error);
-          }
-        }));
+
+    let subInschrijvingen = this.inschrijvingService.getSubscriptionsEvent$(this.data.data.Id)
+      .pipe(
+        catchError(err => of(new Array<InschrijvingItem>()))
+      );
+
+    let subLeden = this.ledenService.getActiveMembers$()
+      .pipe(
+        catchError(err => of(new Array<LedenItemExt>()))
+      );
 
     this.registerSubscription(
-      this.ledenService.getActiveMembersWithRatings$()
+      forkJoin([subInschrijvingen, subLeden,])
         .subscribe({
           next: (data) => {
-            this.ledenLijst = data;
+            this.subscriptions = data[0];
+            let ledenLijst = data[1];
+
+            this.subscriptions.forEach((inschrijving: InschrijvingItem) => {
+              // let reportItem = new ReportItem();
+              let lid: LedenItemExt = new LedenItemExt();
+
+              let index = ledenLijst.findIndex((lid: LedenItemExt) => (lid.LidNr == inschrijving.LidNr));
+
+              if (inschrijving.LidNr != 0 && index != -1) {
+                lid = ledenLijst[index];
+              }
+
+              lid['OpgegevenNaam'] = inschrijving.Naam;
+              lid['Email'] = inschrijving.Email;
+              lid['ExtraInformatie'] = inschrijving.ExtraInformatie;
+
+              this.reportList.push(lid);
+            });
+            // this.list = localList;
+
           },
           error: (error: AppError) => {
-            console.log("error", error);
+            console.log("EventSubscriptionsDialogComponent --> ngOnInit --> error", error);
           }
         })
     );
   }
 
   onClickDownload(): void {
-    let localList: ReportItem[] = [];
-    this.csvOptions.filename = this.event.EvenementNaam + '-' + new Date().to_YYYY_MM_DD();
-
-    this.subscriptions.forEach((element: InschrijvingItem) => {
-      let reportItem = new ReportItem();
-
-      reportItem.Naam = element.Naam;
-      reportItem.Email = element.Email;
-      reportItem.ExtraInformatie = element.ExtraInformatie;
-
-      let index = this.ledenLijst.findIndex((lid: LedenItemExt) => (lid.LidNr == element.LidNr));
-
-      if (element.LidNr != 0 && index != -1) {
-
-        let lid: LedenItemExt = this.ledenLijst[index];
-
-        reportItem.NaamGeregistreerd = lid.VolledigeNaam;
-        reportItem.LeeftijdCategorieBond = lid.LeeftijdCategorieBond
-        reportItem.Voornaam = lid.Voornaam;
-        reportItem.Achternaam = lid.Achternaam;
-        reportItem.Tussenvoegsel = lid.Tussenvoegsel;
-        reportItem.BondsNr = lid.BondsNr
-        reportItem.Geslacht = lid.Geslacht
-        reportItem.GeboorteDatum = lid.GeboorteDatum;
-        reportItem.Rating = (lid.Rating !== 0 ? lid.Rating.toString() : '');
-        reportItem.Licentie_Jun = lid.LicentieJun != undefined ? lid.LicentieJun : '';
-        reportItem.Licentie_Sen = lid.LicentieSen != undefined ? lid.LicentieSen : '';
-      }
-      localList.push(reportItem);
-    });
-
-    console.log("EventSubscriptionsDialogComponent --> this.subscriptions.forEach --> localList", localList);
-    let csvExporter = new ExportToCsv(this.csvOptions);
-    csvExporter.generateCsv(localList);
+    console.log("EventSubscriptionsDialogComponent --> onClickDownload --> this.reportList", this.reportList);
+    ExportRatingFile(this.reportList, 'Inschrijvingen ' + this.event.EvenementNaam);
   }
-}
-
-export class ReportItem {
-  Email: string = '';
-  Naam: string = '';
-  ExtraInformatie: string = '';
-
-  NaamGeregistreerd: string = '';
-  LeeftijdCategorieBond: string = '';
-  Voornaam: string = '';
-  Achternaam: string = '';
-  Tussenvoegsel: string = '';
-
-  BondsNr: string = '';
-  Geslacht: string = '';
-  GeboorteDatum: string = '';
-  Rating : string = '';
-  Licentie_Sen: string = '';
-  Licentie_Jun: string = '';
-
 }

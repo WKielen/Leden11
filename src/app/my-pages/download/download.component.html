@@ -68,13 +68,13 @@
     </mat-card>
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Update ratings</mat-card-title>
+        <mat-card-title>Ratings</mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        Met onderstaande knop kan je de ratings updaten in de database.
+        Met onderstaande knop kan je de ratings en licenties updaten in de database. De gegevens worden van de NTTB website gehaald.
       </mat-card-content>
       <mat-card-actions>
-        <app-update-ratings-component [ledenLijst]="ledenArray" (lidChanged)='updateRating($event)' ></app-update-ratings-component>
+        <button mat-raised-button color="primary" (click)="onClickUpdateRatings()">Update ratings in Database</button>
       </mat-card-actions>
     </mat-card>
   </div>

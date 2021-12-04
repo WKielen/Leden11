@@ -30,45 +30,11 @@ export class RatingService extends DataService {
       )
   }
 
-  // updateRatingsInDataBase(): void {
-  //   this.getRatings$()
-  //   .subscribe({
-  //     next: (data) => {
-  //       this.ratingLijst = data;
-  //     },
-  //     error: (error: AppError) => {
-  //       console.error(error);
-  //     }
-  //   })
-
-
-
-  //   this.ratingLijst.forEach(ratingItem => {
-  //       if (isNaN(Number(ratingItem.rating))) return;  // sommige leden hebben een niet numerieke rating --> '---'
-  //       this.ledenLijst.forEach(lidItem => {
-  //         if (lidItem.BondsNr !== ratingItem.bondsnr) return;
-  //         if (lidItem.Rating == Number(ratingItem.rating)) return;
-  //         lidItem.Rating = Number(ratingItem.rating);
-  //         lidItem.LicentieJun = ratingItem.senjun;
-  //         lidItem.LicentieSen = ratingItem.senlic;
-  //       });
-  //     });
-  //   }
-
-
-
-  // }
-
-
-
-
-
-
 }
 
 export class RatingItem {
   bondsnr?: string = '';
   rating?: string = '';
   senlic?: string = '';
-  senjun?: string = '';
+  junlic?: string = '';
 }

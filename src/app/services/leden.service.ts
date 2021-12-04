@@ -90,7 +90,7 @@ export class LedenService extends DataService {
               if (index == -1) return;  // zou niet voor mogen komen
 
               ledenLijst[index].Rating = Number(ratingItem.rating);
-              ledenLijst[index].LicentieJun = ratingItem.senjun;
+              ledenLijst[index].LicentieJun = ratingItem.junlic;
               ledenLijst[index].LicentieSen = ratingItem.senlic;
             });
             return ledenLijst;

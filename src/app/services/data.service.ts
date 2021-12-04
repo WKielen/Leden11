@@ -32,7 +32,7 @@ export class DataService implements OnDestroy {
     // console.log('received in update$', resource);
     return this.http.patch(this.url + '/Update', resource)
       .pipe(
-        retry(3),
+        retry(1),
         tap({ // Log the result or error
           next: data => console.log('Received: ', data),
           error: error => console.log('Oeps: ', error)
