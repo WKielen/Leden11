@@ -48,7 +48,8 @@ export class SendInventationDialogComponent implements OnInit {
     this.htmlContent += '<br>' + eventData;
     this.htmlContent += '<br>' + '%link%';
 
-    this.theBoundCallback = this.theCallback.bind(this);  }
+    this.theBoundCallback = this.theCallback.bind(this);
+  }
 
   /***************************************************************************************************
   / Sluit dialog
@@ -79,7 +80,7 @@ export class SendInventationDialogComponent implements OnInit {
   }
 
   theCallback(lid: LedenItemExt) {
-    let link: string = btoa(JSON.stringify({ 'evenement': this.data.data['Id'], 'lidnr':lid.LidNr }));
+    let link: string = btoa(JSON.stringify({ 'evenement': this.data.data['Id'], 'lidnr': lid.LidNr }));
     return this.createLink(link);
   }
 

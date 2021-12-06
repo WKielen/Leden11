@@ -70,6 +70,9 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
   private mailToYourself = new MailItem();
   private extraEmailAddress: string = 'wim_kielen@hotmail.com';
 
+  // I use this to send an extra mail to myself
+  private mailBoxParam = new MailBoxParam();
+
   constructor(
     protected mailService: MailService,
     private authService: AuthService,
@@ -88,24 +91,7 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
         .subscribe({
           next: (data) => {
             let result = data as string;
-            let mailBoxParam = JSON.parse(result) as MailBoxParam;
-
-            let lid = new LedenItemExt();
-            lid.Voornaam = this.authService.firstname;
-            lid.Achternaam = this.authService.fullName;
-            lid.Email1 = mailBoxParam.UserId;
-            this.mailToYourself.Message = '<br><strong><i>Dit is een kopie mail naar jezelf</i></strong><br><br>' + ReplaceKeywords(lid, this.htmlContent);
-            this.mailToYourself.Subject = this.emailSubject;
-            this.mailToYourself.To = mailBoxParam.UserId
-            this.mailToYourself.ToName = mailBoxParam.Name;
-
-            this.mailToYourself.Attachment = this.attachmentContent ?? '';
-            this.mailToYourself.Type = this.attachmentFile?.type ?? '';
-            this.mailToYourself.FileName = this.attachmentFile?.name ?? '';
-
-            let myPersonaliedLink = this.replaceLinkCallback(lid);
-            this.mailToYourself.Message = Replace(this.mailToYourself.Message, /%link%/gi, myPersonaliedLink);
-
+            this.mailBoxParam = JSON.parse(result) as MailBoxParam;
           },
           error: (error: AppError) => {
             console.log("error", error);
@@ -147,11 +133,16 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
     });
 
     if (this.EmailExtra.value != '') {
-      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList());
+      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList(this.extraEmailAddress, new LedenItemExt));
     }
+
     if (this.EigenMail.value as boolean) {
-      mailDialogInputMessage.MailItems.push(this.mailToYourself);
+      let lid = new LedenItemExt();
+      lid.Voornaam = this.authService.firstname;
+      lid.Achternaam = this.authService.fullName;
+      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList(this.mailBoxParam.UserId, lid, '<br><strong><i>Dit is een kopie mail naar jezelf</i></strong><br><br>'));
     }
+
     if (mailDialogInputMessage.MailItems.length <= 0) {
       this.showSnackBar('Er zijn geen email adressen geselecteerd', '');
       return;
@@ -205,14 +196,14 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
     return result;
   }
 
-  addExtraEmailAddressToList(): MailItem {
-    let lid = new LedenItemExt();
-    lid.Email1 = this.extraEmailAddress;
+  addExtraEmailAddressToList(extraEmail:string, lid: LedenItem, extraText:string=''): MailItem {
+
+    lid.Email1 = extraEmail;
     let extraMail = new MailItem();
 
-    extraMail.Message = ReplaceKeywords(lid, this.htmlContent);
+    extraMail.Message = extraText + ReplaceKeywords(lid, this.htmlContent);
     extraMail.Subject = this.emailSubject;
-    extraMail.To = this.extraEmailAddress;
+    extraMail.To = extraEmail;
     extraMail.ToName = '';
 
     extraMail.Attachment = this.attachmentContent ?? '';

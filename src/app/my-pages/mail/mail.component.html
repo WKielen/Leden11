@@ -63,22 +63,15 @@
     </mat-card>
 
     <div class="flexcontainer" style="justify-content: space-between;">
-      <mat-card style="flex-basis: 48%;">
-        <mat-card-header>
-          <mat-card-title>Verstuur Mail</mat-card-title>
-        </mat-card-header>
-        <form [formGroup]="mailboxparamForm" novalidate>
-          <mat-card-content>
-
-            <button mat-raised-button color="primary" (click)="onSendMail($event)" [disabled]='itemsToMail.length === 0'
-              matBadge={{itemsToMail.length}} matBadgePosition="after" matBadgeColor="warn">Verzend mail</button>
-          </mat-card-content>
-        </form>
-      </mat-card>
-    </div>
+      <div style="flex-basis: 48%;">
+        <app-send-mail [itemsToMail]='itemsToMail' [htmlContent]='HtmlContent.value' [emailSubject]='EmailSubject.value'
+        [attachmentFile]='fileToUpload' [replaceLinkCallback]="theBoundCallback"></app-send-mail>
+      </div>
+      </div>
   </div>
 
   <mat-card style="flex-basis: 30%;">
-    <app-member-selection-box-wrapper (selectedMemberList)="onSelectionChanged($event)"></app-member-selection-box-wrapper>
+    <app-member-selection-box-wrapper (selectedMemberList)="onSelectionChanged($event)">
+    </app-member-selection-box-wrapper>
   </mat-card>
 </div>

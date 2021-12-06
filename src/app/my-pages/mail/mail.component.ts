@@ -1,10 +1,9 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { LedenService, LedenItem, LedenItemExt, DateRoutines } from '../../services/leden.service';
+import { LedenService, LedenItem, LedenItemExt } from '../../services/leden.service';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { ParamService } from 'src/app/services/param.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AppError } from 'src/app/shared/error-handling/app-error';
@@ -39,17 +38,17 @@ export class MailComponent extends ParentComponent implements OnInit {
   mailBoxParam = new MailBoxParam();
   savedMailNames = new MailNameList();
 
-  mailboxparamForm = new FormGroup({
-    EmailAddress: new FormControl(
-      '',
-      [Validators.required, Validators.email]
-    ),
-    EmailPassword: new FormControl(
-      '',
-      [Validators.required]
-    ),
-    EmailSender: new FormControl()
-  });
+  // mailboxparamForm = new FormGroup({
+  //   EmailAddress: new FormControl(
+  //     '',
+  //     [Validators.required, Validators.email]
+  //   ),
+  //   EmailPassword: new FormControl(
+  //     '',
+  //     [Validators.required]
+  //   ),
+  //   EmailSender: new FormControl()
+  // });
 
   mailForm = new FormGroup({
     HtmlContent: new FormControl(
@@ -126,7 +125,7 @@ export class MailComponent extends ParentComponent implements OnInit {
     protected authService: AuthService,
     protected mailService: MailService,
     protected snackBar: MatSnackBar,
-    private dialog: MatDialog,
+    // private dialog: MatDialog,
   ) {
     super(snackBar)
   }
@@ -141,56 +140,57 @@ export class MailComponent extends ParentComponent implements OnInit {
         }));
 
     this.readMailList();
+    this.theBoundCallback = this.theCallback.bind(this);
   }
 
   private attachmentcontent: string = '';
   /***************************************************************************************************
   / Verstuur de email
   /***************************************************************************************************/
-  async onSendMail($event): Promise<void> {
+  // async onSendMail($event): Promise<void> {
 
-    let mailDialogInputMessage = new ExternalMailApiRecord();
+  //   let mailDialogInputMessage = new ExternalMailApiRecord();
 
-    mailDialogInputMessage.MailItems = new Array<MailItem>();
+  //   mailDialogInputMessage.MailItems = new Array<MailItem>();
 
-    this.itemsToMail.forEach(lid => {
-      let mailAddresses: Array<MailItemTo> = LedenItem.GetEmailList(lid);
+  //   this.itemsToMail.forEach(lid => {
+  //     let mailAddresses: Array<MailItemTo> = LedenItem.GetEmailList(lid);
 
-      mailAddresses.forEach(element => {
-        let itemToMail = new MailItem();
-        itemToMail.Message = ReplaceKeywords(lid, this.HtmlContent.value);
-        itemToMail.Subject = this.EmailSubject.value;
-        itemToMail.To = element.To;
-        itemToMail.ToName = element.ToName;
+  //     mailAddresses.forEach(element => {
+  //       let itemToMail = new MailItem();
+  //       itemToMail.Message = ReplaceKeywords(lid, this.HtmlContent.value);
+  //       itemToMail.Subject = this.EmailSubject.value;
+  //       itemToMail.To = element.To;
+  //       itemToMail.ToName = element.ToName;
 
-        itemToMail.Attachment = this.attachmentcontent ?? '';
-        itemToMail.Type = this.fileToUpload?.type ?? '';
-        itemToMail.FileName = this.fileToUpload?.name ?? '';
+  //       itemToMail.Attachment = this.attachmentcontent ?? '';
+  //       itemToMail.Type = this.fileToUpload?.type ?? '';
+  //       itemToMail.FileName = this.fileToUpload?.name ?? '';
 
-        mailDialogInputMessage.MailItems.push(itemToMail);
-      });
-    });
+  //       mailDialogInputMessage.MailItems.push(itemToMail);
+  //     });
+  //   });
 
-    if (mailDialogInputMessage.MailItems.length <= 0) {
-      this.showSnackBar('Er zijn geen email adressen geselecteerd', '');
-      return;
-    }
+  //   if (mailDialogInputMessage.MailItems.length <= 0) {
+  //     this.showSnackBar('Er zijn geen email adressen geselecteerd', '');
+  //     return;
+  //   }
 
-    const dialogRef = this.dialog.open(MailDialogComponent, {
-      panelClass: 'custom-dialog-container', width: '400px',
-      data: mailDialogInputMessage
-    });
+  //   const dialogRef = this.dialog.open(MailDialogComponent, {
+  //     panelClass: 'custom-dialog-container', width: '400px',
+  //     data: mailDialogInputMessage
+  //   });
 
-    dialogRef
-      .afterClosed()
-      .subscribe({
-        next: (result: any) => {
-          if (result) {  // in case of cancel the result will be false
-            console.log('result', result);
-          }
-        }
-      });
-  }
+  //   dialogRef
+  //     .afterClosed()
+  //     .subscribe({
+  //       next: (result: any) => {
+  //         if (result) {  // in case of cancel the result will be false
+  //           console.log('result', result);
+  //         }
+  //       }
+  //     });
+  // }
 
 
   /***************************************************************************************************
@@ -398,6 +398,12 @@ export class MailComponent extends ParentComponent implements OnInit {
     return this.mailForm.get('HtmlContent');
   }
 
+  /***************************************************************************************************
+  / Het app-send-mail component heeft een callback waarin een link kan worden vervangen.
+  / Dit wordt hier niet gebruikt.
+  /***************************************************************************************************/
+  public theBoundCallback: Function;
+  theCallback(lid: LedenItemExt) {}
 }
 
 /***************************************************************************************************
