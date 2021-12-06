@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { LedenItem, LedenItemExt } from 'src/app/services/leden.service';
-import { ExternalMailApiRecord, MailItem, MailItemTo, MailService } from 'src/app/services/mail.service';
+import { ExternalMailApiRecord, MailBoxParam, MailItem, MailItemTo, MailService } from 'src/app/services/mail.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MailDialogComponent } from 'src/app/my-pages/mail/mail.dialog';
@@ -8,6 +8,9 @@ import { ParentComponent } from '../parent.component';
 import { Replace, ReplaceKeywords } from '../modules/ReplaceKeywords';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppError } from '../error-handling/app-error';
+import { AuthService } from 'src/app/services/auth.service';
+import { ParamService } from 'src/app/services/param.service';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-send-mail',
@@ -17,16 +20,28 @@ import { AppError } from '../error-handling/app-error';
     <mat-card-header>
           <mat-card-title>Verstuur Mail</mat-card-title>
     </mat-card-header>
-    <mat-card-content>
-      <button mat-raised-button color="primary" (click)="onSendMail($event)" [disabled]='itemsToMail.length === 0'
-            matBadge={{itemsToMail.length}} matBadgePosition="after" matBadgeColor="warn">Verzend mail</button>
+    <mat-card-content [formGroup]="extraMailForm" novalidate>
+      <mat-checkbox color="primary" formControlName="EigenMail" [formControl]="EigenMail">Stuur ook een mail naar mezelf</mat-checkbox>
+      <br>
+      <mat-form-field>
+        <input matInput type="text" placeholder="Eventeel extra email adres" formControlName="EmailExtra"
+            [formControl]="EmailExtra" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$">
+        <mat-error *ngIf="EmailExtra.hasError('email')">
+            Vul een geldig email adres in
+        </mat-error>
+      </mat-form-field>
     </mat-card-content>
-  </mat-card>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="onSendMail($event)" [disabled]='itemsToMail.length === 0'
+      [disabled]='!extraMailForm.valid'
+      matBadge={{itemsToMail.length}} matBadgePosition="after" matBadgeColor="warn">Verzend mail</button>
+    </mat-card-actions>
+</mat-card>
 `,
   styles: []
 })
 
-export class SendMailComponent extends ParentComponent implements OnChanges {
+export class SendMailComponent extends ParentComponent implements OnInit, OnChanges {
 
   @Input()
   itemsToMail: Array<LedenItemExt> = [];
@@ -43,16 +58,62 @@ export class SendMailComponent extends ParentComponent implements OnChanges {
   @Input()
   public replaceLinkCallback: Function;
 
+  extraMailForm = new FormGroup({
+    EmailExtra: new FormControl(
+      '',
+      [Validators.email]
+    ),
+    EigenMail: new FormControl(),
+  });
 
   private attachmentContent: string = '';
+  private mailToYourself = new MailItem();
+  private extraEmailAddress: string = 'wim_kielen@hotmail.com';
 
   constructor(
     protected mailService: MailService,
+    private authService: AuthService,
+    private paramService: ParamService,
     protected snackBar: MatSnackBar,
     private dialog: MatDialog,
   ) {
     super(snackBar)
   }
+
+  ngOnInit(): void {
+    this.registerSubscription(
+      this.paramService.readParamData$('mailboxparam' + this.authService.userId,
+        JSON.stringify(new MailBoxParam()),
+        'Om in te loggen in de mailbox')
+        .subscribe({
+          next: (data) => {
+            let result = data as string;
+            let mailBoxParam = JSON.parse(result) as MailBoxParam;
+
+            let lid = new LedenItemExt();
+            lid.Voornaam = this.authService.firstname;
+            lid.Achternaam = this.authService.fullName;
+            lid.Email1 = mailBoxParam.UserId;
+            this.mailToYourself.Message = '<br><strong><i>Dit is een kopie mail naar jezelf</i></strong><br><br>' + ReplaceKeywords(lid, this.htmlContent);
+            this.mailToYourself.Subject = this.emailSubject;
+            this.mailToYourself.To = mailBoxParam.UserId
+            this.mailToYourself.ToName = mailBoxParam.Name;
+
+            this.mailToYourself.Attachment = this.attachmentContent ?? '';
+            this.mailToYourself.Type = this.attachmentFile?.type ?? '';
+            this.mailToYourself.FileName = this.attachmentFile?.name ?? '';
+
+            let myPersonaliedLink = this.replaceLinkCallback(lid);
+            this.mailToYourself.Message = Replace(this.mailToYourself.Message, /%link%/gi, myPersonaliedLink);
+
+          },
+          error: (error: AppError) => {
+            console.log("error", error);
+          }
+        })
+    );
+  }
+
 
   /***************************************************************************************************
   / Verstuur de email
@@ -85,6 +146,12 @@ export class SendMailComponent extends ParentComponent implements OnChanges {
       });
     });
 
+    if (this.EmailExtra.value != '') {
+      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList());
+    }
+    if (this.EigenMail.value as boolean) {
+      mailDialogInputMessage.MailItems.push(this.mailToYourself);
+    }
     if (mailDialogInputMessage.MailItems.length <= 0) {
       this.showSnackBar('Er zijn geen email adressen geselecteerd', '');
       return;
@@ -138,5 +205,30 @@ export class SendMailComponent extends ParentComponent implements OnChanges {
     return result;
   }
 
+  addExtraEmailAddressToList(): MailItem {
+    let lid = new LedenItemExt();
+    lid.Email1 = this.extraEmailAddress;
+    let extraMail = new MailItem();
+
+    extraMail.Message = ReplaceKeywords(lid, this.htmlContent);
+    extraMail.Subject = this.emailSubject;
+    extraMail.To = this.extraEmailAddress;
+    extraMail.ToName = '';
+
+    extraMail.Attachment = this.attachmentContent ?? '';
+    extraMail.Type = this.attachmentFile?.type ?? '';
+    extraMail.FileName = this.attachmentFile?.name ?? '';
+
+    let myPersonaliedLink = this.replaceLinkCallback(lid);
+    extraMail.Message = Replace(extraMail.Message, /%link%/gi, myPersonaliedLink);
+    return extraMail;
+  }
+
+  get EmailExtra() {
+    return this.extraMailForm.get('EmailExtra');
+  }
+  get EigenMail() {
+    return this.extraMailForm.get('EigenMail');
+  }
 
 }
