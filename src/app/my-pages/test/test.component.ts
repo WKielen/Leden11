@@ -9,7 +9,7 @@ import { RatingService } from "src/app/services/rating.service";
 import { ReplaceKeywords } from "src/app/shared/modules/ReplaceKeywords";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { EventSubscriptionsDialogComponent } from "../evenementen/event-subscriptions-dialog/event-subscribtions.dialog";
-import { MailNameList } from "../mail/mail.component";
+import { MailNameList } from "../mail/MailBoxParamClasses";
 
 @Component({
   selector: "app-test",

@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { ParamService } from 'src/app/services/param.service';
-import { MailBoxParam } from '../../my-pages/mail/mail.component';
+import { MailBoxParam } from "../../my-pages/mail/MailBoxParamClasses";
 import { AppError } from '../../shared/error-handling/app-error';
 import { NotFoundError } from '../../shared/error-handling/not-found-error';
 import { DuplicateKeyError } from '../../shared/error-handling/duplicate-key-error';

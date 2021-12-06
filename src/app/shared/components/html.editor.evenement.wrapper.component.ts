@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, TemplateRef } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MailNameList, MailSaveItem } from 'src/app/my-pages/mail/mail.component';
+import { MailNameList, MailSaveItem } from "src/app/my-pages/mail/MailBoxParamClasses";
 import { AuthService } from 'src/app/services/auth.service';
 import { MailService } from 'src/app/services/mail.service';
 import { ParamService } from 'src/app/services/param.service';
