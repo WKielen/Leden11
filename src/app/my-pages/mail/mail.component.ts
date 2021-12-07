@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { LedenItemExt } from '../../services/leden.service';
-import { AppError } from 'src/app/shared/error-handling/app-error';
-import { Observable, ReplaySubject } from 'rxjs';
 import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
@@ -47,26 +45,6 @@ export class MailComponent extends BaseComponent implements OnInit {
 
   onAttachmentFileChanged($event): void {
     this.fileToUpload = $event;
-    this.convertFile(this.fileToUpload).subscribe({
-      next: (data) => {
-        this.attachmentcontent = data;
-      },
-      error: (error: AppError) => {
-      }
-    });
-  }
-//TODO: Remove convertFile from this
-  /**
-   * Converts file
-   * @param file
-   * @returns file
-   */
-  convertFile(file: File): Observable<string> {
-    const result = new ReplaySubject<string>(1);//TODO Opzoeken wat ReplaySubject doet
-    const reader = new FileReader();
-    reader.readAsBinaryString(file);
-    reader.onload = (event) => result.next(btoa(event.target.result.toString()));
-    return result;
   }
 
   public theBoundCallback: Function;

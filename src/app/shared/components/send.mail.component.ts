@@ -67,8 +67,6 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
   });
 
   private attachmentContent: string = '';
-  private mailToYourself = new MailItem();
-  private extraEmailAddress: string = 'wim_kielen@hotmail.com';
 
   // I use this to send an extra mail to myself
   private mailBoxParam = new MailBoxParam();
@@ -133,7 +131,7 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
     });
 
     if (this.EmailExtra.value != '') {
-      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList(this.extraEmailAddress, new LedenItemExt));
+      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList(this.EmailExtra.value, new LedenItemExt));
     }
 
     if (this.EigenMail.value as boolean) {
