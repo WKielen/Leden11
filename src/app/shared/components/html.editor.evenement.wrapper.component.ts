@@ -60,7 +60,7 @@ import { ParentComponent } from '../parent.component';
             </div> <!-- end of fxflex -->
           </div>  <!-- end of fxlayout -->
 
-          <app-html-editor [htmlInputContent]="htmlOutput" (htmlOutputContent)='onHtmlOutputChange($event)'></app-html-editor>
+          <app-html-editor-formcontrol [formControl]="HtmlControl" (htmlContent)="onHtmlOutputChange($event)"></app-html-editor-formcontrol>
 
           <div class="attachmentbox">
             <button mat-raised-button color="primary" (click)="fileInput.click()" id="attachmentbutton">
@@ -123,6 +123,10 @@ export class HtmlEditorEvenementWrapperComponent extends ParentComponent impleme
       [Validators.required]
     ),
     SavedMails: new FormControl(),
+    HtmlControl: new FormControl(
+      '',
+      [Validators.required]
+    )
   });
 
   constructor(
@@ -328,5 +332,8 @@ export class HtmlEditorEvenementWrapperComponent extends ParentComponent impleme
   }
   get SavedMails() {
     return this.mailForm.get('SavedMails');
+  }
+  get HtmlControl() {
+    return this.mailForm.get('HtmlControl');
   }
 }

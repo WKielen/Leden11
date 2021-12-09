@@ -7,7 +7,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   template: `
   <small class="development" *ngIf="developmentMode">{{ me }}</small>
   <angular-editor [(ngModel)]="htmlInputContent" [config]="editorConfig" (ngModelChange)="onChange($event)"
-                  [placeholder]="'Schrijf hier je mail ...'"></angular-editor>
+                  [placeholder]="'Schrijf hier je tekst ...'"></angular-editor>
 `
 })
 
