@@ -1,9 +1,9 @@
 <div class="flexcontainer">
   <div style="flex-basis: 65%;">
-    <app-html-editor-evenement-wrapper [htmlOutput]='HtmlContent' [subject]='EmailSubject'
+    <app-html-editor-mail-wrapper [htmlOutput]='HtmlContent' [subject]='EmailSubject'
       (htmlContent)='onHtmlContentChanged($event)' (emailSubject)='onEmailSubjectChanged($event)'
       (attachmentFile)='onAttachmentFileChanged($event)'>
-    </app-html-editor-evenement-wrapper>
+    </app-html-editor-mail-wrapper>
 
     <!-- <mat-card>
       <form [formGroup]="mailForm" novalidate>

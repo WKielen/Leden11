@@ -16,7 +16,7 @@ import { ParentComponent } from '../parent.component';
 // De html in de template wordt doorgegeven aan het child component. De events worden echter hier afgehandeld.
 
 @Component({
-  selector: 'app-html-editor-evenement-wrapper',
+  selector: 'app-html-editor-mail-wrapper',
   template: `
   <small class="development" *ngIf="developmentMode">{{ me }}</small><div>
     <mat-card>
@@ -89,7 +89,7 @@ import { ParentComponent } from '../parent.component';
   ]
 })
 
-export class HtmlEditorEvenementWrapperComponent extends ParentComponent implements OnInit {
+export class HtmlEditorMailWrapperComponent extends ParentComponent implements OnInit {
 
   @Input()
   htmlOutput: string = "<b>Dit is mijn tekst</b>";  // Input voor html editor

@@ -7,10 +7,10 @@
 
   <div class="flexcontainer">
     <div style="flex-basis: 65%;">
-      <app-html-editor-evenement-wrapper [htmlOutput]='htmlContent' [subject]='emailSubject'
+      <app-html-editor-mail-wrapper [htmlOutput]='htmlContent' [subject]='emailSubject'
         (htmlContent)='onHtmlContentChanged($event)' (emailSubject)='onEmailSubjectChanged($event)'
         (attachmentFile)='onAttachmentFileChanged($event)' [extraButtonsTemplate]='extrabuttons'>
-      </app-html-editor-evenement-wrapper>
+      </app-html-editor-mail-wrapper>
       <app-send-mail [itemsToMail]='itemsToMail' [htmlContent]='htmlContent' [emailSubject]='emailSubject'
         [attachmentFile]='attachmentFile' [replaceLinkCallback]="theBoundCallback"></app-send-mail>
     </div>

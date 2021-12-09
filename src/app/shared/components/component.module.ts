@@ -16,7 +16,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { HtmlEditorComponent } from './html.editor.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
-import { HtmlEditorEvenementWrapperComponent } from './html.editor.evenement.wrapper.component';
+import { HtmlEditorMailWrapperComponent } from './html.editor.mail.wrapper.component';
 import { SendMailComponent } from './send.mail.component';
 import { DisplayAgendaDetailsComponent } from './display.agenda.details.component';
 import { DisplaySubscriptionsAgendaDetailsComponent } from './display.subscribtions.details.component';
@@ -33,7 +33,7 @@ const componentList = [
   MemberSelectionBoxComponent,
   MemberSelectionBoxWrapperComponent,
   HtmlEditorComponent,
-  HtmlEditorEvenementWrapperComponent,
+  HtmlEditorMailWrapperComponent,
   SendMailComponent,
   DisplaySubscriptionsAgendaDetailsComponent,
   DisplayAgendaDetailsComponent,
