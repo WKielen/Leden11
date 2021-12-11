@@ -21,10 +21,10 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
           <mat-card-title>Verstuur Mail</mat-card-title>
     </mat-card-header>
     <mat-card-content [formGroup]="extraMailForm" novalidate>
-      <mat-checkbox color="primary" formControlName="EigenMail" [formControl]="EigenMail">Stuur ook een mail naar mezelf</mat-checkbox>
+      <mat-checkbox color="primary" formControlName="EigenMail" (change)='onEigenMailChange()' [formControl]="EigenMail">Stuur ook een mail naar mezelf</mat-checkbox>
       <br>
       <mat-form-field>
-        <input matInput type="text" placeholder="Eventeel extra email adres" formControlName="EmailExtra"
+        <input matInput type="text" (ngModelChange)='onEigenMailChange()' placeholder="Eventeel extra email adres" formControlName="EmailExtra"
             [formControl]="EmailExtra" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$">
         <mat-error *ngIf="EmailExtra.hasError('email')">
             Vul een geldig email adres in
@@ -32,9 +32,9 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
       </mat-form-field>
     </mat-card-content>
     <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="onSendMail($event)" [disabled]='itemsToMail.length === 0'
+      <button mat-raised-button color="primary" (click)="onSendMail($event)" [disabled]='nbrOfPersonsToMail == 0'
       [disabled]='!extraMailForm.valid'
-      matBadge={{itemsToMail.length}} matBadgePosition="after" matBadgeColor="warn">Verzend mail</button>
+      matBadge={{nbrOfPersonsToMail}} matBadgePosition="after" matBadgeColor="warn">Verzend mail</button>
     </mat-card-actions>
 </mat-card>
 `,
@@ -178,6 +178,7 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
         });
       }
     }
+    this.setNbrOfPersonsToMail();
   }
 
 
@@ -194,7 +195,7 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
     return result;
   }
 
-  addExtraEmailAddressToList(extraEmail:string, lid: LedenItem, extraText:string=''): MailItem {
+  addExtraEmailAddressToList(extraEmail: string, lid: LedenItem, extraText: string = ''): MailItem {
 
     lid.Email1 = extraEmail;
     let extraMail = new MailItem();
@@ -213,11 +214,26 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
     return extraMail;
   }
 
+  onEigenMailChange() {
+    this.setNbrOfPersonsToMail();
+  }
+
+  public nbrOfPersonsToMail = 0;
+  setNbrOfPersonsToMail() {
+    this.nbrOfPersonsToMail = this.itemsToMail.length;
+    if (this.EmailExtra.value != '') {
+      this.nbrOfPersonsToMail++;
+    }
+
+    if (this.EigenMail.value as boolean) {
+      this.nbrOfPersonsToMail++;
+    }
+  }
+
   get EmailExtra() {
     return this.extraMailForm.get('EmailExtra');
   }
   get EigenMail() {
     return this.extraMailForm.get('EigenMail');
   }
-
 }

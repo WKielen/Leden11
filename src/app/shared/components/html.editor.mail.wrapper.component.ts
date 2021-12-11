@@ -74,7 +74,7 @@ import { ParentComponent } from '../parent.component';
       </mat-card-content>
 
       <mat-card-actions>
-        <button mat-raised-button color="primary" (click)='onSaveEmail()' [disabled]='!mailForm.valid'>Save</button>
+        <button mat-raised-button color="primary" (click)='onSaveEmail()' [disabled]='!mailForm.valid'>Bewaar</button>
         <button mat-raised-button color="primary" (click)='onDeleteMail()' [disabled]='!mailForm.valid'>Delete</button>
         <ng-container *ngTemplateOutlet="extraButtonsTemplate"></ng-container>
       </mat-card-actions>

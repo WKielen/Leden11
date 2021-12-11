@@ -5,67 +5,6 @@
       (attachmentFile)='onAttachmentFileChanged($event)'>
     </app-html-editor-mail-wrapper>
 
-    <!-- <mat-card>
-      <form [formGroup]="mailForm" novalidate>
-        <mat-card-header>
-          <mat-card-title>Mail bericht</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-
-          <div fxLayout="row" fxLayout.xs="column" fxLayout.sm="column" fxLayoutAlign="space-evenly start">
-            <div fxFlex="0 0 30%">
-              <mat-form-field>
-                <mat-select placeholder="Bewaarde mails" formControlName="SavedMails"
-                  (selectionChange)="onMailNameChanged($event)">
-                  <mat-option *ngFor="let item of savedMailNames.MailNameItems" [value]="item">{{item}}</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-
-            <div fxFlex="0 0 66%">
-              <div fxLayout="column">
-
-                <mat-form-field id="EmailName">
-                  <input matInput type="text" placeholder="Naam mail" formControlName="EmailName"
-                    [formControl]="EmailName">
-                  <mat-error *ngIf="EmailName.hasError('required')">
-                    Veld is verplicht
-                  </mat-error>
-                </mat-form-field>
-
-                <mat-form-field id="EmailSubject">
-                  <input matInput type="text" placeholder="Onderwerp" formControlName="EmailSubject"
-                    [formControl]="EmailSubject">
-                  <mat-error *ngIf="EmailSubject.hasError('required')">
-                    Veld is verplicht
-                  </mat-error>
-                </mat-form-field>
-
-                <angular-editor formControlName="HtmlContent" [config]="editorConfig"
-                  [placeholder]="'Schrijf hier je mail ...'"></angular-editor>
-
-                <div class="attachmentbox">
-                  <button mat-raised-button color="primary" (click)="fileInput.click()" id="attachmentbutton">
-                    <span>Kies bijlage</span>
-                    <input #fileInput type="file" (change)="onFileSelected($event.target.files)"
-                      style="display:none; margin: 0px 15px 0px 0px;" />
-                  </button>
-                  {{ fileToUpload?.name }}
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </mat-card-content>
-
-        <mat-card-actions>
-          <button mat-raised-button color="primary" (click)='onSaveEmail()' [disabled]='!mailForm.valid'>Save</button>
-          <button mat-raised-button color="primary" (click)='onDeleteMail()'>Delete</button>
-        </mat-card-actions>
-
-      </form>
-    </mat-card> -->
-
     <div class="flexcontainer" style="justify-content: space-between;">
       <div style="flex-basis: 48%;">
         <app-send-mail [itemsToMail]='itemsToMail' [htmlContent]='HtmlContent' [emailSubject]='EmailSubject'

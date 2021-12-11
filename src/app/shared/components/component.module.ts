@@ -21,6 +21,7 @@ import { SendMailComponent } from './send.mail.component';
 import { DisplayAgendaDetailsComponent } from './display.agenda.details.component';
 import { DisplaySubscriptionsAgendaDetailsComponent } from './display.subscribtions.details.component';
 import { HtmlEditorFormControlComponent } from './html.editor.formcontrol.component';
+import { SendMailSettingsComponent } from './send.mail.setting.dialog';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -38,6 +39,7 @@ const componentList = [
   DisplaySubscriptionsAgendaDetailsComponent,
   DisplayAgendaDetailsComponent,
   HtmlEditorFormControlComponent,
+  SendMailSettingsComponent,
 ]
 @NgModule({
   imports: [
