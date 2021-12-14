@@ -1,36 +1,4 @@
 <app-mat-dialog-header-detail title='Configuratie'></app-mat-dialog-header-detail>
-
-   <mat-dialog-content [formGroup]="mailboxparamForm" novalidate>
-        Deze velden zijn nodig voor het inloggen in je mailbox<br><br>
-
-        <mat-form-field>
-            <input matInput type="text" placeholder="Email adres" formControlName="ElecPostAddress"
-                [formControl]="ElecPostAddress" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$">
-            <mat-error *ngIf="ElecPostAddress.hasError('email') && !ElecPostAddress.hasError('required')">
-                Vul een geldig email adres in
-            </mat-error>
-            <mat-error *ngIf="ElecPostAddress.hasError('required')">
-                Veld is verplicht
-            </mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput [type]="showPw ? 'text' : 'password'" placeholder="Wachtwoord" [formControl]="EmailPassword"
-                formControlName="EmailPassword">
-            <mat-icon matSuffix (click)="showPw = !showPw">{{showPw ? 'visibility_off' : 'visibility'}}
-            </mat-icon>
-            <mat-error *ngIf="EmailPassword.hasError('required')">
-                Wachtwoord is <strong>verplicht</strong>
-            </mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <input matInput placeholder="Naam afzender" [formControl]="EmailSender" formControlName="EmailSender">
-        </mat-form-field>
-
-    </mat-dialog-content>
-
-    <mat-dialog-actions>
-        <button mat-raised-button color="primary" type="button" (click)="onSaveEmailParameters()"
-            [disabled]='!mailboxparamForm.valid'>Bewaar</button>
-    </mat-dialog-actions>
+<mat-dialog-content>
+  <app-send-mail-settings></app-send-mail-settings>
+</mat-dialog-content>

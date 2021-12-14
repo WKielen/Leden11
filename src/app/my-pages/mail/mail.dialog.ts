@@ -24,10 +24,10 @@ export class MailDialogComponent extends ParentComponent {
     private mailService: MailService,
     protected snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA)
-    public dataFromCaller,  // wordt gevuld vanuit het component. Letop: geen type toevoegen
+    public MailItems,  // wordt gevuld vanuit het component. Letop: geen type toevoegen
   ) {
     super(snackBar)
-    console.log('data from caller', this.dataFromCaller);
+    console.log('data from caller', this.MailItems);
   }
 
   /***************************************************************************************************
@@ -36,7 +36,7 @@ export class MailDialogComponent extends ParentComponent {
   /***************************************************************************************************/
   onSendMail(): void {
     let mailWentOkay = true;
-    this.dataFromCaller.MailItems.delayedForEach(function (item, idx, lijst) {
+    this.MailItems.delayedForEach(function (item, idx, lijst) {
       // console.log(item, idx, lijst);
       let result: boolean = this.processLid(item);
       if (!result) {
@@ -44,7 +44,7 @@ export class MailDialogComponent extends ParentComponent {
         console.log('mail result', result);
 
       }
-      this.percentageComplete = (idx + 1) * 100 / this.dataFromCaller.MailItems.length;
+      this.percentageComplete = (idx + 1) * 100 / this.MailItems.length;
 
     }, 1000, this,
       // Onderstaande functie wordt uitgevoerd wanneer de array doorlopen is.
@@ -62,7 +62,7 @@ export class MailDialogComponent extends ParentComponent {
         }
 
         setTimeout(function () {// na 3 sec sluit dialog automatisch
-          context.dataFromCaller.MailItems.clearTimeout();
+          context.MailItems.clearTimeout();
           context.dialogRef.close();
         }, 3000);
 
@@ -124,7 +124,7 @@ export class MailDialogComponent extends ParentComponent {
   / Cancel button pressed
   /***************************************************************************************************/
   onCancel(): void {
-    this.dataFromCaller.MailItems.clearTimeout();
+    this.MailItems.clearTimeout();
     this.dialogRef.close();
   }
 }

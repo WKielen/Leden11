@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { LedenItem, LedenItemExt } from 'src/app/services/leden.service';
-import { ExternalMailApiRecord, MailBoxParam, MailItem, MailItemTo, MailService } from 'src/app/services/mail.service';
+import { MailBoxParam, MailItem, MailItemTo, MailService } from 'src/app/services/mail.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MailDialogComponent } from 'src/app/my-pages/mail/mail.dialog';
@@ -104,9 +104,7 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
   /***************************************************************************************************/
   async onSendMail($event): Promise<void> {
 
-    let mailDialogInputMessage = new ExternalMailApiRecord();
-
-    mailDialogInputMessage.MailItems = new Array<MailItem>();
+    let mailItems =  new Array<MailItem>();
 
     this.itemsToMail.forEach(lid => {
       let mailAddresses: Array<MailItemTo> = LedenItem.GetEmailList(lid);
@@ -125,30 +123,29 @@ export class SendMailComponent extends ParentComponent implements OnInit, OnChan
         let myPersonaliedLink = this.replaceLinkCallback(lid);
         itemToMail.Message = Replace(itemToMail.Message, /%link%/gi, myPersonaliedLink);
 
-
-        mailDialogInputMessage.MailItems.push(itemToMail);
+        mailItems.push(itemToMail);
       });
     });
 
     if (this.EmailExtra.value != '') {
-      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList(this.EmailExtra.value, new LedenItemExt));
+      mailItems.push(this.addExtraEmailAddressToList(this.EmailExtra.value, new LedenItemExt));
     }
 
     if (this.EigenMail.value as boolean) {
       let lid = new LedenItemExt();
       lid.Voornaam = this.authService.firstname;
       lid.Achternaam = this.authService.fullName;
-      mailDialogInputMessage.MailItems.push(this.addExtraEmailAddressToList(this.mailBoxParam.UserId, lid, '<br><strong><i>Dit is een kopie mail naar jezelf</i></strong><br><br>'));
+      mailItems.push(this.addExtraEmailAddressToList(this.mailBoxParam.UserId, lid, '<br><strong><i>Dit is een kopie mail naar jezelf</i></strong><br><br>'));
     }
 
-    if (mailDialogInputMessage.MailItems.length <= 0) {
+    if (mailItems.length <= 0) {
       this.showSnackBar('Er zijn geen email adressen geselecteerd', '');
       return;
     }
 
     const dialogRef = this.dialog.open(MailDialogComponent, {
       panelClass: 'custom-dialog-container', width: '400px',
-      data: mailDialogInputMessage
+      data: mailItems
     });
 
     dialogRef

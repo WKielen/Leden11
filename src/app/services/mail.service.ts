@@ -1,11 +1,10 @@
 import { environment } from '../../environments/environment';
-import { Inject, Injectable, Optional } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { DataService } from './data.service';
-import { retry, tap, catchError } from 'rxjs/operators';
+import { retry, tap, catchError, switchMap } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { ParamService } from './param.service';
-import { AppError } from '../shared/error-handling/app-error';
 import { Observable } from 'rxjs/internal/Observable';
 
 @Injectable({
@@ -14,67 +13,44 @@ import { Observable } from 'rxjs/internal/Observable';
 
 export class MailService extends DataService {
 
-  public mailBoxParam = new MailBoxParam();
+  // public mailBoxParam = new MailBoxParam();
 
   constructor(
     http: HttpClient,
     protected paramService: ParamService,
     protected authService: AuthService,
-    // De inject is om door een param door te geven aan de MailService vanuit een component
-    // Dit lukt nog niet.
-    @Inject('param') @Optional() public useServerSideParams: string
   ) {
     super(environment.baseUrl + '/param', http);
-    if (authService.isLoggedIn()) {
-      // if (!useServerSideParams)
-      this.readMailLoginData();
-      // } else {
-      //   this.mailBoxParam.UserId = '';
-      //   this.mailBoxParam.Password = '';
-      //   this.mailBoxParam.UserId = '';
-      //   this.mailBoxParam.Name = '';
-    }
   }
 
-  /***************************************************************************************************
-  / Send a mail
-  /***************************************************************************************************/
   mail$(mailItems: MailItem[]): Observable<Object> {
-    let externalRecord = new ExternalMailApiRecord();
-    externalRecord.UserId = this.mailBoxParam.UserId;
-    externalRecord.Password = this.mailBoxParam.Password;
-    externalRecord.From = this.mailBoxParam.UserId;
-    externalRecord.FromName = this.mailBoxParam.Name;
-    externalRecord.MailItems = mailItems;
-
-    return this.http.post(environment.baseUrl + '/mail/sendmail', JSON.stringify(externalRecord))
-      .pipe(
-        retry(1),
-        tap({ // Log the result or error
-          next: data => console.log('Received: ', data),
-          error: error => console.log('Oeps: ', error)
-        }),
-        catchError(this.errorHandler)
-      );
-  }
-
-  /***************************************************************************************************
-  / Lees de mail box credetials uit de Param tabel
-  /***************************************************************************************************/
-  private readMailLoginData(): void {
-    let sub = this.paramService.readParamData$('mailboxparam' + this.authService.userId,
+    return this.paramService.readParamData$('mailboxparam' + this.authService.userId,
       JSON.stringify(new MailBoxParam()),
       'Om in te loggen in de mailbox')
-      .subscribe({
-        next: (data) => {
+      .pipe(
+        switchMap(data => {
           let result = data as string;
-          this.mailBoxParam = JSON.parse(result) as MailBoxParam;
-        },
-        error: (error: AppError) => {
-          console.log("error", error);
+          let mailBoxParam = JSON.parse(result) as MailBoxParam;
+
+          let externalRecord = new ExternalMailApiRecord();
+          externalRecord.UserId = mailBoxParam.UserId;
+          externalRecord.Password = mailBoxParam.Password;
+          externalRecord.From = mailBoxParam.UserId;
+          externalRecord.FromName = mailBoxParam.Name;
+          externalRecord.MailItems = mailItems;
+
+          return this.http.post(environment.baseUrl + '/mail/sendmail', JSON.stringify(externalRecord))
+          .pipe(
+            retry(1),
+            tap({ // Log the result or error
+              next: data => console.log('Received: ', data),
+              error: error => console.log('Oeps: ', error)
+            }),
+            catchError(this.errorHandler)
+          );
         }
-      })
-    this.registerSubscription(sub);
+        )
+      )
   }
 }
 

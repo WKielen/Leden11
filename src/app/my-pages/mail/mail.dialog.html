@@ -1,7 +1,7 @@
 <app-mat-dialog-header-detail title='Mail versturen'></app-mat-dialog-header-detail>
 <small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-dialog-content>
-    Je staat op het punt om {{dataFromCaller.MailItems.length}} personen te mailen.<br><br>
+    Je staat op het punt om {{ MailItems.length }} personen te mailen.<br><br>
     <mat-progress-bar [value]="percentageComplete" color="primary" mode="determinate">
     </mat-progress-bar>
     <br>

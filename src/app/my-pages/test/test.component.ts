@@ -5,7 +5,7 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { AuthService } from "src/app/services/auth.service";
 import { LedenItemExt, LedenService } from "src/app/services/leden.service";
-import { MailService } from "src/app/services/mail.service";
+import { MailItem, MailService } from "src/app/services/mail.service";
 import { ParamService } from "src/app/services/param.service";
 import { RatingService } from "src/app/services/rating.service";
 import { ParentComponent } from "src/app/shared/parent.component";
@@ -69,9 +69,6 @@ export class TestComponent
   }
 
   onClick() {
-    // let lid = this.ledenLijst[0];
-    // let output = ReplaceKeywords(lid, '');
-    // console.log("onClick --> output", output);
   }
 
   // onHTMLChanged($event) {
