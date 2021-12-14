@@ -4,7 +4,6 @@ import { DateAdapter } from '@angular/material/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormValueToDutchDateString } from 'src/app/shared/modules/DateRoutines';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({
   selector: 'app-website-dialog',
@@ -16,10 +15,6 @@ export class WebsiteDialogComponent implements OnInit {
       '',
       [Validators.required]
     ),
-    // Text: new FormControl(
-    //   '',
-    //   [Validators.required]
-    // ),
     HtmlContent: new FormControl(
       '',
       [Validators.required]
@@ -38,58 +33,6 @@ export class WebsiteDialogComponent implements OnInit {
   OrganisatieValues = OrganisatieValues.table;
   doelgroepValues = DoelgroepValues.table;
 
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: 'auto',
-    minHeight: '350px',
-    maxHeight: 'auto',
-    // width: '800px',
-    width: '500px',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'Enter text here...',
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    defaultFontSize: '',
-    fonts: [
-      { class: 'arial', name: 'Arial' },
-      { class: 'times-new-roman', name: 'Times New Roman' },
-      { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' }
-    ],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText'
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h1',
-      },
-    ],
-    uploadUrl: 'v1/image',
-    uploadWithCredentials: false,
-    sanitize: true,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [
-      ['insertImage', 'insertVideo',
-        'backgroundColor',
-        'customClasses',
-        'link',
-        'unlink',
-
-      ],
-    ]
-  };
-
   constructor(
     public dialogRef: MatDialogRef<WebsiteDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
@@ -101,8 +44,14 @@ export class WebsiteDialogComponent implements OnInit {
     this.StartDate.setValue(this.data.data.StartDate);
     this.EndDate.setValue(this.data.data.EndDate);
     this.Header.setValue(this.data.data.Header);
-    // this.Text.setValue(this.data.data.Text);
     this.HtmlContent.setValue(this.data.data.Text);
+  }
+
+  /***************************************************************************************************
+  / de inhoud van de HTML is gewijzigd
+  /***************************************************************************************************/
+  onHtmlOutputChange($event) {
+    this.HtmlContent.setValue($event);
   }
 
   /***************************************************************************************************
@@ -122,9 +71,6 @@ export class WebsiteDialogComponent implements OnInit {
   get Header() {
     return this.websiteItemForm.get('Header');
   }
-  // get Text() {
-  //   return this.websiteItemForm.get('Text');
-  // }
   get HtmlContent() {
     return this.websiteItemForm.get('HtmlContent');
   }
