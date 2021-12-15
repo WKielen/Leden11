@@ -7,7 +7,6 @@ import { AuthService } from 'src/app/services/auth.service';
 import { LedenItem } from 'src/app/services/leden.service';
 import { NotificationService } from 'src/app/services/notification.service';
 import { ACTIVATIONSTATUS, UserItem, UserService } from 'src/app/services/user.service';
-import { WaitingButtonComponent } from 'src/app/shared/components/waiting-button.component';
 import { IHoldableResponse } from 'src/app/shared/directives/holdable.directive';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';

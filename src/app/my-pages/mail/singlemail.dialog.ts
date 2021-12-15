@@ -4,9 +4,9 @@ import { LedenItem } from 'src/app/services/leden.service';
 import { ReadTextFileService } from 'src/app/services/readtextfile.service';
 import { ReplaceKeywords } from 'src/app/shared/modules/ReplaceKeywords';
 import { MailDialogComponent } from './mail.dialog';
-import { ExternalMailApiRecord, MailItem, MailItemTo } from 'src/app/services/mail.service';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { MailItem, MailItemTo } from 'src/app/services/mail.service';
 import { BaseComponent } from 'src/app/shared/base.component';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'singlemail-dialog',
@@ -16,62 +16,18 @@ import { BaseComponent } from 'src/app/shared/base.component';
 })
 export class SingleMailDialogComponent extends BaseComponent implements OnInit {
 
-  mailText: string = '';
-  mailSubject: string = '';
-  itemsToMail: Array<MailItem> = [];
-  subject: string = '';
+  websiteItemForm = new FormGroup({
+    Subject: new FormControl(
+      '',
+      [Validators.required]
+    ),
+    HtmlContent: new FormControl(
+      '',
+      [Validators.required]
+    ),
+  });
 
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: 'auto',
-    minHeight: '20',
-    maxHeight: 'auto',
-    // width: '800px',
-    width: 'auto',
-    minWidth: '0',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'Enter text here...',
-    defaultParagraphSeparator: '',
-    defaultFontName: '',
-    defaultFontSize: '',
-    fonts: [
-      { class: 'arial', name: 'Arial' },
-      { class: 'times-new-roman', name: 'Times New Roman' },
-      { class: 'calibri', name: 'Calibri' },
-      { class: 'comic-sans-ms', name: 'Comic Sans MS' }
-    ],
-    customClasses: [
-      {
-        name: 'quote',
-        class: 'quote',
-      },
-      {
-        name: 'redText',
-        class: 'redText'
-      },
-      {
-        name: 'titleText',
-        class: 'titleText',
-        tag: 'h1',
-      },
-    ],
-    uploadUrl: 'v1/image',
-    uploadWithCredentials: false,
-    sanitize: true,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [
-      ['insertImage', 'insertVideo',
-        'backgroundColor',
-        'customClasses',
-        'link',
-        'unlink',
-
-      ],
-    ]
-  };
+//  itemsToMail: Array<MailItem> = [];
 
   constructor(
     public dialogRef: MatDialogRef<SingleMailDialogComponent>,
@@ -84,8 +40,8 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
     this.readTextFileService.read(this.singleMailInputDialog.TemplatePathandName)
       .subscribe({
         next: data => {
-          this.mailText = ReplaceKeywords(this.singleMailInputDialog.Lid, data);
-          this.mailSubject = this.singleMailInputDialog.Subject;
+          this.Subject.setValue(this.singleMailInputDialog.Subject);
+          this.HtmlContent.setValue(ReplaceKeywords(this.singleMailInputDialog.Lid, data));
         }
       });
   }
@@ -94,23 +50,23 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
   / Verstuur de email
   /***************************************************************************************************/
   onSendMail($event): void {
-    let mailDialogInputMessage = new ExternalMailApiRecord();
-    mailDialogInputMessage.MailItems = new Array<MailItem>();
+    let mailItems = new Array<MailItem>();
 
     let mailAddresses: Array<MailItemTo> = LedenItem.GetEmailList(this.singleMailInputDialog.Lid);
     mailAddresses.forEach(element => {
       let itemToMail = new MailItem();
-      itemToMail.Message = this.mailText;
-      itemToMail.Subject = this.mailSubject;
+
+      itemToMail.Message = this.HtmlContent.value;
+      itemToMail.Subject = this.Subject.value;
       itemToMail.To = element.To;
       itemToMail.ToName = element.ToName;
-      mailDialogInputMessage.MailItems.push(itemToMail);
+      mailItems.push(itemToMail);
     });
 
     // console.log('data from sender', mailDialogInputMessage);
     const dialogRef = this.dialog.open(MailDialogComponent, {
       panelClass: 'custom-dialog-container', width: '400px',
-      data: mailDialogInputMessage
+      data: mailItems
     });
 
     dialogRef.afterClosed()
@@ -121,6 +77,23 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
           }
         }
       });
+  }
+
+  /***************************************************************************************************
+  / de inhoud van de HTML is gewijzigd
+  /***************************************************************************************************/
+  onHtmlOutputChange($event) {
+    this.HtmlContent.setValue($event);
+  }
+
+  /***************************************************************************************************
+  / Properties
+  /***************************************************************************************************/
+  get Subject() {
+    return this.websiteItemForm.get('Subject');
+  }
+  get HtmlContent() {
+    return this.websiteItemForm.get('HtmlContent');
   }
 }
 
