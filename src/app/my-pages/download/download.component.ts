@@ -441,7 +441,7 @@ JN41vdmfsP3LCJ7yhbLSoYVNTXKmroKOPf7/URXfWGNKvb/xnKSrKHXiFYXKfSp1k/Pc/qpj5lnl0dV1
   /***************************************************************************************************/
   readActionLijst(): Promise<Object> {
     // -------------------------------------------------------- :o)
-    return lastValueFrom(this.actionService.getAll$())
+    return lastValueFrom(this.actionService.getAllActions$())
       .then(response => {
         return response
       });
