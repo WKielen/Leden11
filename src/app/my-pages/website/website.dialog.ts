@@ -50,9 +50,9 @@ export class WebsiteDialogComponent implements OnInit {
   /***************************************************************************************************
   / de inhoud van de HTML is gewijzigd
   /***************************************************************************************************/
-  onHtmlOutputChange($event) {
-    this.HtmlContent.setValue($event);
-  }
+  // onHtmlOutputChange($event) {
+  //   // this.HtmlContent.setValue($event);
+  // }
 
   /***************************************************************************************************
   /

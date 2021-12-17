@@ -14,6 +14,12 @@ import { BaseComponent } from '../base.component';
   }]
 })
 export class HtmlEditorFormControlComponent extends BaseComponent implements OnInit, ControlValueAccessor {
+/***************************************************************************************************
+//! LET OP
+// * Er zijn twee manieren om de waarde van this control te krijgen
+// 1. via de this.websiteItemForm.get('HtmlControl');  in het aanroepende component
+// 2. via de eventemmiter
+/***************************************************************************************************/
 
   @Output()
   htmlContent = new EventEmitter<string>(); // Hiermee geven we een gewijzigde html terug
@@ -21,17 +27,17 @@ export class HtmlEditorFormControlComponent extends BaseComponent implements OnI
   public receivedHtmlInput:string = '';  // Deze ontvangen we via setvalue
 
   constructor(
-    @Optional() @Self() public ngControl: NgControl,
+    @Optional() @Self() public thisControl: NgControl,
   ) {
     super();
-    if (this.ngControl != null) {
-      this.ngControl.valueAccessor = this;
+    if (this.thisControl != null) {
+      this.thisControl.valueAccessor = this;
     }
   }
 
   ngOnInit(): void {
     if (this.receivedHtmlInput == '') {
-      this.ngControl.control?.setErrors({});  // we maken de control invalid
+      this.thisControl.control?.setErrors({});  // we maken de control invalid
     }
   }
 
@@ -40,13 +46,14 @@ export class HtmlEditorFormControlComponent extends BaseComponent implements OnI
   /***************************************************************************************************/
   onHtmlChanged ($event) {
     if ($event == '') {
-      this.ngControl.control?.setErrors({});  // we maken de control invalid
+      this.thisControl.control?.setErrors({});  // we maken de control invalid
     }
     else {
-      this.ngControl.control?.setErrors(null);
+      this.thisControl.control?.setErrors(null);
     }
 
     this.htmlContent.emit($event);
+    this.thisControl.control.setValue($event);
   }
 
   /***************************************************************************************************

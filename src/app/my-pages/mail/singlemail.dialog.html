@@ -7,8 +7,7 @@
       Veld is verplicht
     </mat-error>
   </mat-form-field>
-  <app-html-editor-formcontrol [formControl]="HtmlContent" (htmlContent)="onHtmlOutputChange($event)">
-  </app-html-editor-formcontrol>
+  <app-html-editor-formcontrol [formControl]="HtmlControl"></app-html-editor-formcontrol>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [disabled]='!websiteItemForm.valid' (click)="onSendMail($event)">Verzend

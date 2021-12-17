@@ -2,7 +2,7 @@
 <app-send-mail-settings></app-send-mail-settings>
 
 <form [formGroup]="myForm" novalidate>
-  <app-html-editor-formcontrol [formControl]="chipscontrol" (htmlContent)="onChangeHtmlContent($event)"  ></app-html-editor-formcontrol>
+  <app-html-editor-formcontrol [formControl]="chipscontrol"></app-html-editor-formcontrol>
   <button mat-raised-button color="primary" type="button" (click)="onClick3()" [disabled]='!myForm.valid'>Save
     me!</button>
 </form>

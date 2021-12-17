@@ -21,13 +21,11 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
       '',
       [Validators.required]
     ),
-    HtmlContent: new FormControl(
+    HtmlControl: new FormControl(
       '',
       [Validators.required]
     ),
   });
-
-//  itemsToMail: Array<MailItem> = [];
 
   constructor(
     public dialogRef: MatDialogRef<SingleMailDialogComponent>,
@@ -41,7 +39,7 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
       .subscribe({
         next: data => {
           this.Subject.setValue(this.singleMailInputDialog.Subject);
-          this.HtmlContent.setValue(ReplaceKeywords(this.singleMailInputDialog.Lid, data));
+          this.HtmlControl.setValue(ReplaceKeywords(this.singleMailInputDialog.Lid, data));
         }
       });
   }
@@ -56,7 +54,8 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
     mailAddresses.forEach(element => {
       let itemToMail = new MailItem();
 
-      itemToMail.Message = this.HtmlContent.value;
+      itemToMail.Message = this.HtmlControl.value;
+      console.log("SingleMailDialogComponent --> onSendMail --> itemToMail.Message", itemToMail.Message);
       itemToMail.Subject = this.Subject.value;
       itemToMail.To = element.To;
       itemToMail.ToName = element.ToName;
@@ -80,20 +79,13 @@ export class SingleMailDialogComponent extends BaseComponent implements OnInit {
   }
 
   /***************************************************************************************************
-  / de inhoud van de HTML is gewijzigd
-  /***************************************************************************************************/
-  onHtmlOutputChange($event) {
-    this.HtmlContent.setValue($event);
-  }
-
-  /***************************************************************************************************
   / Properties
   /***************************************************************************************************/
   get Subject() {
     return this.websiteItemForm.get('Subject');
   }
-  get HtmlContent() {
-    return this.websiteItemForm.get('HtmlContent');
+  get HtmlControl() {
+    return this.websiteItemForm.get('HtmlControl');
   }
 }
 

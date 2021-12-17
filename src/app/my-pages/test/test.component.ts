@@ -64,9 +64,6 @@ export class TestComponent
     //     }));
   }
 
-  onChangeHtmlContent($event) {
-    this.htmlContent = $event;
-  }
 
   onClick() {
   }
@@ -80,7 +77,7 @@ export class TestComponent
 
 
   onClick3() {
-    console.log('x');
+    this.htmlContent = this.chipscontrol.value;
   }
 
 

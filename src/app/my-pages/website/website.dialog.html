@@ -27,7 +27,7 @@
     </mat-error>
   </mat-form-field>
   <br>
-  <app-html-editor-formcontrol [formControl]="HtmlContent" (htmlContent)="onHtmlOutputChange($event)"></app-html-editor-formcontrol>
+  <app-html-editor-formcontrol [formControl]="HtmlContent"></app-html-editor-formcontrol>
 </mat-dialog-content>
 <mat-dialog-actions>
   <button mat-raised-button color="primary" [disabled]='!websiteItemForm.valid' (click)="onSubmit()">Bewaar</button>
