@@ -38,11 +38,16 @@ export class TestComponent
   // eventlist = new MailNameList();
 
   myForm = new FormGroup({
-    // myControl: new FormControl('',
-    //   [Validators.required]
-    // ),
+    demoControl: new FormControl('',
+      [Validators.required]
+    ),
     chipscontrol: new FormControl(),
   });
+
+
+  get demoControl(): any {
+    return this.myForm.get('demoControl');
+  }
 
   get chipscontrol(): any {
     return this.myForm.get('chipscontrol');
@@ -54,6 +59,7 @@ export class TestComponent
   ngOnInit() {
     // this.chipscontrol.disable({ emitEvent: false });
     this.chipscontrol.setValue(this.htmlContent);
+    this.demoControl.setValue(this.htmlContent);
     // this.registerSubscription(
     //   this.ledenService.getActiveMembersWithRatings$()
     //     .subscribe({
