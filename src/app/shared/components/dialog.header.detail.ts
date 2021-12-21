@@ -7,7 +7,7 @@ import { BaseComponent } from '../base.component';
   <h2 mat-dialog-title>
     <mat-toolbar class="task-header">
       <span> {{ title }}</span>
-      <span class="fx-spacer"></span>
+      <span style="flex: 1 1 auto !important;"></span>
 
       <button *ngIf="showButtons" mat-icon-button color="white" (click)="onClickModify($event)">
         <mat-icon>edit</mat-icon>
@@ -29,15 +29,11 @@ import { BaseComponent } from '../base.component';
   `,
   styles: [
     'h2 { margin: 0px; }',
-    '#left { display: flex; justify-content: flex-end; }',
     `.task-header {
       background-color: transparent;
       color: white;
       padding: 0;
       height: 25px;
-    }`,
-    `.fx-spacer {
-      flex: 1 1 auto;
     }`
   ]
 })

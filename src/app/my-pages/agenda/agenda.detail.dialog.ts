@@ -92,33 +92,11 @@ export class AgendaDetailDialogComponent implements OnInit{
   }
 
   onClickEventSubscriptions() {
-
     const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent, {
-      // panelClass: 'width-800px-dialog',
+      panelClass: 'custom-dialog-container', width: '800px',
       data: {
         data: this.data.data,
       },
     });
-
-    // dialogRef.afterClosed()
-    //   .subscribe({
-    //     next: (data: AgendaItem) => {
-    //       if (data) {
-    //         this.data.data = data;
-    //         this.dialogRef.close(this.data);
-    //       }
-    //       else {
-    //         this.data.method = 'Cancel';
-    //         this.dialogRef.close(this.data);
-    //       }
-    //     },
-    //     error: (error: AppError) => {
-    //       console.log("error", error);
-    //     }
-    //   })
   }
-
-
-
-
 }

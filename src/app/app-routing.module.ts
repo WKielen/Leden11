@@ -6,7 +6,6 @@ import { LedenComponent } from './my-pages/leden/leden.component';
 import { LedenManagerComponent } from './my-pages/ledenmanager/ledenmanager.component';
 import { AgendaComponent } from './my-pages/agenda/agenda.component';
 import { OudLedenComponent } from './my-pages/oud-leden/oud-leden.component';
-import { DownloadComponent } from './my-pages/download/download.component';
 import { AdminAuthGuard } from './services/admin-auth-guard.service';
 import { OfflineComponent } from './app-nav/offline/offline.component';
 import { MultiUpdateComponent } from './my-pages/multi-update/multi-update.component';
@@ -30,7 +29,7 @@ import { TrainingGroupsComponent } from './my-pages/trainingsgroep/trainingsgroe
 const routes: Routes = [
   { path: ROUTE.loginPageRoute, component: LoginComponent },
   { path: ROUTE.offlinePageRoute, component: OfflineComponent },
-  { path: ROUTE.subscribeeventPageRoute, loadChildren: () => import('./my-pages/evenementen/subscribe-event/module').then(m => m.Module), data: { roles: PAGEROLES.testPageRoles } },
+  { path: ROUTE.subscribeeventPageRoute, loadChildren: () => import('./my-pages/evenementen/subscribe-event/module').then(m => m.Module) },
   {
     path: '', component: DefaultComponent,canActivate: [AuthGuard],
     children: [
@@ -43,7 +42,6 @@ const routes: Routes = [
       { path: ROUTE.agendaPageRoute, component: AgendaComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.agendaPageRoles } },
       { path: ROUTE.websitePageRoute, component: WebsiteComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.websitePageRoles } },
       { path: ROUTE.multiupdatePageRoute, component: MultiUpdateComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.multiupdatePageRoles } },
-      // { path: ROUTE.downloadPageRoute, component: DownloadComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.downloadPageRoles } },
       { path: ROUTE.oudledenPageRoute, component: OudLedenComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.oudledenPageRoles } },
       { path: ROUTE.contrbedragenPageRoute, component: ContrBedragenComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.contrbedragenPageRoles } },
       { path: ROUTE.ladderPageRoute, component: LadderComponent, canActivate: [AuthGuard, AdminAuthGuard], data: { roles: PAGEROLES.ladderPageRoles } },

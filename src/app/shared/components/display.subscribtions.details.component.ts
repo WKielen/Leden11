@@ -5,9 +5,9 @@ import { BaseComponent } from '../base.component';
 @Component({
   selector: 'app-display-subscriptions-details',
   template: `
-  <div style='width:600px!important;'>
+  <!-- <div style='width:600px!important;'> -->
   <small class="development" *ngIf="developmentMode">{{ me }}</small>
-  <mat-table [dataSource]="inschrijvingsList">
+  <table mat-table [dataSource]="inschrijvingsList">
     <ng-container matColumnDef="Naam">
       <th mat-header-cell *matHeaderCellDef> Naam </th>
       <td mat-cell *matCellDef="let element"> {{element.Naam}} </td>
@@ -22,8 +22,8 @@ import { BaseComponent } from '../base.component';
     </ng-container>
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </mat-table>
-</div>
+  <table>
+<!-- </div> -->
 `,
 styles:[
   `@use "src/mixins.scss" as s`,

@@ -3,11 +3,14 @@ import { Component, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { catchError, of, forkJoin } from "rxjs";
 import { AuthService } from "src/app/services/auth.service";
+import { InschrijvingItem, InschrijvingService } from "src/app/services/inschrijving.service";
 import { LedenItemExt, LedenService } from "src/app/services/leden.service";
 import { MailItem, MailService } from "src/app/services/mail.service";
 import { ParamService } from "src/app/services/param.service";
 import { RatingService } from "src/app/services/rating.service";
+import { AppError } from "src/app/shared/error-handling/app-error";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { EventSubscriptionsDialogComponent } from "../evenementen/event-subscriptions-dialog/event-subscribtions.dialog";
 
@@ -26,6 +29,7 @@ export class TestComponent
     protected authService: AuthService,
     protected mailService: MailService,
     protected ratingService: RatingService,
+    protected inschrijvingService: InschrijvingService,
 
     public dialogRef: MatDialogRef<EventSubscriptionsDialogComponent>,
     public dialog: MatDialog,) {
@@ -33,6 +37,8 @@ export class TestComponent
   }
 
   // ledenLijst: Array<LedenItemExt> = [];
+  public subscriptions: Array<InschrijvingItem> = [];
+  public reportList: Array<LedenItemExt> = [];
 
   htmlContent: string = "<b>Dit is mijn tekst</b>";
   // eventlist = new MailNameList();
@@ -68,6 +74,64 @@ export class TestComponent
     //         console.log("ngOnInit --> this.ledenLijst", this.ledenLijst);
     //       }
     //     }));
+
+
+    let subInschrijvingen = this.inschrijvingService.getSubscriptionsEvent$(2146)
+      .pipe(
+        catchError(err => of(new Array<InschrijvingItem>()))
+      );
+
+    let subLeden = this.ledenService.getActiveMembers$()
+      .pipe(
+        catchError(err => of(new Array<LedenItemExt>()))
+      );
+
+    this.registerSubscription(
+      forkJoin([subInschrijvingen, subLeden,])
+        .subscribe({
+          next: (data) => {
+            this.subscriptions = data[0];
+            let ledenLijst = data[1];
+
+            this.subscriptions.forEach((inschrijving: InschrijvingItem) => {
+              // let reportItem = new ReportItem();
+              let lid: LedenItemExt = new LedenItemExt();
+
+              let index = ledenLijst.findIndex((lid: LedenItemExt) => (lid.LidNr == inschrijving.LidNr));
+
+              if (inschrijving.LidNr != 0 && index != -1) {
+                lid = ledenLijst[index];
+              }
+
+              lid['OpgegevenNaam'] = inschrijving.Naam;
+              lid['Email'] = inschrijving.Email;
+              lid['ExtraInformatie'] = inschrijving.ExtraInformatie;
+
+              this.reportList.push(lid);
+            });
+            // this.list = localList;
+
+          },
+          error: (error: AppError) => {
+            console.log("EventSubscriptionsDialogComponent --> ngOnInit --> error", error);
+          }
+        })
+    )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   }
 
 
