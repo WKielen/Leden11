@@ -3,18 +3,20 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { LedenItemExt } from 'src/app/services/leden.service';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { ConvertToReadableDate } from 'src/app/shared/modules/DateRoutines';
+import { BaseComponent } from 'src/app/shared/base.component';
 
 @Component({
   selector: 'app-send-inventation-dialog',
   templateUrl: './send-inventation.dialog.html',
   styles: []
 })
-export class SendInventationDialogComponent implements OnInit {
+export class SendInventationDialogComponent extends BaseComponent implements OnInit {
   constructor(
     private clipboard: Clipboard,
     public dialogRef: MatDialogRef<SendInventationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
   ) {
+    super();
   }
 
   public itemsToMail: Array<LedenItemExt> = [];
@@ -85,7 +87,10 @@ export class SendInventationDialogComponent implements OnInit {
   }
 
   createLink(link: string): string {
-    return "<a href='" + "http://localhost:4200/#/inschrijven?evenement=" + link + "'>" + "Hier inschrijven voor " + this.data.data['EvenementNaam'] + "</a>"
+    if (this.developmentMode)
+      return "<a href='" + "http://localhost:4200/#/inschrijven?evenement=" + link + "'>" + "Hier inschrijven voor " + this.data.data['EvenementNaam'] + "</a>"
+    else
+      return "<a href='" + "https://www.ttvn.nl/app/#/inschrijven?evenement=" + link + "'>" + "Hier inschrijven voor " + this.data.data['EvenementNaam'] + "</a>"
   }
 
 }

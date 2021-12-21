@@ -140,6 +140,8 @@ export class HtmlEditorMailWrapperComponent extends ParentComponent implements O
   ngOnInit(): void {
     if (this.subject)
       this.EmailSubject.setValue(this.subject);
+    if (this.htmlOutput)
+      this.HtmlControl.setValue(this.htmlOutput);
     this.readMailList();
   }
 
@@ -257,6 +259,7 @@ export class HtmlEditorMailWrapperComponent extends ParentComponent implements O
 
     this.EmailName.setValue('');
     this.EmailSubject.setValue('');
+    this.HtmlControl.setValue('');
     this.htmlOutput = '';
   }
 
@@ -291,6 +294,10 @@ export class HtmlEditorMailWrapperComponent extends ParentComponent implements O
           this.EmailSubject.setValue(result.Subject);
           this.htmlOutput = result.Message;
 
+          // We zetten de waarde van het html control
+          this.HtmlControl.setValue(result.Message);
+
+          // we publiceren de veranderde inhoud naar mijn parent
           this.htmlContent.emit(this.htmlOutput);
           this.emailSubject.emit(result.Subject);
         },
@@ -310,10 +317,10 @@ export class HtmlEditorMailWrapperComponent extends ParentComponent implements O
     this.readMail(key);
   }
 
- /**
- * Bijlage kiezen
- * @param files
- */
+  /**
+  * Bijlage kiezen
+  * @param files
+  */
   fileToUpload: File | null = null;
   onFileSelected(files: FileList) {
     this.fileToUpload = files.item(0)
