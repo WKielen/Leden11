@@ -5,6 +5,8 @@ import { AppError } from 'src/app/shared/error-handling/app-error';
 import { AgendaDialogComponent } from './agenda.dialog';
 import { SendInventationDialogComponent } from '../evenementen/send-inventation-dialog/send-inventation.dialog';
 import { EventSubscriptionsDialogComponent } from '../evenementen/event-subscriptions-dialog/event-subscribtions.dialog';
+import { Router } from '@angular/router';
+import { ROUTE } from 'src/app/services/website.service';
 
 @Component({
   selector: 'app-agenda-detail-dialog',
@@ -16,6 +18,7 @@ export class AgendaDetailDialogComponent implements OnInit{
     public dialogRef: MatDialogRef<AgendaDetailDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data,
     public dialog: MatDialog,
+    private router: Router
   ) {
   }
   public showButtons: boolean = this.data.data.Type != 'A' && this.data.data.Type != '';
@@ -79,7 +82,7 @@ export class AgendaDetailDialogComponent implements OnInit{
       })
   }
 
-  onClickSendInvitation() {
+  onClickSendInvitation(): void {
 
     const dialogRef = this.dialog.open(SendInventationDialogComponent, {
       // autoFocus: false,
@@ -91,12 +94,16 @@ export class AgendaDetailDialogComponent implements OnInit{
     });
   }
 
-  onClickEventSubscriptions() {
+  onClickEventSubscriptions(): void {
     const dialogRef = this.dialog.open(EventSubscriptionsDialogComponent, {
       panelClass: 'custom-dialog-container', width: '800px',
       data: {
         data: this.data.data,
       },
     });
+  }
+  onClickAddSubscription(): void {
+    this.router.navigate([ROUTE.subscribeeventPageRoute], { queryParams: { evenement:'eyJldmVuZW1lbnQiOiIyMTQ2IiwibGlkbnIiOiIxMzc4In0='} });
+    this.dialogRef.close();
   }
 }

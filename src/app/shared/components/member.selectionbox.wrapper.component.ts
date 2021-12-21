@@ -1,5 +1,4 @@
 //<mat-checkbox-list [checkboxDictionary]="myDictionairy" (click)="onRoleClicked($event)"></mat-checkbox-list>
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component, Input, Output, EventEmitter, ViewChild, OnInit, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { LedenItemExt, LedenService } from 'src/app/services/leden.service';

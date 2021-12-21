@@ -1,9 +1,15 @@
 <ng-template #extrabuttons>
-  <button  mat-icon-button [style.display]="showExtraButtons" color="white" (click)="onClickSendInvitation()">
+  <button  mat-icon-button [style.display]="showExtraButtons" matTooltipClass="tooltip"
+    matTooltip="Mail uitnodigingen" color="white" (click)="onClickSendInvitation()">
     <mat-icon>mail_outline</mat-icon>
   </button>
-  <button  mat-icon-button [style.display]="showExtraButtons" color="white" (click)="onClickEventSubscriptions()">
+  <button  mat-icon-button [style.display]="showExtraButtons" matTooltipClass="tooltip"
+  matTooltip="Bekijk inschrijvingen" color="white" (click)="onClickEventSubscriptions()">
     <mat-icon>how_to_reg</mat-icon>
+  </button>
+  <button  mat-icon-button [style.display]="showExtraButtons" matTooltipClass="tooltip"
+  matTooltip="Voeg zelf inschrijving toe" color="white" (click)="onClickAddSubscription()">
+    <mat-icon>laptop</mat-icon>
   </button>
 </ng-template>
 

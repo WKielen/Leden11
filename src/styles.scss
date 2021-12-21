@@ -257,3 +257,9 @@ body {
 .primary-color {
   color: mat.get-color-from-palette($custom-theme-primary) !important;
 }
+
+.tooltip {
+  background: red;
+  font: 0.8rem sans-serif;
+}
+
