@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 import { AgendaItem, DoelgroepValues, OrganisatieValues, TypeValues } from "src/app/services/agenda.service";
 
 @Component({

@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 
 import { SubscribeEventPageComponent } from './subscribe-event.component';
 import { CustomMaterialModule } from 'src/app/material.module';
-import { SharedComponentsModule } from 'src/app/shared/components/component.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ComponentsModule } from 'src/app/components/component.module';
 
 
 @NgModule({
@@ -21,7 +21,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ]),
     CommonModule,
     CustomMaterialModule,
-    SharedComponentsModule,
+    ComponentsModule,
     FormsModule,
     ReactiveFormsModule,
   ],

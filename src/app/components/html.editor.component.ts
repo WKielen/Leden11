@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
 @Component({

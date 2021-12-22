@@ -9,6 +9,7 @@ import { HoldableModule } from 'src/app/shared/directives/directives.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormFieldCustomControlExample, MyTelInput } from './telephone/telephone.field.component';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ComponentsModule } from 'src/app/components/component.module';
 
 
 @NgModule({
@@ -27,6 +28,7 @@ import { MatDialogRef } from '@angular/material/dialog';
     CommonModule,
     CustomMaterialModule,
     HoldableModule,
+    ComponentsModule,
     SharedComponentsModule,
     FormsModule,
     ReactiveFormsModule,

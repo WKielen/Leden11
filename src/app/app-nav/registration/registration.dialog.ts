@@ -1,13 +1,13 @@
 import { Component, Inject, OnInit, Input } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { ICheckboxDictionaryItem } from 'src/app/shared/components/checkbox.list.component';
 import { Role, WebsiteService } from 'src/app/services/website.service';
 import { BaseComponent } from 'src/app/shared/base.component';
 import { RolesDialogComponent } from './roles.dialog';
 import { Md5 } from 'ts-md5';
 import { LedenItem, LedenService } from 'src/app/services/leden.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
+import { ICheckboxDictionaryItem } from 'src/app/components/checkbox.list.component';
 
 
 @Component({

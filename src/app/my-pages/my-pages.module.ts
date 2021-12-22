@@ -40,7 +40,6 @@ import { MasterzComponent } from './masterz/masterz.component';
 import { KomendeWeekComponent } from './komendeweek/komendeweek.component'; // the main connector. must go first
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularIbanModule } from 'angular-iban';
-import { SharedComponentsModule } from '../shared/components/component.module';
 import { HoldableModule } from '../shared/directives/directives.module';
 import { TodolistComponent } from './todolist/todolist.component';
 import { TodoListDetailDialogComponent } from './todolist/todolist.detail.dialog';
@@ -49,6 +48,7 @@ import { DecisionDialogComponent } from './todolist/decision.dialog';
 import { TrainingGroupsComponent } from './trainingsgroep/trainingsgroep.component';
 import { SendInventationDialogComponent } from './evenementen/send-inventation-dialog/send-inventation.dialog';
 import { EventSubscriptionsDialogComponent } from './evenementen/event-subscriptions-dialog/event-subscribtions.dialog';
+import { ComponentsModule } from '../components/component.module';
 
 FullCalendarModule.registerPlugins([ // register FullCalendar plugins
   dayGridPlugin,
@@ -106,7 +106,8 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     AngularEditorModule,
     HoldableModule,
     AngularIbanModule,
-    SharedComponentsModule,
+    ComponentsModule,
+    // SharedComponentsModule,
 
   ],
 })

@@ -2,7 +2,7 @@
 // use as: <app-select-lid-dropdown [leden-array]="ledenArray" (valueSelected)="onValueSelected($event)"></app-select-lid-dropdown>
 //
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'mat-card-header-spinner',

@@ -7,11 +7,11 @@ import { ConfigDialogComponent } from 'src/app/app-nav/headerconfigdialog/config
 import { AuthService } from 'src/app/services/auth.service';
 import { MailBoxParam } from 'src/app/services/mail.service';
 import { ParamService } from 'src/app/services/param.service';
-import { AppError } from '../error-handling/app-error';
-import { DuplicateKeyError } from '../error-handling/duplicate-key-error';
-import { NoChangesMadeError } from '../error-handling/no-changes-made-error';
-import { SnackbarTexts } from '../error-handling/SnackbarTexts';
-import { ParentComponent } from '../parent.component';
+import { AppError } from '../shared/error-handling/app-error';
+import { DuplicateKeyError } from '../shared/error-handling/duplicate-key-error';
+import { NoChangesMadeError } from '../shared/error-handling/no-changes-made-error';
+import { SnackbarTexts } from '../shared/error-handling/SnackbarTexts';
+import { ParentComponent } from '../shared/parent.component';
 
 @Component({
   selector: 'app-send-mail-settings',

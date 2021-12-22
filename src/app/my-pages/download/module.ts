@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { CustomMaterialModule } from 'src/app/material.module';
-import { SharedComponentsModule } from 'src/app/shared/components/component.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DownloadComponent } from './download.component';
+import { ComponentsModule } from 'src/app/components/component.module';
 
 @NgModule({
   declarations: [
@@ -20,7 +20,7 @@ import { DownloadComponent } from './download.component';
     ]),
     CommonModule,
     CustomMaterialModule,
-    SharedComponentsModule,
+    ComponentsModule,
     FormsModule,
     ReactiveFormsModule,
   ],

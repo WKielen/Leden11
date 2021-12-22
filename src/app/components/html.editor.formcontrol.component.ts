@@ -1,6 +1,6 @@
 import { Component, OnInit, Optional, Self, EventEmitter, Output } from '@angular/core';
 import { ControlValueAccessor, FormControl, NgControl } from '@angular/forms';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'app-html-editor-formcontrol',

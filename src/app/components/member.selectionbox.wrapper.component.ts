@@ -2,7 +2,7 @@
 import { Component, Input, Output, EventEmitter, ViewChild, OnInit, OnChanges, SimpleChanges, TemplateRef } from '@angular/core';
 import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { LedenItemExt, LedenService } from 'src/app/services/leden.service';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 // De html in de template wordt doorgegeven aan het child component. De events worden echter hier afgehandeld.
 

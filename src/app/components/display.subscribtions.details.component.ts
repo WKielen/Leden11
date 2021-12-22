@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { InschrijvingItem } from 'src/app/services/inschrijving.service';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'app-display-subscriptions-details',

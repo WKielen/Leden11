@@ -4,10 +4,10 @@ import { MailBoxParam, MailItem, MailItemTo, MailService } from 'src/app/service
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MailDialogComponent } from 'src/app/my-pages/mail/mail.dialog';
-import { ParentComponent } from '../parent.component';
-import { Replace, ReplaceKeywords } from '../modules/ReplaceKeywords';
+import { ParentComponent } from '../shared/parent.component';
+import { Replace, ReplaceKeywords } from '../shared/modules/ReplaceKeywords';
 import { Observable, ReplaySubject } from 'rxjs';
-import { AppError } from '../error-handling/app-error';
+import { AppError } from '../shared/error-handling/app-error';
 import { AuthService } from 'src/app/services/auth.service';
 import { ParamService } from 'src/app/services/param.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';

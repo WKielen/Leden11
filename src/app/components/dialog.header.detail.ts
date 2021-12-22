@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'app-mat-dialog-header-detail',

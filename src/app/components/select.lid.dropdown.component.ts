@@ -2,7 +2,7 @@
 // use as: <app-select-lid-dropdown [leden-array]="ledenLijst" [default-value]="selected" (valueSelected)="onUserSelectedRole($event)"></app-select-lid-dropdown>
 //
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'app-select-lid-dropdown',

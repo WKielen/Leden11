@@ -22,11 +22,11 @@ import { CustomMaterialModule } from '../material.module';
 import { RegisterDialogComponent } from './register-dialog/register.dialog';
 import { RegistrationComponent } from './registration/registration.component';
 import { HoldableModule } from '../shared/directives/directives.module';
-import { SharedComponentsModule } from '../shared/components/component.module';
 import { RegistrationDetailDialogComponent } from './registration/registration.detail.dialog';
 import { RegistrationDialogComponent } from './registration/registration.dialog';
 import { RolesDialogComponent } from './registration/roles.dialog';
 import { ResetPasswordDialogComponent } from './resetpassword-dialog/password.reset.dialog';
+import { ComponentsModule } from '../components/component.module';
 
 @NgModule({
   declarations: [
@@ -59,7 +59,7 @@ import { ResetPasswordDialogComponent } from './resetpassword-dialog/password.re
     LayoutModule,
     CustomMaterialModule,
     HoldableModule,
-    SharedComponentsModule,
+    ComponentsModule,
   ],
 })
 

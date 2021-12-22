@@ -5,13 +5,13 @@ import { MailNameList, MailSaveItem } from "src/app/my-pages/mail/MailBoxParamCl
 import { AuthService } from 'src/app/services/auth.service';
 import { MailService } from 'src/app/services/mail.service';
 import { ParamService } from 'src/app/services/param.service';
-import { AppError } from '../error-handling/app-error';
-import { DuplicateKeyError } from '../error-handling/duplicate-key-error';
-import { NoChangesMadeError } from '../error-handling/no-changes-made-error';
-import { NotFoundError } from '../error-handling/not-found-error';
-import { SnackbarTexts } from '../error-handling/SnackbarTexts';
-import { ReplaceCharacters } from '../modules/ReplaceCharacters';
-import { ParentComponent } from '../parent.component';
+import { AppError } from '../shared/error-handling/app-error';
+import { DuplicateKeyError } from '../shared/error-handling/duplicate-key-error';
+import { NoChangesMadeError } from '../shared/error-handling/no-changes-made-error';
+import { NotFoundError } from '../shared/error-handling/not-found-error';
+import { SnackbarTexts } from '../shared/error-handling/SnackbarTexts';
+import { ReplaceCharacters } from '../shared/modules/ReplaceCharacters';
+import { ParentComponent } from '../shared/parent.component';
 
 // De html in de template wordt doorgegeven aan het child component. De events worden echter hier afgehandeld.
 

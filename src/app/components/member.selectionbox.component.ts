@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter, TemplateRef, OnInit, OnChanges,
 import { FormControl } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { DateRoutines, LedenItemExt } from 'src/app/services/leden.service';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'app-member-selection-box',

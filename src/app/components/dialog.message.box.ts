@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { BaseComponent } from '../base.component';
+import { BaseComponent } from '../shared/base.component';
 
 @Component({
   selector: 'mat-dialog-message-box',
