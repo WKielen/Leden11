@@ -4,6 +4,7 @@ import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { catchError, of, forkJoin } from "rxjs";
+import { AgendaItem } from "src/app/services/agenda.service";
 import { AuthService } from "src/app/services/auth.service";
 import { InschrijvingItem, InschrijvingService } from "src/app/services/inschrijving.service";
 import { LedenItemExt, LedenService } from "src/app/services/leden.service";
@@ -59,10 +60,18 @@ export class TestComponent
     return this.myForm.get('chipscontrol');
   }
 
+
+  evenement = new AgendaItem();
+  onChangedEvent($event) {
+    console.log("onChangedEvent --> $event", $event);
+  }
+
+
   /***************************************************************************************************
   / Lees agenda in en voeg deze toe aan de options object
   /***************************************************************************************************/
   ngOnInit() {
+
     // this.chipscontrol.disable({ emitEvent: false });
     this.chipscontrol.setValue(this.htmlContent);
     this.demoControl.setValue(this.htmlContent);

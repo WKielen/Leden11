@@ -21,6 +21,7 @@ import { SendMailSettingsComponent } from './send.mail.setting.component';
 import { HoldableModule } from '../shared/directives/directives.module';
 import { CardHeaderSpinnerComponent } from './card.header.spinner';
 import { CardHeaderDetailComponent } from './dialog.header.detail';
+import { AgendaMutationFormComponent } from './agenda.mutation.form/agenda.mutation.form.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -38,6 +39,7 @@ const componentList = [
   DisplayAgendaDetailsComponent,
   HtmlEditorFormControlComponent,
   SendMailSettingsComponent,
+  AgendaMutationFormComponent,
 ]
 @NgModule({
   imports: [
@@ -51,7 +53,7 @@ const componentList = [
 
   ],
   declarations: [
-    ...componentList
+    ...componentList,
   ],
   exports: [
     ...componentList
