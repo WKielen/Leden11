@@ -1,14 +1,15 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LedenItemExt, LedenService } from 'src/app/services/leden.service';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SnackbarTexts } from 'src/app/shared/error-handling/SnackbarTexts';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ParamService } from 'src/app/services/param.service';
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { NotFoundError } from 'src/app/shared/error-handling/not-found-error';
 import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-made-error';
 import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
+import { catchError, forkJoin, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-masterz',
@@ -20,13 +21,10 @@ import { MAT_CHECKBOX_DEFAULT_OPTIONS } from '@angular/material/checkbox';
 })
 
 export class MasterzComponent extends ParentComponent implements OnInit {
-  public ledenList: Array<LedenItemExt> = [];
+  public columns: Array<string> = ['Naam', 'Leeftijd'];
   public displayedColumns: string[] = ['Naam', 'Leeftijd', 'actions1',];
-  public dataSource = new MatTableDataSource<LedenItemTableRow>();
-  public fabButtons = [];  // dit zijn de buttons op het scherm
-  public fabIcons = [{ icon: 'save' }];
+  public dataSource = new MatTableDataSource<LedenItemExt>();
   private geslaagden: Array<Number> = [];
-  @ViewChild(MatTable, { static: false }) table: MatTable<any>;
 
   constructor(
     protected ledenService: LedenService,
@@ -37,90 +35,60 @@ export class MasterzComponent extends ParentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    let sub = this.ledenService.getYouthMembers$()
-      .subscribe({
-        next: (data) => {
-          let tmpList: Array<LedenItemExt> = data;
+    let subLeden = this.ledenService.getYouthMembers$()
+      .pipe(
+        map((data) => {
+          return data.filter(isCompAndOlder12());
+        }),
+        catchError(err => of(new Array<LedenItemExt>()))
+      );
 
-          for (let i = 0; i < tmpList.length; i++) {
-            if (tmpList[i].Leeftijd <= 12 || tmpList[i].CompGerechtigd == '0') continue;
-            this.ledenList.push(tmpList[i]);
+    let subParam = this.paramService.readParamData$('Masterz', JSON.stringify(this.geslaagden), 'Geslaagden')
+      .pipe(
+        catchError(err => of(new Array<LedenItemExt>()))
+      );
+
+    this.registerSubscription(
+      forkJoin([subLeden, subParam])
+        .subscribe({
+          next: (data) => {
+            this.geslaagden = JSON.parse(data[1] as string);
+            this.dataSource.data = this.mergeLedenAndDiploma(data[0], this.geslaagden);
+          },
+          error: (error: AppError) => {
+            console.error("EventSubscriptionsDialogComponent --> ngOnInit --> error", error);
           }
-          this.readAndMergeLedenWithDiploma();
-        },
-        error: (error: AppError) => {
-          console.log("error", error);
-        }
-      });
-
-    this.fabButtons = this.fabIcons;  // plaats add button op scherm
-
-    this.registerSubscription(sub);
-  }
-
-  /***************************************************************************************************
-  / Read Diplomalist and Merge it with the ledenlist
-  /***************************************************************************************************/
-  private readAndMergeLedenWithDiploma(): void {
-    let sub = this.paramService.readParamData$('Masterz', JSON.stringify(this.geslaagden), 'Geslaagden')
-      .subscribe({
-        next: (data) => {
-          this.geslaagden = JSON.parse(data);
-          this.dataSource.data = this.mergeLedenAndDiploma(this.ledenList, this.geslaagden);
-          console.log('', this.dataSource.data);
-        },
-        error: (error: AppError) => {
-          this.dataSource.data = this.mergeLedenAndDiploma(this.ledenList, this.geslaagden);
-        }
-      });
-    this.registerSubscription(sub);
+        })
+    );
   }
 
   /***************************************************************************************************
   / Merge ledenlist with Diplomalist
   /***************************************************************************************************/
-  private mergeLedenAndDiploma(ledenList: Array<LedenItemExt>, geslaagden): Array<LedenItemTableRow> {
-    let newList = new Array<LedenItemTableRow>();
-    // merge beide tabellen
+  private mergeLedenAndDiploma(ledenList: Array<LedenItemExt>, geslaagden): Array<LedenItemExt> {
     ledenList.forEach(lid => {
-      let newElement = new LedenItemTableRow(lid.LidNr, lid.Naam);
-      newElement.Leeftijd = lid.Leeftijd;
       geslaagden.forEach(LidNr => {
         if (lid.LidNr == LidNr) {
-          newElement.Checked = true;
+          lid['Checked'] = true;
           return;
         }
       });
-      newList.push(newElement);
     });
-    return newList;
-  }
-  /***************************************************************************************************
-  / The onRowClick from a row that has been hit
-  /***************************************************************************************************/
-  onRowClick(row: LedenItemTableRow): void {
-    row.Checked = !row.Checked;
-  }
-
-  /***************************************************************************************************
-  / A Floating Action Button has been pressed.
-  /***************************************************************************************************/
-  onFabClick(event, buttonNbr): void {
-    this.saveDiploma();
+    return ledenList;
   }
 
   /***************************************************************************************************
   / Save the Diploma for this day
   /***************************************************************************************************/
-  private saveDiploma(): void {
+  public onSave(): void {
     this.geslaagden = [];
     this.dataSource.data.forEach(element => {
-      if (element.Checked) {
+      if (element['Checked']) {
         this.geslaagden.push(element.LidNr);
       }
     });
 
-    let sub = this.paramService.saveParamData$('Masterz', JSON.stringify(this.geslaagden), 'geslaagden')
+    this.registerSubscription(this.paramService.saveParamData$('Masterz', JSON.stringify(this.geslaagden), 'geslaagden')
       .subscribe({
         next: (data) => {
           this.showSnackBar(SnackbarTexts.SuccessFulSaved, '');
@@ -137,32 +105,16 @@ export class MasterzComponent extends ParentComponent implements OnInit {
           }
         }
       })
-    this.registerSubscription(sub);
+    );
   }
-
-
 }
 
-
-
-/***************************************************************************************************
-/ Extra velden voor iedere lidregel om de checkbox te besturen.
-/***************************************************************************************************/
-class LedenItemTableRow {
-  constructor(LidNr: number, Naam: string) {
-    this.Naam = Naam;
-    this.LidNr = LidNr;
-    this.Leeftijd = 0;
-    this.Checked = null;
+function isCompAndOlder12() {
+  return function (item: LedenItemExt) {
+    if (item.Leeftijd <= 12 || item.CompGerechtigd == '0') return false
+    return true;
   }
-  Naam: string;
-  Leeftijd: number;
-  LidNr: number;
-  Checked: any;
 }
-
-
-
 
 
 /*

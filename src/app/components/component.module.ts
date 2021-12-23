@@ -22,6 +22,7 @@ import { HoldableModule } from '../shared/directives/directives.module';
 import { CardHeaderSpinnerComponent } from './card.header.spinner';
 import { CardHeaderDetailComponent } from './dialog.header.detail';
 import { AgendaMutationFormComponent } from './agenda.mutation.form/agenda.mutation.form.component';
+import { MemberCheckboxTableComponent } from './member.checkbox.table/member.checkbox.table.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -40,6 +41,7 @@ const componentList = [
   HtmlEditorFormControlComponent,
   SendMailSettingsComponent,
   AgendaMutationFormComponent,
+  MemberCheckboxTableComponent,
 ]
 @NgModule({
   imports: [

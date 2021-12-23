@@ -40,9 +40,22 @@ export class TestComponent
   // ledenLijst: Array<LedenItemExt> = [];
   public subscriptions: Array<InschrijvingItem> = [];
   public reportList: Array<LedenItemExt> = [];
+  public ledenLijst: Array<LedenItemExt> = [];
 
   htmlContent: string = "<b>Dit is mijn tekst</b>";
   // eventlist = new MailNameList();
+  public columns: Array<string> = ['Naam', 'Achternaam'];
+
+  onMemberRowClicked(member) {
+    console.log("onMemberRowClicked --> member", member);
+  }
+
+
+
+
+
+
+
 
   myForm = new FormGroup({
     demoControl: new FormControl('',
@@ -75,14 +88,14 @@ export class TestComponent
     // this.chipscontrol.disable({ emitEvent: false });
     this.chipscontrol.setValue(this.htmlContent);
     this.demoControl.setValue(this.htmlContent);
-    // this.registerSubscription(
-    //   this.ledenService.getActiveMembersWithRatings$()
-    //     .subscribe({
-    //       next: (data: Array<LedenItemExt>) => {
-    //         this.ledenLijst = data;
-    //         console.log("ngOnInit --> this.ledenLijst", this.ledenLijst);
-    //       }
-    //     }));
+    this.registerSubscription(
+      this.ledenService.getActiveMembers$()
+        .subscribe({
+          next: (data: Array<LedenItemExt>) => {
+            this.ledenLijst = data;
+            console.log("ngOnInit --> this.ledenLijst", this.ledenLijst);
+          }
+        }));
 
 
     let subInschrijvingen = this.inschrijvingService.getSubscriptionsEvent$(2146)
