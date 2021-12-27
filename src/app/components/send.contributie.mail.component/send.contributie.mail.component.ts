@@ -7,7 +7,7 @@ import { NoChangesMadeError } from 'src/app/shared/error-handling/no-changes-mad
 import { CreateContributieMail } from 'src/app/shared/modules/ContributieCalcFunctions';
 import { ParentComponent } from 'src/app/shared/parent.component';
 import { LedenItemExt, LedenService, LidTypeValues } from 'src/app/services/leden.service';
-import { ExternalMailApiRecord, MailItem } from 'src/app/services/mail.service';
+import { MailItem } from 'src/app/services/mail.service';
 import { MailDialogComponent } from 'src/app/my-pages/mail/mail.dialog';
 import { formatDate } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -155,27 +155,26 @@ export class SendContributieMailComponent extends ParentComponent implements OnI
 / 
 /***************************************************************************************************/
   onSendMail() {
-    let mailDialogInputMessage = new ExternalMailApiRecord();
-    mailDialogInputMessage.MailItems = new Array<MailItem>();
+    let mailItems = new Array<MailItem>();
 
     let date = new Date(this.datumIncasso);
 
     this.ledenArray.forEach(lid => {
 
       if (lid.LidType == LidTypeValues.CONTRIBUTIEVRIJ) return; // Contributie vrij
-      let mailItem = CreateContributieMail(lid, this.contributieBedragen, 'this.Omschrijving.value', false, formatDate(date, 'dd-MM-yyyy', 'nl-NL'));
+      let mailItem = CreateContributieMail(lid, this.contributieBedragen, this.tekstOpAfschrift, formatDate(date, 'dd-MM-yyyy', 'nl-NL'));
       if (!mailItem) return;
       if (this.extraMailText != '') {
         mailItem.Message += '<br>';
         mailItem.Message += this.extraMailText;
       }
       mailItem.Message += '<br><br>Met vriendelijke groet,<br>Penningmeester TTVN';
-      mailDialogInputMessage.MailItems.push(mailItem);
+      mailItems.push(mailItem);
     });
 
     const dialogRef = this.dialog.open(MailDialogComponent, {
       panelClass: 'custom-dialog-container', width: '400px',
-      data: mailDialogInputMessage
+      data: mailItems
     });
 
     dialogRef
@@ -187,12 +186,5 @@ export class SendContributieMailComponent extends ParentComponent implements OnI
           }
         }
       });
-
-
-
-
-
   }
-
 }
-

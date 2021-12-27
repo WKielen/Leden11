@@ -69,6 +69,7 @@ body {
     display: flex;
     flex-direction: row;
     justify-content: space-evenly;
+    flex-wrap: wrap;
     align-items: flex-start;
   }
   // Voor kolommen met 1 actions. Kolom naam moet 'actions1' zijn.  actions zijn dan edit en delete

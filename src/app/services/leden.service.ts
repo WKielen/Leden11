@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/internal/Observable';
 import { MailItemTo } from './mail.service';
 import { forkJoin, of } from 'rxjs';
 import { RatingItem, RatingService } from './rating.service';
-import { AppError } from '../shared/error-handling/app-error';
 
 @Injectable({
   providedIn: 'root'
@@ -386,6 +385,7 @@ export class LedenItemExt extends LedenItem {
 export class LidTypeValues {
   public static readonly STANDAARD = 'N';
   public static readonly ZWERFLID = 'Z';
+  public static readonly DONATEUR = 'D';
   public static readonly CONTRIBUTIEVRIJ = 'V';
   public static readonly PAKKET = 'P';
 
@@ -401,6 +401,7 @@ export class LidTypeValues {
   public static table: any[] = [
     { Value: LidTypeValues.STANDAARD, Label: 'Standaard' },
     { Value: LidTypeValues.ZWERFLID, Label: 'Zwerflid' },
+    { Value: LidTypeValues.DONATEUR, Label: 'Donateur' },
     { Value: LidTypeValues.CONTRIBUTIEVRIJ, Label: 'Contributie vrij' },
     { Value: LidTypeValues.PAKKET, Label: 'Pakket' },
   ];
@@ -614,50 +615,3 @@ export interface IBirthDay {
   BirthDay: Date,
   Age: Number
 }
-
-
-      // public static string LeeftijdCategorieBond(DateTime birthdate, bool longversion)
-      // {
-      //     int yearsOld = BondsLeeftijd(birthdate);
-
-      //     if (longversion)
-      //     {
-      //         if (yearsOld <= 06) return LidItem.constWelpMin2;
-      //         if (yearsOld == 07) return LidItem.constWelpMin1;
-      //         if (yearsOld == 08) return LidItem.constWelp0;
-      //         if (yearsOld == 09) return LidItem.constWelp1;
-      //         if (yearsOld == 10) return LidItem.constWelp2;
-      //         if (yearsOld == 11) return LidItem.constPupil1;
-      //         if (yearsOld == 12) return LidItem.constPupil2;
-      //         if (yearsOld == 13) return LidItem.constCadet1;
-      //         if (yearsOld == 14) return LidItem.constCadet2;
-      //         if (yearsOld == 15) return LidItem.constJunior1;
-      //         if (yearsOld == 16) return LidItem.constJunior2;
-      //         if (yearsOld == 17) return LidItem.constJunior3;
-
-      //         if (yearsOld == 18) return LidItem.constSenior1;
-      //         if (yearsOld >= 65) return LidItem.const65Plus;
-
-      //         return LidItem.constSenior;
-      //     }
-      //     else
-      //     {
-      //         if (yearsOld <= 10) return LidItem.constWelp;
-      //         if (yearsOld == 11 || yearsOld == 12) return LidItem.constPupil;
-      //         if (yearsOld == 13 || yearsOld == 14) return LidItem.constCadet;
-      //         if (yearsOld == 15 || yearsOld == 16 || yearsOld == 17) return LidItem.constJunior;
-      //         return LidItem.constSenior;
-      //     }
-      // }
-
-  // public static RemoveObsoleteProperties(item: LedenItem): LedenItem {
-  //   const referenceObject = new LedenItem();
-  //   // console.log('RemoveObsolete', referenceObject, item);
-  //   for (const key in item) {
-  //     if (!(key in referenceObject)) {
-  //       console.log('key', key)
-  //       delete item[key];
-  //     }
-  //   }
-  //   return item;
-  // }

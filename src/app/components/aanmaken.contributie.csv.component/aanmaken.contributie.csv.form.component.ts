@@ -81,7 +81,7 @@ export class AanmakenContributieCSVFormComponent extends ParentComponent impleme
   / Maak een incasso bestand. Dit is een input bestand voor sepabestand.nl
   /***************************************************************************************************/
   onIncassoBestand(): void {
-    let directDebits: DirectDebit[] = CreateDirectDebits(this.ledenArray, this.contributieBedragen, this.Omschrijving.value, false)
+    let directDebits: DirectDebit[] = CreateDirectDebits(this.ledenArray, this.contributieBedragen, this.Omschrijving.value)
     this.csvOptions.filename = "TTVN Incasso " + new Date().to_YYYY_MM_DD();
     let csvExporter = new ExportToCsv(this.csvOptions);
     csvExporter.generateCsv(directDebits);
@@ -91,7 +91,7 @@ export class AanmakenContributieCSVFormComponent extends ParentComponent impleme
   / Maak een bestand om de rekeningen te maken voor de zelfbetalers
   /***************************************************************************************************/
   onRekeningBestand(): void {
-    let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, false, 'R', this.Omschrijving.value);
+    let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, 'R', this.Omschrijving.value);
     this.csvOptions.filename = "TTVN Rekeningen " + new Date().to_YYYY_MM_DD();
     let csvExporter = new ExportToCsv(this.csvOptions);
     csvExporter.generateCsv(berekeningOverzichten);
@@ -101,7 +101,7 @@ export class AanmakenContributieCSVFormComponent extends ParentComponent impleme
   / Maak een bestand om de rekeningen te maken voor de UPAS en Nieuwegeinpas houders.
   /***************************************************************************************************/
   onAndersBetalenden(): void {
-    let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, false, 'U', this.Omschrijving.value);
+    let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, 'U', this.Omschrijving.value);
     this.csvOptions.filename = "TTVN Nieuwegeinpas " + new Date().to_YYYY_MM_DD();
     let csvExporter = new ExportToCsv(this.csvOptions);
     csvExporter.generateCsv(berekeningOverzichten);
@@ -111,7 +111,8 @@ export class AanmakenContributieCSVFormComponent extends ParentComponent impleme
   / Maak een overzicht van alle gegevens die zijn gebruikt bij het berekenen van de contributie
   /***************************************************************************************************/
   onBerekeningOverzicht(): void {
-    let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, false, '', this.Omschrijving.value);
+    let berekeningOverzichten = CreateBerekenOverzicht(this.ledenArray, this.contributieBedragen, '', this.Omschrijving.value);
+    console.log("AanmakenContributieCSVFormComponent --> onBerekeningOverzicht --> berekeningOverzichten", berekeningOverzichten);
     this.csvOptions.filename = "TTVN Overzicht berekeningen " + new Date().to_YYYY_MM_DD();
     let csvExporter = new ExportToCsv(this.csvOptions);
     csvExporter.generateCsv(berekeningOverzichten);

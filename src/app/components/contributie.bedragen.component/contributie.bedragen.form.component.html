@@ -53,6 +53,14 @@
                     Veld is verplicht
                 </mat-error>
             </mat-form-field>
+            <mat-form-field class="mat-form-max-width">
+                <input matInput type="number" placeholder="Jeugd Tablestars Pakket" formControlName="Pakket"
+                    [formControl]="Pakket">
+                <span matPrefix>&euro;&nbsp;</span>
+                <mat-error *ngIf="Donateur.hasError('required')">
+                    Veld is verplicht
+                </mat-error>
+            </mat-form-field>
         </form>
     </mat-card-content>
     <mat-card-actions>

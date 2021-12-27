@@ -9,4 +9,5 @@ export class ContributieBedragen {
     CompetitieBijdrageJeugd: number = 0;
     ZwerflidPercentage: number = 0;
     Donateur: number = 0;
+    Pakket: number = 0;
 }

@@ -24,14 +24,14 @@
             </mat-form-field>
         </mat-card-content>
         <mat-card-actions>
-            <div class='flexcontainer'>
-                <button mat-raised-button color="primary" type="button" (click)="onIncassoBestand()"
+            <div class='flexcontainer' style="justify-content: space-between">
+                <button mat-raised-button color="primary" (click)="onIncassoBestand()"
                     [disabled]='!incassoForm.valid'>Maak Incasso bestand</button>
-                <button mat-raised-button color="primary" type="button" (click)='onRekeningBestand()'
+                <button mat-raised-button color="primary" (click)='onRekeningBestand()'
                     [disabled]='!incassoForm.valid'>Maak Rekening bestand</button>
-                <button mat-raised-button color="primary" type="button" (click)='onAndersBetalenden()'
+                <button mat-raised-button color="primary" (click)='onAndersBetalenden()'
                     [disabled]='!incassoForm.valid'>Maak Overigen bestand</button>
-                <button mat-raised-button color="secondary" type="button" (click)="onBerekeningOverzicht()"
+                <button mat-raised-button color="secondary" (click)="onBerekeningOverzicht()"
                     [disabled]='!incassoForm.valid'>Maak berekening overzicht</button>
             </div>
         </mat-card-actions>

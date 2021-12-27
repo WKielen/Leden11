@@ -41,6 +41,10 @@ export class ContributieBedragenFormComponent extends ParentComponent implements
       '',
       [Validators.required]
     ),
+    Pakket: new FormControl(
+      '',
+      [Validators.required]
+    ),
   });
 
   constructor(
@@ -90,6 +94,7 @@ export class ContributieBedragenFormComponent extends ParentComponent implements
     contributieBedragen.CompetitieBijdrageJeugd = this.CompetitieBijdrageJeugd.value;
     contributieBedragen.ZwerflidPercentage = this.ZwerflidPercentage.value;
     contributieBedragen.Donateur = this.Donateur.value;
+    contributieBedragen.Pakket = this.Pakket.value;
     contributieBedragen.HalfjaarJeugdExtraTraining = 0;
 
     this.registerSubscription(
@@ -118,6 +123,7 @@ export class ContributieBedragenFormComponent extends ParentComponent implements
     this.CompetitieBijdrageJeugd.setValue(contributieBedragen.CompetitieBijdrageJeugd);
     this.ZwerflidPercentage.setValue(contributieBedragen.ZwerflidPercentage);
     this.Donateur.setValue(contributieBedragen.Donateur);
+    this.Pakket.setValue(contributieBedragen.Pakket);
     this.changedAmounts.emit(contributieBedragen);
   }
 
@@ -144,5 +150,8 @@ export class ContributieBedragenFormComponent extends ParentComponent implements
   }
   get Donateur() {
     return this.contributieForm.get('Donateur');
+  }
+  get Pakket() {
+    return this.contributieForm.get('Pakket');
   }
 }
