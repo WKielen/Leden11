@@ -23,6 +23,9 @@ import { CardHeaderSpinnerComponent } from './card.header.spinner';
 import { CardHeaderDetailComponent } from './dialog.header.detail';
 import { AgendaMutationFormComponent } from './agenda.mutation.form/agenda.mutation.form.component';
 import { MemberCheckboxTableComponent } from './member.checkbox.table/member.checkbox.table.component';
+import { ContributieBedragenFormComponent } from './contributie.bedragen.component/contributie.bedragen.form.component';
+import { AanmakenContributieCSVFormComponent } from './aanmaken.contributie.csv.component/aanmaken.contributie.csv.form.component';
+import { SendContributieMailComponent } from './send.contributie.mail.component/send.contributie.mail.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -42,6 +45,9 @@ const componentList = [
   SendMailSettingsComponent,
   AgendaMutationFormComponent,
   MemberCheckboxTableComponent,
+  ContributieBedragenFormComponent,
+  AanmakenContributieCSVFormComponent,
+  SendContributieMailComponent,
 ]
 @NgModule({
   imports: [

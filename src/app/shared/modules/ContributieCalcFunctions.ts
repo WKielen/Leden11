@@ -47,9 +47,9 @@ export function BerekenContributie(lid: LedenItemExt,
         berekendeBedragen.BasisContributie = Math.round(((berekendeBedragen.BasisContributie * contributieBedragen.ZwerflidPercentage / 100) + Number.EPSILON) * 100) / 100;
     }
 
-    if (String(lid.VrijwilligersKorting).toBoolean()) {
-        berekendeBedragen.KortingVrijwilliger = contributieBedragen.KortingVrijwilliger * -1;
-    }
+    // if (String(lid.VrijwilligersKorting).toBoolean()) {
+    //     berekendeBedragen.KortingVrijwilliger = contributieBedragen.KortingVrijwilliger * -1;
+    // }
 
     berekendeBedragen.Description = description;
 
@@ -84,9 +84,9 @@ export function BerekenContributieOudeMethode(lid: LedenItemExt, contributieBedr
         if (String(lid.CompGerechtigd).toBoolean()) {
             berekendeBedragen.CompetitieBijdrage = contributieBedragen.CompetitieBijdrageVolwassenen;
         }
-        if (String(lid.LidBond).toBoolean()) {
-            berekendeBedragen.Bondsbijdrage = contributieBedragen.HalfjaarBondBijdrage;
-        }
+        // if (String(lid.LidBond).toBoolean()) {
+        //     berekendeBedragen.Bondsbijdrage = contributieBedragen.HalfjaarBondBijdrage;
+        // }
     } else {
         berekendeBedragen.BasisContributie = contributieBedragen.HalfjaarJeugd;
         if (String(lid.CompGerechtigd).toBoolean()) {
@@ -97,17 +97,17 @@ export function BerekenContributieOudeMethode(lid: LedenItemExt, contributieBedr
         berekendeBedragen.BasisContributie -= 2;
     }
 
-    if (lid.BetaalWijze == BetaalWijzeValues.REKENING) {
-        berekendeBedragen.KostenRekening = contributieBedragen.KostenRekening;
-    }
+    // if (lid.BetaalWijze == BetaalWijzeValues.REKENING) {
+    //     berekendeBedragen.KostenRekening = contributieBedragen.KostenRekening;
+    // }
 
     if (lid.LidType == LidTypeValues.ZWERFLID) {             // Zwerflid
         berekendeBedragen.BasisContributie = Math.round(((berekendeBedragen.BasisContributie * contributieBedragen.ZwerflidPercentage / 100) + Number.EPSILON) * 100) / 100;
     }
 
-    if (String(lid.VrijwilligersKorting).toBoolean()) {
-        berekendeBedragen.KortingVrijwilliger = contributieBedragen.KortingVrijwilliger * -1;
-    }
+    // if (String(lid.VrijwilligersKorting).toBoolean()) {
+    //     berekendeBedragen.KortingVrijwilliger = contributieBedragen.KortingVrijwilliger * -1;
+    // }
 
     berekendeBedragen.Description = description;
 
@@ -156,10 +156,10 @@ export function CreateDownloadReportDetailLine(lid: LedenItemExt, berekendeBedra
     berekeningOverzicht.HalfjaarJeugd = contributieBedragen.HalfjaarJeugd;
     berekeningOverzicht.CompetitieBijdrageVolwassenen = contributieBedragen.CompetitieBijdrageVolwassenen;
     berekeningOverzicht.CompetitieBijdrageJeugd = contributieBedragen.CompetitieBijdrageJeugd;
-    berekeningOverzicht.HalfjaarBondBijdrage = contributieBedragen.HalfjaarBondBijdrage;
+    berekeningOverzicht.HalfjaarBondBijdrage = 0;
     berekeningOverzicht.ZwerflidPercentage = contributieBedragen.ZwerflidPercentage;
-    berekeningOverzicht.KostenRekening = contributieBedragen.KostenRekening;
-    berekeningOverzicht.KortingVrijwilliger = contributieBedragen.KortingVrijwilliger;
+    berekeningOverzicht.KostenRekening = 0;
+    berekeningOverzicht.KortingVrijwilliger = 0;
     return berekeningOverzicht;
 }
 

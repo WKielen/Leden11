@@ -1,148 +1,16 @@
 <div class="flexcontainer">
-  <mat-card style="flex-basis: 30%;">
-    <form [formGroup]="contributieForm" (ngSubmit)="onSaveBedragen()" novalidate>
-      <mat-card-header>
-        <mat-card-title>Contributie instellingen</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <!-- hieronder de formControlName zoals in de formgroup is beschreven -->
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="Halfjaar Volwassenen" formControlName="HalfjaarVolwassenen"
-            [formControl]="HalfjaarVolwassenen">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="HalfjaarVolwassenen.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="CompetitieBijdrage Volwassenen"
-            formControlName="CompetitieBijdrageVolwassenen" [formControl]="CompetitieBijdrageVolwassenen">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="CompetitieBijdrageVolwassenen.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="Halfjaar BondBijdrage Volwassenen"
-            formControlName="HalfjaarBondBijdrage" [formControl]="HalfjaarBondBijdrage">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="HalfjaarBondBijdrage.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="Halfjaar Jeugd (incl BB)" formControlName="HalfjaarJeugd"
-            [formControl]="HalfjaarJeugd">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="HalfjaarJeugd.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="CompetitieBijdrage Jeugd" formControlName="CompetitieBijdrageJeugd"
-            [formControl]="CompetitieBijdrageJeugd">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="CompetitieBijdrageJeugd.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="ZwerflidPercentage" formControlName="ZwerflidPercentage"
-            [formControl]="ZwerflidPercentage">
-          <span matPrefix>%&nbsp;</span>
-          <mat-error *ngIf="ZwerflidPercentage.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="Kosten Rekening" formControlName="KostenRekening"
-            [formControl]="KostenRekening">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="KostenRekening.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-        <br>
-        <mat-form-field class="mat-form-max-width">
-          <input matInput type="number" placeholder="Korting Vrijwillger" formControlName="KortingVrijwilliger"
-            [formControl]="KortingVrijwilliger">
-          <span matPrefix>&euro;&nbsp;</span>
-          <mat-error *ngIf="KortingVrijwilliger.hasError('required')">
-            Veld is verplicht
-          </mat-error>
-        </mat-form-field>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" [disabled]='!contributieForm.valid'>Bewaar</button>
-      </mat-card-actions>
-    </form>
-  </mat-card>
-
+  <div style="flex-basis: 30%;">
+    <app-contributie-bedragen-form *ngIf="contributieBedragen" [contributieBedragen]="contributieBedragen"
+      (changedAmounts)="onContributieAmounts($event)"></app-contributie-bedragen-form>
+  </div>
   <div style="flex-basis: 30%; flex-direction: column;">
-    <mat-card>
-      <form [formGroup]="incassoForm" novalidate>
-        <mat-card-header>
-          <mat-card-title>Aanmaken Incasso CSV</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-
-          Deze functie maakt een CSV bestand met incasso's. De CSV dient als input voor de incasso Excel
-          van <a href='http://www.Sepabestand.nl' target='_blank'>Sepabestand.nl</a>.<br><br>
-          <mat-form-field class="mat-form-max-width">
-            <input matInput type="text" placeholder="Omschrijving op afschrift" formControlName="Omschrijving"
-              [formControl]="Omschrijving" (blur)="onSaveChangedFields()">
-            <mat-error *ngIf="Omschrijving.hasError('required')">
-              Veld is verplicht
-            </mat-error>
-          </mat-form-field>
-
-          <mat-checkbox class="margin-right-20" color="primary" formControlName="OudeBerekenMethode"
-            [formControl]="OudeBerekenMethode">Oude contributie bereken methode</mat-checkbox>
-        </mat-card-content>
-        <mat-card-actions>
-          <div class='flexcontainer'>
-            <button mat-raised-button color="primary" type="button" (click)="onIncassoBestand()"
-              [disabled]='!incassoForm.valid'>Maak Incasso bestand</button>
-            <button mat-raised-button color="primary" type="button" (click)='onRekeningBestand()'
-              [disabled]='!incassoForm.valid'>Maak Rekening bestand</button>
-            <button mat-raised-button color="primary" type="button" (click)='onAndersBetalenden()'
-              [disabled]='!incassoForm.valid'>Maak Overigen bestand</button>
-            <button mat-raised-button color="secondary" type="button"
-              (click)="onBerekeningOverzicht()" [disabled]='!incassoForm.valid'>Maak berekening overzicht</button>
-          </div>
-        </mat-card-actions>
-      </form>
-    </mat-card>
-
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Verstuur Contributie Mail</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-
-        <mat-form-field>
-          <mat-label>Verwachte incasso datum</mat-label>
-          <input matInput [matDatepicker]="picker" (dateChange)="onSaveChangedDate($event)"
-            [value]="requestedDirectDebitDate.value">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field class="mat-form-max-width">
-          <textarea matInput type="text" placeholder="Vrije extra tekst voor onderaan de mail"
-            [(ngModel)]="secondaryFeeParams.ExtraText" (blur)="onSaveChangedFields()" matTextareaAutosize
-            matAutosizeMinRows='5'></textarea>
-        </mat-form-field>
-      </mat-card-content>
-      <mat-card-actions>
-        <button mat-raised-button color="primary" (click)="onSendMail($event)" [disabled]='ledenArray.length == 0'
-          matBadge={{ledenArray.length}} matBadgePosition="after" matBadgeColor="warn">Verzend mail</button>
-      </mat-card-actions>
-    </mat-card>
+    <app-aanmaken-contributie-csv-form *ngIf="contributieBedragen && ledenArray"
+      [contributieBedragen]="contributieBedragen" [ledenArray]="ledenArray" [tekstOpAfschrift]="tekstOpAfschrift"
+      [datumIncasso]="datumIncasso" (changedDatumIncasso)="datumIncasso" (changedTekstOpAfschrift)="tekstOpAfschrift">
+    </app-aanmaken-contributie-csv-form>
+    <app-send-controbutie-mail 
+    *ngIf="contributieBedragen && ledenArray && tekstOpAfschrift && datumIncasso"
+      [contributieBedragen]="contributieBedragen" [ledenArray]="ledenArray" [tekstOpAfschrift]="tekstOpAfschrift"
+      [datumIncasso]="datumIncasso" [extraMailText]="extraMailText"></app-send-controbutie-mail>
   </div>
 </div>
