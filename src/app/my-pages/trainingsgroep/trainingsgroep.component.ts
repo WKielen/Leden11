@@ -64,7 +64,8 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
               this.trainingsTijden.forEach(tijdstip => {
                 tmp[tijdstip.Code] = false;
               });
-              lid.Trainingsgroepen.forEach(tijdstip => {
+              let tg = lid.TrainingsGroepen == null || lid.TrainingsGroepen == '' ? [] : JSON.parse(lid.TrainingsGroepen);
+              tg.forEach(tijdstip => {
                 tmp[tijdstip] = true;
                 this.categories.Increment(tijdstip);
               });
@@ -110,7 +111,7 @@ export class TrainingGroupsComponent extends ParentComponent implements OnInit {
 
           const updateRecord = {
             'LidNr': element.LidNr,
-            'Trainingsgroepen': geselecteerdeDagen,
+            'TrainingsGroepen': JSON.stringify(geselecteerdeDagen),
           };
           let sub = this.ledenService.update$(updateRecord)
           .subscribe({

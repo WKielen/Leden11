@@ -1,5 +1,5 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import { LedenService, LidTypeValues } from 'src/app/services/leden.service';
+import { LedenItemExt, LedenService, LidTypeValues } from 'src/app/services/leden.service';
 import * as moment from 'moment';
 import { formatDate } from '@angular/common';
 import { DateRoutines } from 'src/app/services/leden.service';
@@ -11,11 +11,12 @@ import { BaseComponent } from 'src/app/shared/base.component';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
+
 export class DashboardComponent extends BaseComponent implements OnInit {
 
   private todayMoment = moment();
   private todayDate = moment().toDate();
-  private ledenDataArray = [];
+  private ledenDataArray: Array<localLid> = [];
 
   // input voor de linechart
   public bigChart = null;
@@ -68,7 +69,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     /***************************************************************************************************/
     let sub = this.ledenService.getAll$()
     .subscribe({
-      next: (data: Array<object>) => {
+      next: (data: Array<localLid>) => {
         this.ledenDataArray = data;
         this.FillTheCounters();
         this.bigChart = this.GetDataForLineChart();
@@ -88,7 +89,7 @@ export class DashboardComponent extends BaseComponent implements OnInit {
     // Vanaf hier gaan we actuele gegevens voor de piecharts verzamelen
     this.ledenDataArray.forEach(lid => {
       if (lid.Opgezegd == '1') return;
-      lid.Leeftijd = DateRoutines.AgeRel(lid.GeboorteDatum, this.todayDate);
+      lid.Leeftijd = DateRoutines.AgeRel(new Date(lid.GeboorteDatum), this.todayDate);
       lid.membershipYears = this.todayMoment.get('years') - moment(lid.LidVanaf).get('years');
 
       if (lid.Leeftijd <= LidTypeValues.MAXYOUTHAGE) {
@@ -182,22 +183,23 @@ export class DashboardComponent extends BaseComponent implements OnInit {
 
     // Eerst creeren we de datums op de x-as
     this.CreateArrayWithReferenceDates();   // fills referenceDateArray and xAxisValueArray
-
+    
     // per datum op de x-as gaan we het aantal leden tellen
     this.referenceDateArray.forEach(referenceDate => {
       let countLeden = 0;
       let countJuniorLeden = 0;
       let countSeniorLeden = 0;
-
+      
       // voor een datum gaan we alle leden langs of ze misschien al lid waren.
-      this.ledenDataArray.forEach(lid => {
+      this.ledenDataArray.forEach((lid:localLid) => {
         let lidvanaf: Date = new Date(lid.LidVanaf);
         let lidtot: Date = new Date(lid.LidTot);
-
+        console.log("DashboardComponent --> this.ledenDataArray.forEach --> lid.LidTot", lid.LidTot);
+        
         if (lidvanaf < referenceDate && (referenceDate < lidtot || lid.Opgezegd == '0')) {
           countLeden += 1;
-
-          let age = DateRoutines.AgeRel(lid.GeboorteDatum, referenceDate);
+          
+          let age = DateRoutines.AgeRel(new Date(lid.GeboorteDatum), referenceDate);
           if (age <= LidTypeValues.MAXYOUTHAGE) {
             countJuniorLeden += 1;
           } else {
@@ -211,7 +213,6 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       this.countJuniorMemberArray.push(countJuniorLeden);
       this.countSeniorMemberArray.push(countSeniorLeden);
     });
-
   }
 
 
@@ -252,6 +253,8 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       this.xAxisValueArray.push(formatDate(date, 'yyyy-MM', 'nl'));
       mydate = mydate.add(6, 'M');
     }
+    this.referenceDateArray.push(new Date());
+    this.xAxisValueArray.push(formatDate(new Date(), 'yyyy-MM', 'nl'));
   }
 
 
@@ -385,4 +388,7 @@ export class GraphData {
   LegendaSuffix: string = '';
   LabelFormat: string = '';
   TooltipFormat: string = '';
+}
+class localLid extends LedenItemExt {
+  membershipYears: number = 0;
 }

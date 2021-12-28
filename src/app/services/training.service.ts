@@ -22,7 +22,6 @@ export class TrainingService extends DataService {
   public getDate$(TrainingDate: Date): Observable<any> {
     return this.http.get(environment.baseUrl + '/training/get?Datum='  + TrainingDate.to_YYYY_MM_DD()  )
     .pipe(
-      retry(3),
       tap({ // Log the result or error
         next: data => console.log('Received: ', data),
         error: error => console.log('Oeps: ', error)

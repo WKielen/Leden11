@@ -12,6 +12,10 @@ import { MailItem, MailService } from "src/app/services/mail.service";
 import { ParamService } from "src/app/services/param.service";
 import { RatingService } from "src/app/services/rating.service";
 import { AppError } from "src/app/shared/error-handling/app-error";
+import { DuplicateKeyError } from "src/app/shared/error-handling/duplicate-key-error";
+import { NoChangesMadeError } from "src/app/shared/error-handling/no-changes-made-error";
+import { NotFoundError } from "src/app/shared/error-handling/not-found-error";
+import { SnackbarTexts } from "src/app/shared/error-handling/SnackbarTexts";
 import { ParentComponent } from "src/app/shared/parent.component";
 import { EventSubscriptionsDialogComponent } from "../evenementen/event-subscriptions-dialog/event-subscribtions.dialog";
 
@@ -45,6 +49,44 @@ export class TestComponent
   htmlContent: string = "<b>Dit is mijn tekst</b>";
   // eventlist = new MailNameList();
   public columns: Array<string> = ['Naam', 'Achternaam'];
+
+
+  onClick2() {
+    this.ledenLijst.forEach(element => {
+      if (element.TrainingsGroepen == null || element.TrainingsGroepen == '') return;
+      let myArray = element.TrainingsGroepen ? element.TrainingsGroepen.split(',') : [];
+      element.TrainingsGroepen = JSON.stringify(myArray);
+      
+      this.registerSubscription(
+        this.ledenService.update$({'LidNr': element.LidNr, 'TrainingsGroepen': element.TrainingsGroepen})
+        .subscribe({
+          next: (data) => {
+            this.showSnackBar(SnackbarTexts.SuccessDelete);
+          },
+          error: (error: AppError) => {
+            console.error(error);
+            if (error instanceof NoChangesMadeError) {
+              this.showSnackBar(SnackbarTexts.NoChanges);
+            } else if (error instanceof NotFoundError) {
+              this.showSnackBar(SnackbarTexts.NotFound);
+            } else if (error instanceof DuplicateKeyError) {
+              this.showSnackBar(SnackbarTexts.DuplicateKey);
+            } else {
+              throw error;
+            }
+          }
+        }))
+      })
+  }
+
+
+
+
+
+
+
+
+
 
   onMemberRowClicked(member) {
     console.log("onMemberRowClicked --> member", member);
@@ -89,11 +131,10 @@ export class TestComponent
     this.chipscontrol.setValue(this.htmlContent);
     this.demoControl.setValue(this.htmlContent);
     this.registerSubscription(
-      this.ledenService.getActiveMembers$()
+      this.ledenService.getAll$()
         .subscribe({
           next: (data: Array<LedenItemExt>) => {
             this.ledenLijst = data;
-            console.log("ngOnInit --> this.ledenLijst", this.ledenLijst);
           }
         }));
 
@@ -173,10 +214,7 @@ export class TestComponent
   }
 
 
-  onClick2() {
-    // var index = this.ledenLijst.findIndex(obj => obj.LidNr == 1378);
-    // console.log('x', index);
-  }
+
 
   //   onSelectionChanged($event) {
   //     this.myControl.setValue($event);

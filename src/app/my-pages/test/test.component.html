@@ -1,3 +1,12 @@
+<mat-card>
+  <mat-card-header-spinner title="Update Trainingsgroepen"></mat-card-header-spinner>
+
+  <mat-card-actions>
+    <button mat-raised-button (click)="onClick2()" color="primary">Migreer trainingsgroepen</button>
+  </mat-card-actions>
+</mat-card>
+
+
 <app-member-checkbox-table [dataSource]='ledenLijst' checkboxHeader="Geslaagd" [columns]="columns" (memberChecked)="onMemberRowClicked($event)"  ></app-member-checkbox-table>
 
 

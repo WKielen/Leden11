@@ -169,14 +169,14 @@ export class TrainingDeelnameComponent extends ParentComponent implements OnInit
 
     this.ledenList.forEach(lid => {
       // in ExtraA property sla ik de lijst op met trainingsgroepen
-      if (!lid.ExtraA) return; // niet ingedeelde leden
+      if (!lid.TrainingsGroepen) return; // niet ingedeelde leden
 
       // Ik maak een regel voor het lid voor in de tabel
       let memberTableRow = new LedenItemTableRow(lid.LidNr, lid.Naam);
 
       // Nu moeten we nog bepalen in welke groep we hem gaan toevoegen.
       for (let index = 0; index < this.groepenVanGekozenDatum.length; index++) {
-        if (lid.ExtraA.indexOf(this.groepenVanGekozenDatum[index].Code) > -1) {
+        if (lid.TrainingsGroepen.indexOf(this.groepenVanGekozenDatum[index].Code) > -1) {
           memberTableRow.Group = index;
           dictWithMembersPerGroup.get(this.groepenVanGekozenDatum[index].Code).push(memberTableRow);
         }

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  baseUrl: 'https://www.ttvn.nl/api',
-  loginUrl: 'https://www.ttvn.nl/api/signin',
+  baseUrl: 'https://www.ttvn.nl/api_test',
+  loginUrl: 'https://www.ttvn.nl/api_test/signin',
   databaseName: 'ttest',
 
   // De mail url wijst naar mijn rasp pi. waar een python flask server draait. Deze handelt de mail requests af. Tevens notifications requests.
@@ -13,7 +13,7 @@ export const environment = {
 
   // de proxy url stuurt requests door naar de Rasp.Pi. Dit kan ook direct natuurlijk maar we gebruiken deze proxy om de https te ontwijken op de Pi
   // de service worker wil namelijk alleen via https en de pi heeft dit niet.
-  proxyUrl: 'https://www.ttvn.nl/api/proxy/',
+  proxyUrl: 'https://www.ttvn.nl/api_test/proxy/',
 
   firebase: {
     apiKey: "AIzaSyBrkqBOtSElrG76AIjsaHe9SrmZA_0gjrY",

@@ -177,13 +177,7 @@
 
                 <br>
 
-                <mat-checkbox class="margin-right-20" color="primary" formControlName="vrijwilligerskorting"
-                    [formControl]="vrijwilligerskorting">Vrijwilligerskorting</mat-checkbox>
 
-                <mat-form-field style="width: 250px;">
-                    <input matInput placeholder="Welke vrijwilligertaak?" formControlName="vrijwillgersToelichting"
-                        [formControl]="vrijwillgersToelichting">
-                </mat-form-field>
             </div>
 
         </mat-tab>
@@ -232,6 +226,14 @@
                     </mat-error>
                 </mat-form-field>
 
+                <mat-form-field class="margin-right-20" style="max-width: 150px;">
+                    <input matInput placeholder="Mobiel" formControlName="ouder1_mobiel2" [formControl]="ouder1_mobiel2">
+                    <mat-error *ngIf="ouder1_mobiel.hasError('tel')">
+                        Onjuist telefoonnummer
+                    </mat-error>
+                </mat-form-field>
+
+                <br>
                 <mat-form-field style="max-width: 150px;">
                     <input matInput placeholder="Telefoon" formControlName="ouder1_telefoon"
                         [formControl]="ouder1_telefoon">

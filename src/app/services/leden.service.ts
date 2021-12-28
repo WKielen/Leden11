@@ -51,8 +51,6 @@ export class LedenService extends DataService {
             element.LeeftijdCategorie = DateRoutines.LeeftijdCategorie(new Date(element.GeboorteDatum));
             element.LeeftijdCategorieWithSex = DateRoutines.LeeftijdCategorieWithSex(element);
             element.Leeftijd = DateRoutines.Age(new Date(element.GeboorteDatum));
-            if (element.ExtraA == '_ExtraA') element.ExtraA = '';
-            element.Trainingsgroepen = element.ExtraA ? element.ExtraA.split(',') : [];
             if (element.LidType === '0') { element.LidType = ''; }
             if (element.BetaalWijze === '0') { element.BetaalWijze = ''; }
           });
@@ -113,9 +111,6 @@ export class LedenService extends DataService {
     delete element['LeeftijdCategorie'];
     delete element['LeeftijdCategorieWithSex'];
     delete element['Leeftijd'];
-    if (element['Trainingsgroepen'])
-      element['ExtraA'] = element['Trainingsgroepen'].join();
-    delete element['Trainingsgroepen'];
     return super.update$(element);
   }
 
@@ -285,33 +280,29 @@ export class LedenItem {
   Email1?: string = '';
   Email2?: string = '';
   IBAN?: string = '';
-  BIC?: string = '';
-  BetaalWijze?: string = '';
   LidBond?: string = '';
   CompGerechtigd?: string = '';
   LidType?: string = '';
   LidVanaf?: string = '';
   Opgezegd?: string = '';
   LidTot?: string = '';
-  U_PasNr?: string = '';
-  VastBedrag: number = 0;
-  Korting?: number = 0;
   Medisch?: string = '';
+  U_PasNr?: string = '';
+  PakketTot?: string = '';
+  BetaalWijze?: string = '';
+  VastBedrag: number = 0;
   Ouder1_Naam?: string = '';
   Ouder1_Email1?: string = '';
   Ouder1_Email2?: string = '';
   Ouder1_Mobiel?: string = '';
   Ouder1_Telefoon?: string = '';
-  Geincasseerd?: string = '';
-  Rating?: number = 0;
-  LicentieJun?: string = '';
-  VrijwillgersToelichting?: string = '';
+  Ouder1_Mobiel2?: string = '';
   LicentieSen?: string = '';
-  MagNietOpFoto?: string = '';
-  VrijwilligersKorting?: string = '';
+  LicentieJun?: string = '';
+  TrainingsGroepen?: string = '';
   Rol?: string = '';
-  ToegangsCode?: string = '';
-  ExtraA?: string = '';
+  Rating?: number = 0;
+  MagNietOpFoto?: string = '';
 
 
   /***************************************************************************************************
@@ -375,7 +366,6 @@ export class LedenItemExt extends LedenItem {
   LeeftijdCategorieWithSex?: string = '';
   Leeftijd?: number = 0;
   VolledigeNaam?: string = '';
-  Trainingsgroepen?: Array<string> = [];
 
 }
 
@@ -615,3 +605,4 @@ export interface IBirthDay {
   BirthDay: Date,
   Age: Number
 }
+

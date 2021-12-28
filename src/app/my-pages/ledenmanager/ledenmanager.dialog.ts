@@ -31,13 +31,11 @@ export class LedenDialogComponent implements OnInit {
         iban: new FormControl('',  [ValidatorService.validateIban] ),
         bic: new FormControl(),
         u_pasNr: new FormControl(),
-        vrijwillgersToelichting: new FormControl(),
         lidvanaf: new FormControl('', [Validators.required]),
         betaalwijze: new FormControl('', [Validators.required]),
         lidnr: new FormControl(),
         lidtype: new FormControl('', [Validators.required]),
         korting: new FormControl(),
-        vrijwilligerskorting: new FormControl(),
         vastbedrag: new FormControl(),
         //-------------------------------------------------------
         bondsnr: new FormControl(),
@@ -51,6 +49,7 @@ export class LedenDialogComponent implements OnInit {
         ouder1_email1: new FormControl(),
         ouder1_email2: new FormControl(),
         ouder1_mobiel: new FormControl(),
+        ouder1_mobiel2: new FormControl(),
         ouder1_telefoon: new FormControl(),
     });
 
@@ -86,13 +85,11 @@ export class LedenDialogComponent implements OnInit {
         this.iban.setValue(this.data.data.IBAN);
         this.bic.setValue(this.data.data.BIC);
         this.u_pasNr.setValue(this.data.data.U_PasNr);
-        this.vrijwillgersToelichting.setValue(this.data.data.VrijwillgersToelichting);
         this.lidvanaf.setValue(this.data.data.LidVanaf);
         this.betaalwijze.setValue(this.data.data.BetaalWijze);
         this.lidnr.setValue(this.data.data.LidNr);
         this.lidtype.setValue(this.data.data.LidType);
         this.korting.setValue(this.data.data.Korting);
-        this.vrijwilligerskorting.setValue(String(this.data.data.VrijwilligersKorting).toBoolean());
         this.vastbedrag.setValue(this.data.data.VastBedrag);
         this.bondsnr.setValue(this.data.data.BondsNr);
         this.lidbond.setValue(String(this.data.data.LidBond).toBoolean());
@@ -104,6 +101,7 @@ export class LedenDialogComponent implements OnInit {
         this.ouder1_email1.setValue(this.data.data.Ouder1_Email1);
         this.ouder1_email2.setValue(this.data.data.Ouder1_Email2);
         this.ouder1_mobiel.setValue(this.data.data.Ouder1_Mobiel);
+        this.ouder1_mobiel2.setValue(this.data.data.Ouder1_Mobiel2);
         this.ouder1_telefoon.setValue(this.data.data.Ouder1_Telefoon);
         console.log('received by dialog', this.data.data);
     }
@@ -126,13 +124,11 @@ export class LedenDialogComponent implements OnInit {
         this.data.data.IBAN = this.iban.value;
         this.data.data.BIC = this.bic.value;
         this.data.data.U_PasNr = this.u_pasNr.value;
-        this.data.data.VrijwillgersToelichting = this.vrijwillgersToelichting.value;
         this.data.data.LidVanaf = FormValueToDutchDateString(this.lidvanaf.value);
         this.data.data.BetaalWijze = this.betaalwijze.value;
         this.data.data.LidNr = this.lidnr.value;
         this.data.data.LidType = this.lidtype.value;
         this.data.data.Korting = this.korting.value;
-        this.data.data.VrijwilligersKorting = Boolean(this.vrijwilligerskorting.value).ToNumberString();
         this.data.data.VastBedrag = this.vastbedrag.value;
         this.data.data.BondsNr = this.bondsnr.value;
         this.data.data.LidBond = Boolean(this.lidbond.value).ToNumberString();
@@ -144,6 +140,7 @@ export class LedenDialogComponent implements OnInit {
         this.data.data.Ouder1_Email1 = this.ouder1_email1.value;
         this.data.data.Ouder1_Email2 = this.ouder1_email2.value;
         this.data.data.Ouder1_Mobiel = this.ouder1_mobiel.value;
+        this.data.data.Ouder1_Mobiel2 = this.ouder1_mobiel2.value;
         this.data.data.Ouder1_Telefoon = this.ouder1_telefoon.value;
         console.log('submitted by dialog', this.data.data);
         this.dialogRef.close(this.data.data);
@@ -215,9 +212,6 @@ export class LedenDialogComponent implements OnInit {
     get u_pasNr() {
         return this.ledenItemForm.get('u_pasNr');
     }
-    get vrijwillgersToelichting() {
-        return this.ledenItemForm.get('vrijwillgersToelichting');
-    }
     get lidvanaf() {
         return this.ledenItemForm.get('lidvanaf');
     }
@@ -233,9 +227,7 @@ export class LedenDialogComponent implements OnInit {
     get korting() {
         return this.ledenItemForm.get('korting');
     }
-    get vrijwilligerskorting() {
-        return this.ledenItemForm.get('vrijwilligerskorting');
-    }
+
     get vastbedrag() {
         return this.ledenItemForm.get('vastbedrag');
     }
@@ -270,6 +262,9 @@ export class LedenDialogComponent implements OnInit {
     }
     get ouder1_mobiel() {
         return this.ledenItemForm.get('ouder1_mobiel');
+    }
+    get ouder1_mobiel2() {
+        return this.ledenItemForm.get('ouder1_mobiel2');
     }
     get ouder1_telefoon() {
         return this.ledenItemForm.get('ouder1_telefoon');

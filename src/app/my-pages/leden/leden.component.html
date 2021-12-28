@@ -188,6 +188,15 @@
                     </button>
                   </td>
                 </tr>
+                <tr *ngIf='element.Ouder1_Mobiel2'>
+                  <td class='cell'>Ouder mobiel :</td>
+                  <td class='cell'>{{ element.Ouder1_Mobiel2 }}</td>
+                  <td>
+                    <button mat-icon-button (click)="onClickCopy(element.Ouder1_Mobiel2)">
+                      <mat-icon>content_copy</mat-icon>
+                    </button>
+                  </td>
+                </tr>
                 <tr *ngIf='element.Ouder1_Telefoon'>
                   <td class='cell'>Ouder telefoon :</td>
                   <td class='cell'>{{ element.Ouder1_Telefoon }}</td>
@@ -198,14 +207,6 @@
                 <tr *ngIf='element.Medisch'>
                   <td class='cell'>Medisch:</td>
                   <td class='cell'>{{ element.Medisch }}</td>
-                </tr>
-                <tr *ngIf='element.VrijwilligersKorting'>
-                  <td class='cell'>Vrijw. Korting:</td>
-                  <td class='cell'>{{ element.VrijwilligersKorting.toDutchTextString() }}</td>
-                </tr>
-                <tr *ngIf='element.VrijwillgersToelichting'>
-                  <td class='cell'>Toel. Vrijw. :</td>
-                  <td class='cell'>{{ element.VrijwillgersToelichting }}</td>
                 </tr>
                 <tr *ngIf='element.Rating > 0'>
                   <td class='cell'>Rating :</td>

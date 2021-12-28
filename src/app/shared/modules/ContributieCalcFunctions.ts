@@ -159,7 +159,7 @@ export function CreateOneDirectDebit(lid: LedenItemExt, contributieBedragen: Con
         directDebit.DatumMachtiging = formatDate(minMandateDate, 'dd-MM-yyyy', 'nl');
     }
 
-    directDebit.BIC = lid.BIC;
+    directDebit.BIC = '';
     directDebit.IBAN = lid.IBAN;
     directDebit.NaamDebiteur = ReplaceCharacters(lid.VolledigeNaam)
     directDebit.AdresRegel1 = ReplaceCharacters(lid.Adres);
