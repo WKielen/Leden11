@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Observable } from 'rxjs/internal/Observable';
 import { retry, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
@@ -22,13 +23,19 @@ export class ActionService extends DataService {
     return this.http.get(environment.baseUrl + '/action/getallactions') //getallfromnow
       .pipe(
         retry(3),
-        tap({ // Log the result or error
+        tap({ // Log the result or error 
           next: data => console.log('Received: ', data),
           error: error => console.log('Oeps: ', error)
         }),
       );
   }
 
+
+  /***************************************************************************************************
+  / Deze stream gebuik ik in de ActionMaintenancelist component. Op de pagina waarop het component 
+  / meerdere keren staat, breng ik wijzigingen aan die dan direct naar alle componenten gaan.
+  /***************************************************************************************************/
+  public actionStream = new Subject<Array<ActionItem>>();
 
   /***************************************************************************************************
   / Get all actions in the future

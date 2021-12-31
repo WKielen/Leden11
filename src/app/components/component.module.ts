@@ -26,6 +26,16 @@ import { MemberCheckboxTableComponent } from './member.checkbox.table/member.che
 import { ContributieBedragenFormComponent } from './contributie.bedragen.component/contributie.bedragen.form.component';
 import { AanmakenContributieCSVFormComponent } from './aanmaken.contributie.csv.component/aanmaken.contributie.csv.form.component';
 import { SendContributieMailComponent } from './send.contributie.mail.component/send.contributie.mail.component';
+import { ActionMaintenanceCardComponent } from './action.compoments/action.maintenance.card.component/action.maintenance.card.component';
+import { DisplayActionDetailsComponent } from './action.compoments/display.action.details.component';
+import { ActionDetailDialogComponent } from './action.compoments/action.detail.dialog.component/action.detail.dialog';
+import { ActionMutationFormComponent } from './action.compoments/action.mutation.form/action.mutation.form.component';
+import { DecisionMutationFormComponent } from './action.compoments/decision.mutation.form/decision.mutation.form.component';
+import { DecisionDetailDialogComponent } from './action.compoments/decision.detail.dialog.component/decision.detail.dialog';
+import { DecisionMaintenanceCardComponent } from './action.compoments/decision.maintenance.card.component/decision.maintenance.card.component';
+import { DisplayDecisionDetailsComponent } from './action.compoments/display.decision.details.component';
+import { ActionMutationDialogComponent } from './action.compoments/action.mutation.dialog/action.mutation';
+import { DecisionMutationDialogComponent } from './action.compoments/decision.mutation.dialog/decision.mutation.dialog';
 
 const componentList = [
   CardHeaderSpinnerComponent,
@@ -48,6 +58,16 @@ const componentList = [
   ContributieBedragenFormComponent,
   AanmakenContributieCSVFormComponent,
   SendContributieMailComponent,
+  ActionMaintenanceCardComponent,
+  DisplayActionDetailsComponent,
+  ActionDetailDialogComponent,
+  ActionMutationFormComponent,
+  ActionMutationDialogComponent,
+  DecisionMutationFormComponent,
+  DisplayDecisionDetailsComponent,
+  DecisionDetailDialogComponent,
+  DecisionMaintenanceCardComponent,
+  DecisionMutationDialogComponent,
 ]
 @NgModule({
   imports: [

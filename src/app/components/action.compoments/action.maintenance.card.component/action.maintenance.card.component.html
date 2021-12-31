@@ -1,0 +1,60 @@
+<small class="development" *ngIf="developmentMode">{{ me }}</small>
+<mat-card>
+    <mat-card-header-spinner [title]="cardHeaderText" [progress]="actionSpinner"
+    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onFirstSliderChanged($event)"
+    [toggleTitle2]="secondToggleTitle" [toggleChecked2]='headerToggleChecked' (onSliderChanged2)="onSecondSliderChanged($event)">
+    </mat-card-header-spinner>
+    <mat-card-content>
+      <mat-table #tableOpenActions [dataSource]="dataSource" class="mat-cell">
+  
+        <ng-container matColumnDef="Id">
+          <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Nr</mat-header-cell>
+          <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Id }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="Title">
+          <mat-header-cell *matHeaderCellDef class="firstcolumnshrink">Actie</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="firstcolumnshrink">{{ row.Title }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="HolderName">
+          <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="StartDate">
+          <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="TargetDate">
+          <mat-header-cell *matHeaderCellDef class="hideonmobile">Uiterste</mat-header-cell>
+          <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.TargetDate }}</mat-cell>
+        </ng-container>
+  
+        <ng-container matColumnDef="actions3">
+          <mat-header-cell *matHeaderCellDef>
+            <button *ngIf="!hideAddButton" mat-icon-button color="primary" (click)="onAddAction()">
+              <mat-icon aria-label="Add icon">add</mat-icon>
+            </button>
+          </mat-header-cell>
+  
+          <mat-cell *matCellDef="let row; let i=index;">
+            <mat-waiting-button icon="done" (holdTime)="onDoneAction($event, i)" [myCallback]="theBoundCallback">
+            </mat-waiting-button>
+            <button mat-icon-button color="primary" (click)="onEditAction(i)">
+              <mat-icon aria-label="Edit">edit</mat-icon>
+            </button>
+            <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteAction($event, i)"
+              [myCallback]="theBoundCallback"></mat-waiting-button>
+          </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
+        <mat-row *matRowDef="let row; index as i; columns: columnsToDisplay;"
+          (dblclick)="onDblclickAction($event, i)">
+        </mat-row>
+      </mat-table>
+  
+    </mat-card-content>
+  </mat-card>

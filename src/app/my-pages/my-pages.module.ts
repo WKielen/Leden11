@@ -42,9 +42,6 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularIbanModule } from 'angular-iban';
 import { HoldableModule } from '../shared/directives/directives.module';
 import { TodolistComponent } from './todolist/todolist.component';
-import { TodoListDetailDialogComponent } from './todolist/todolist.detail.dialog';
-import { TodoListDialogComponent } from './todolist/todolist.dialog';
-import { DecisionDialogComponent } from './todolist/decision.dialog';
 import { TrainingGroupsComponent } from './trainingsgroep/trainingsgroep.component';
 import { SendInventationDialogComponent } from './evenementen/send-inventation-dialog/send-inventation.dialog';
 import { EventSubscriptionsDialogComponent } from './evenementen/event-subscriptions-dialog/event-subscribtions.dialog';
@@ -80,15 +77,12 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     SingleMailDialogComponent,
     TrainingOverzichtDialogComponent,
     WebsiteDialogComponent,
-    DecisionDialogComponent,
     SendInventationDialogComponent,
     EventSubscriptionsDialogComponent,
 
     MasterzComponent,
     KomendeWeekComponent,
     TodolistComponent,
-    TodoListDetailDialogComponent,
-    TodoListDialogComponent,
     TrainingGroupsComponent,
   ],
   imports: [
@@ -107,8 +101,6 @@ FullCalendarModule.registerPlugins([ // register FullCalendar plugins
     HoldableModule,
     AngularIbanModule,
     ComponentsModule,
-    // SharedComponentsModule,
-
   ],
 })
 export class MyPagesModule { }

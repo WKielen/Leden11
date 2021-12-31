@@ -1,288 +1,46 @@
-<mat-card>
-  <mat-card-header-spinner title="Actie lijst" [progress]="openActionSpinner"
-  toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderChanged($event)"
-  [toggleTitle2]="toggleTitle2" [toggleChecked2]='headerToggleChecked' (onSliderChanged2)="onSliderChanged2($event)">
-  </mat-card-header-spinner>
-  <mat-card-content>
-    <mat-table #tableOpenActions [dataSource]="dataSourceOpenActions" class="mat-cell">
 
-      <ng-container matColumnDef="Id">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Nr</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Id }}</mat-cell>
-      </ng-container>
+<app-action-maintenance-form
+cardHeaderText="ActieLijst"
+filterStatus="0"
+statusAfterFinished="1"
+[firstNameFilter]="authService.firstname"
+[amIBestuur]="amIBestuur"
+(updateAction)="updateAction($event)"
+></app-action-maintenance-form>
 
-      <ng-container matColumnDef="Title">
-        <mat-header-cell *matHeaderCellDef class="firstcolumnshrink">Actie</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="firstcolumnshrink">{{ row.Title }}</mat-cell>
-      </ng-container>
+<app-action-maintenance-form
+cardHeaderText="Herhalende acties"
+filterStatus="9"
+statusAfterFinished="9"
+[firstNameFilter]="authService.firstname"
+[amIBestuur]="amIBestuur"
+(updateAction)="updateAction($event)"
+></app-action-maintenance-form>
 
-      <ng-container matColumnDef="HolderName">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
-      </ng-container>
+<app-decision-maintenance-form
+cardHeaderText="Besluitenlijst"
+filterStatus="8"
+statusAfterFinished="8"
+[amIBestuur]="amIBestuur"
+(updateAction)="updateAction($event)"
+></app-decision-maintenance-form>
 
-      <ng-container matColumnDef="StartDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
-      </ng-container>
+<app-action-maintenance-form
+cardHeaderText="Afgehandelde acties"
+filterStatus="1"
+statusAfterFinished="2"
+hideAddButton="true"
+[firstNameFilter]="authService.firstname"
+[amIBestuur]="amIBestuur"
+(updateAction)="updateAction($event)"
+></app-action-maintenance-form>
 
-      <ng-container matColumnDef="TargetDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Uiterste</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.TargetDate }}</mat-cell>
-      </ng-container>
-
-      <!-- actions -->
-      <ng-container matColumnDef="actions3">
-        <mat-header-cell *matHeaderCellDef>
-          <button mat-icon-button color="primary" (click)="onAddOpenAction()">
-            <mat-icon aria-label="Add icon">add</mat-icon>
-          </button>
-        </mat-header-cell>
-
-        <mat-cell *matCellDef="let row; let i=index;">
-          <mat-waiting-button icon="done" (holdTime)="onDoneOpenAction($event, i)" [myCallback]="theBoundCallback">
-          </mat-waiting-button>
-          <button mat-icon-button color="primary" (click)="onEditAction(i)">
-            <mat-icon aria-label="Edit">edit</mat-icon>
-          </button>
-          <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteOpenAction($event, i)"
-            [myCallback]="theBoundCallback"></mat-waiting-button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columnsOpenToDisplay"></mat-header-row>
-      <mat-row *matRowDef="let row; index as i; columns: columnsOpenToDisplay;"
-        (dblclick)="onDblclickOpenAction($event, i)">
-      </mat-row>
-    </mat-table>
-
-  </mat-card-content>
-</mat-card>
-
-
-
-<mat-card>
-  <mat-card-header-spinner title="Herhalende acties" [progress]="repeatingActionSpinner"
-    toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderRepeatingChanged($event)"
-    [toggleTitle2]="toggleTitle2" [toggleChecked2]='headerToggleChecked' (onSliderChanged2)="onSliderRepeatingChanged2($event)">
-  </mat-card-header-spinner>
-  <mat-card-content>
-    <mat-table #tableOpenActions [dataSource]="dataSourceRepeatingActions" class="mat-cell">
-
-      <ng-container matColumnDef="Id">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Nr</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Id }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="Title">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Title }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="HolderName">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="StartDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
-      </ng-container>
-
-
-      <ng-container matColumnDef="TargetDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Uiterste</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.TargetDate }}</mat-cell>
-      </ng-container>
-
-
-      <!-- actions -->
-      <ng-container matColumnDef="actions3">
-        <mat-header-cell *matHeaderCellDef>
-          <button mat-icon-button color="primary" (click)="onAddRepeatingAction()">
-            <mat-icon aria-label="Add icon">add</mat-icon>
-          </button>
-        </mat-header-cell>
-
-        <mat-cell *matCellDef="let row; let i=index;">
-          <mat-waiting-button icon="done" (holdTime)="onDoneRepeatingAction($event, i)" [myCallback]="theBoundCallback">
-          </mat-waiting-button>
-          <button mat-icon-button color="primary" (click)="onEditRepeatingAction(i)">
-            <mat-icon aria-label="Edit">edit</mat-icon>
-          </button>
-          <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteRepeatingAction($event, i)"
-            [myCallback]="theBoundCallback"></mat-waiting-button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columnsRepeatingToDisplay"></mat-header-row>
-      <mat-row *matRowDef="let row; index as i; columns: columnsRepeatingToDisplay;"
-        (dblclick)="onDblclickRepeatingAction($event, i)">
-      </mat-row>
-    </mat-table>
-
-  </mat-card-content>
-</mat-card>
-
-
-<mat-card>
-  <mat-card-header-spinner title="Besluitenlijst" [progress]="decisionSpinner"
-  [toggleTitle]="toggleTitle2" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderDecisionChanged($event)">
-  </mat-card-header-spinner>
-  <mat-card-content>
-    <mat-table #tableOpenActions [dataSource]="dataSourceDecisions" class="mat-cell">
-
-      <ng-container matColumnDef="Id">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Nr</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Id }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="Title">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Besluit</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Title }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="StartDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Datum</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
-      </ng-container>
-
-      <!-- actions -->
-      <ng-container matColumnDef="actions2">
-        <mat-header-cell *matHeaderCellDef>
-          <button mat-icon-button color="primary" (click)="onAddDecision()">
-            <mat-icon aria-label="Add icon">add</mat-icon>
-          </button>
-        </mat-header-cell>
-
-        <mat-cell *matCellDef="let row; let i=index;">
-          <button mat-icon-button color="primary" (click)="onEditDecision(i)">
-            <mat-icon aria-label="Edit">edit</mat-icon>
-          </button>
-          <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteDecision($event, i)"
-            [myCallback]="theBoundCallback"></mat-waiting-button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columnsDecisionsToDisplay"></mat-header-row>
-      <mat-row *matRowDef="let row; index as i; columns: columnsDecisionsToDisplay;"
-        (dblclick)="onDblclickDecision($event, i)">
-      </mat-row>
-    </mat-table>
-
-  </mat-card-content>
-</mat-card>
-
-
-<mat-card>
-  <mat-card-header-spinner title="Afgehandelde acties" [progress]="finishedActionSpinner"
-  toggleTitle="Eigen acties" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderFinishedChanged($event)"
-  [toggleTitle2]="toggleTitle2" [toggleChecked2]='headerToggleChecked' (onSliderChanged2)="onSliderFinishedChanged2($event)">
-
-  </mat-card-header-spinner>
-  <mat-card-content>
-    <mat-table #table [dataSource]="dataSourceFinishedActions" class="mat-cell">
-
-      <ng-container matColumnDef="Id">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Nr</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Id }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="Title">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Title }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="HolderName">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="StartDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
-      </ng-container>
-
-
-      <ng-container matColumnDef="EndDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Klaar</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.EndDate }}</mat-cell>
-      </ng-container>
-
-
-      <!-- actions -->
-      <ng-container matColumnDef="actions2">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-
-        <mat-cell *matCellDef="let row; let i=index;">
-          <button mat-icon-button color="primary" (click)="onEditFinished(i)">
-            <mat-icon aria-label="Edit">edit</mat-icon>
-          </button>
-          <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteFinishedAction($event, i)"
-            [myCallback]="theBoundCallback"></mat-waiting-button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columnsFinishedToDisplay"></mat-header-row>
-      <mat-row *matRowDef="let row; index as i; columns: columnsFinishedToDisplay;"
-        (dblclick)="onDblclickFinishedAction($event, i)">
-      </mat-row>
-    </mat-table>
-  </mat-card-content>
-</mat-card>
-
-<mat-card>
-  <mat-card-header-spinner title="Actie Archief" [progress]="archivedActionSpinner"
-    [toggleTitle]="toggleTitle2" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onSliderArchivedChanged($event)">
-  </mat-card-header-spinner>
-  <mat-card-content>
-    <mat-table #table [dataSource]="dataSourceArchiveActions" class="mat-cell">
-
-      <ng-container matColumnDef="Id">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Nr</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Id }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="Title">
-        <mat-header-cell *matHeaderCellDef class='firstcolumnshrink'>Actie</mat-header-cell>
-        <mat-cell *matCellDef="let row" class='firstcolumnshrink'>{{ row.Title }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="HolderName">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Door</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.HolderName }}</mat-cell>
-      </ng-container>
-
-      <ng-container matColumnDef="StartDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Begin</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.StartDate }}</mat-cell>
-      </ng-container>
-
-
-      <ng-container matColumnDef="EndDate">
-        <mat-header-cell *matHeaderCellDef class="hideonmobile">Klaar</mat-header-cell>
-        <mat-cell *matCellDef="let row" class="hideonmobile">{{ row.EndDate }}</mat-cell>
-      </ng-container>
-
-
-      <!-- actions -->
-      <ng-container matColumnDef="actions2">
-        <mat-header-cell *matHeaderCellDef></mat-header-cell>
-
-        <mat-cell *matCellDef="let row; let i=index;">
-          <button mat-icon-button color="primary" (click)="onEditArchived(i)">
-            <mat-icon aria-label="Edit">edit</mat-icon>
-          </button>
-          <mat-waiting-button icon="delete" color="warn" (holdTime)="onDeleteArchiveAction($event, i)"
-            [myCallback]="theBoundCallback"></mat-waiting-button>
-        </mat-cell>
-      </ng-container>
-
-      <mat-header-row *matHeaderRowDef="columnsArchiveToDisplay"></mat-header-row>
-      <mat-row *matRowDef="let row; index as i; columns: columnsArchiveToDisplay;"
-        (dblclick)="onDblclickArchiveAction($event, i)">
-      </mat-row>
-    </mat-table>
-
-  </mat-card-content>
-</mat-card>
+<app-action-maintenance-form
+cardHeaderText="Actie Archief"
+filterStatus="2"
+statusAfterFinished=""
+hideAddButton="true"
+[firstNameFilter]="authService.firstname"
+[amIBestuur]="amIBestuur"
+(updateAction)="updateAction($event)"
+></app-action-maintenance-form>
