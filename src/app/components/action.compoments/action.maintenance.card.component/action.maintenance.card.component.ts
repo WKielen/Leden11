@@ -30,10 +30,11 @@ export class ActionMaintenanceCardComponent extends ParentComponent implements O
   
   // for the header
   public actionSpinner = 0;
-  public headerToggleChecked: boolean = false;
-  public secondToggleTitle: string = '';
   
   public theBoundCallback: Function;
+
+  public firstSliderHeaderText: string = "Eigen acties";
+  public secondSliderHeaderText: string = "";
 
   
   /***************************************************************************************************
@@ -70,7 +71,7 @@ export class ActionMaintenanceCardComponent extends ParentComponent implements O
 
     this.createFilters();
     if (this.amIBestuur) {
-      this.secondToggleTitle = "Alleen bestuur"
+      this.secondSliderHeaderText = "Alleen bestuur"
     }
     this.filterValues.Status = this.filterStatus;
     this.dataSource.filter = JSON.stringify(this.filterValues);

@@ -1,7 +1,19 @@
+<ng-template #extrabuttons>
+  <div class="alternative-theme">
+    <mat-slide-toggle *ngIf="firstSliderHeaderText" color="primary" (change)="onFirstSliderChanged($event)"
+    matTooltipClass="tooltip" matTooltip="Laat alleen die acties zien, die alleen voor bestuur zichtbaar zijn"
+    labelPosition="before" checked="false">
+      <div class="toggleTitle">
+        {{ firstSliderHeaderText }}
+      </div>
+    </mat-slide-toggle>
+  </div>
+</ng-template>
+
 <small class="development" *ngIf="developmentMode">{{ me }}</small>
 <mat-card>
-  <mat-card-header-spinner title="Besluitenlijst" [progress]="actionSpinner"
-  [toggleTitle]="secondToggleTitle" [toggleChecked]='headerToggleChecked' (onSliderChanged)="onFirstSliderChanged($event)">
+  <mat-card-header-spinner [title]="cardHeaderText" [progress]="actionSpinner" [extraButtonsTemplate]='extrabuttons'>
+
   </mat-card-header-spinner>
   <mat-card-content>
     <mat-table #tableOpenActions [dataSource]="dataSource" class="mat-cell">
@@ -39,12 +51,9 @@
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="columnsToDisplay"></mat-header-row>
-      <mat-row *matRowDef="let row; index as i; columns: columnsToDisplay;"
-        (dblclick)="onDblclickAction($event, i)">
+      <mat-row *matRowDef="let row; index as i; columns: columnsToDisplay;" (dblclick)="onDblclickAction($event, i)">
       </mat-row>
     </mat-table>
 
   </mat-card-content>
 </mat-card>
-
-

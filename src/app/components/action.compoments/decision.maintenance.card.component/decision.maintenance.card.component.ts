@@ -30,8 +30,7 @@ export class DecisionMaintenanceCardComponent extends ParentComponent implements
   
   // for the header
   public actionSpinner = 0;
-  public headerToggleChecked: boolean = false;
-  public secondToggleTitle: string = '';
+  public firstSliderHeaderText: string = "";
   
   public theBoundCallback: Function;
 
@@ -70,7 +69,7 @@ export class DecisionMaintenanceCardComponent extends ParentComponent implements
 
     this.createFilters();
     if (this.amIBestuur) {
-      this.secondToggleTitle = "Alleen bestuur"
+      this.firstSliderHeaderText = "Alleen bestuur"
     }
     this.filterValues.Status = this.filterStatus;
     this.dataSource.filter = JSON.stringify(this.filterValues);
