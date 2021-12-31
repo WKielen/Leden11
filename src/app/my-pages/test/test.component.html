@@ -1,43 +1,11 @@
-<mat-card>
-  <mat-card-header-spinner title="Update Trainingsgroepen"></mat-card-header-spinner>
 
-  <mat-card-actions>
-    <button mat-raised-button (click)="onClick2()" color="primary">Migreer trainingsgroepen</button>
-  </mat-card-actions>
-</mat-card>
-
-
-<app-member-checkbox-table [dataSource]='ledenLijst' checkboxHeader="Geslaagd" [columns]="columns" (memberChecked)="onMemberRowClicked($event)"  ></app-member-checkbox-table>
-
-
-
-
-
-
-<app-agenda-mutation-form [evenement]='evenement' (changedEvenement)="onChangedEvent($event)"></app-agenda-mutation-form>
-
-
-
-<app-member-selection-box-wrapper></app-member-selection-box-wrapper>
-
-<app-display-subscriptions-details [inschrijvingsList]="subscriptions" ></app-display-subscriptions-details>
-
-<app-send-mail-settings></app-send-mail-settings>
-
-<form [formGroup]="myForm" novalidate>
-  <!-- <app-html-editor-formcontrol [formControl]="chipscontrol"></app-html-editor-formcontrol> -->
-  <app-demo-formcontrol [formControl]="demoControl"></app-demo-formcontrol>
-  <button mat-raised-button color="primary" type="button" (click)="onClick3()" [disabled]='!myForm.valid'>Save
-    me!</button>
-</form>
 
 <mat-card>
   <mat-card-header-spinner title="Kopje pagina"></mat-card-header-spinner>
-
   <mat-card-content>
     <app-a2hs></app-a2hs>
   </mat-card-content>
   <mat-card-actions>
-    <button mat-raised-button (click)="onClick()" color="primary">Replace fields</button>
+    <button mat-raised-button (click)="onClick()" color="primary">Enter</button>
   </mat-card-actions>
 </mat-card>
