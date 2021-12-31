@@ -218,10 +218,6 @@ export class DecisionMaintenanceCardComponent extends ParentComponent implements
   / 
   /***************************************************************************************************/
   onFirstSliderChanged($event): void {
-    this.filterValues.Voornaam = $event.checked ? this.firstNameFilter : '';
-    this.dataSource.filter = JSON.stringify(this.filterValues);
-  }
-  onSecondSliderChanged($event): void {
     this.filterValues.ShowOnlyBestuur = $event.checked;
     this.dataSource.filter = JSON.stringify(this.filterValues);
   }

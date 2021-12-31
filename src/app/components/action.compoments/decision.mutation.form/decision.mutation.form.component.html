@@ -26,5 +26,5 @@
     <textarea matInput type="text" placeholder="Toelichting" formControlName="description" [formControl]="description"
       matTextareaAutosize matAutosizeMinRows='5'></textarea>
   </mat-form-field>
+  <button mat-raised-button type="submit" color="primary" [disabled]='!actionItemForm.valid'>Bewaar</button>
 </form>
-<button mat-raised-button type="submit" color="primary" [disabled]='!actionItemForm.valid'>Bewaar</button>

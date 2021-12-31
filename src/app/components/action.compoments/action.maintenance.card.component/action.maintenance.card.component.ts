@@ -48,6 +48,7 @@ export class ActionMaintenanceCardComponent extends ParentComponent implements O
   
   constructor(
     @Attribute('hideAddButton') public hideAddButton: boolean,
+    @Attribute('hideDoneButton') public hideDoneButton: boolean,
     @Attribute('cardHeaderText') public cardHeaderText: string,
     @Attribute('filterStatus') public filterStatus: string,
     @Attribute('statusAfterFinished') public statusAfterFinished: string,

@@ -27,6 +27,10 @@ import { ActionItem } from '../../services/action.service';
       <td>Voor:</td>
       <td>{{ actionItem.TargetDate }}</td>
     </tr>
+    <tr *ngIf="actionItem.Role">
+      <td>Zichtbaar:</td>
+      <td>Alleen voor bestuur</td>
+    </tr>
     <tr *ngIf="toelichting">
       <td>Toelichting:</td>
       <td><div [innerHTML]="toelichting"></div></td>
