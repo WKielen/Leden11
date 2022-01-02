@@ -86,7 +86,7 @@
               "@babel/runtime-corejs3/core-js/symbol",
               "@babel/runtime-corejs3/core-js/symbol/iterator"
             ],
-            "outputPath": "dist/Leden",
+            "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -96,6 +96,7 @@
               "src/assets",
               "src/manifest.webmanifest",
               "src/main-sw.js",
+              "src/ngsw-worker.js",
               "src/firebase-messaging-sw.js"
             ],
             "styles": [
@@ -137,7 +138,7 @@
                 }
               ],
               "serviceWorker": true,
-              "ngswConfigPath": "ngsw-config.json"
+              "ngswConfigPath": "src/ngsw-config.json"
             }
           }
         },
