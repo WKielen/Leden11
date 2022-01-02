@@ -1,5 +1,5 @@
-import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwPush } from '@angular/service-worker';
 import { NotFoundError } from 'rxjs';
@@ -9,20 +9,20 @@ import { NotificationService, NotificationRecord } from 'src/app/services/notifi
 import { AppError } from 'src/app/shared/error-handling/app-error';
 import { DuplicateKeyError } from 'src/app/shared/error-handling/duplicate-key-error';
 import { ParentComponent } from 'src/app/shared/parent.component';
-import { BaseComponent } from '../../shared/base.component';
 
 @Component({
   selector: 'app-notification-subscription-form',
   template: `
   <small class="development" *ngIf="developmentMode">{{ me }}</small>
-
-    Aanmelden voor meldingen op deze browser of afmelden voor alle browsers<br>
-    <button mat-raised-button color="primary" [disabled]="!enableSubscribeButton" type="button" (click)="onSubscribe()"
-        >Aanmelden</button>
-    <button mat-raised-button color="primary" [disabled]="!enableUnSubscribeButton" type="button"
-        (click)="onUnSubscribe()" >Afmelden</button>
+      <p>
+        Aanmelden voor meldingen op deze browser of afmelden voor alle browsers
+      </p>
+      <button mat-raised-button color="primary" [disabled]="!enableSubscribeButton" type="button" (click)="onSubscribe()"
+      >Aanmelden</button>
+      <button mat-raised-button color="primary" [disabled]="!enableUnSubscribeButton" type="button"
+      (click)="onUnSubscribe()" >Afmelden</button>
 `,
-  styles: []
+  styles: [ 'button { margin: 15px!important;}', 'p { margin: 15px!important;}' ]
 })
 
 export class NotificationSubscriptionFormComponent extends ParentComponent implements OnInit {
@@ -44,23 +44,15 @@ export class NotificationSubscriptionFormComponent extends ParentComponent imple
     super(snackBar)
   }
 
-
-
-
   ngOnInit(): void {
-    let sub = this.notificationService.getPublicKey$()
-      .subscribe({
-        next: (data) => {
-          this.VAPID_PUBLIC_KEY = data as string;
-        },
-        error: (error: AppError) => {
-          this.showSnackBar('Controleer of mailserver aanwezig is!');
-        }
-      })
-    this.registerSubscription(sub);
+
+    if (!this.swPush.isEnabled) {
+      this.enableSubscribeButton = false;
+      this.enableUnSubscribeButton = false;
+      return;
+    }
 
     // Via het slotje in de adresbalk kan je toestemming voor notifications wijzigen. (meestal)
-
     // Als de browser helemaal geen notificaties aankan
     if (!Notification) {
       this.showSnackBar('Desktop notifications not available in your browser. Try Chromium.');
@@ -80,9 +72,8 @@ export class NotificationSubscriptionFormComponent extends ParentComponent imple
     if (this.authService.isEdgeAndroid || this.authService.isEdgeDesktop || this.authService.isEdgeiOS) {
       this.isEdgeVariant = true;
     }
-
-
   }
+
   /***************************************************************************************************
   / Hier vraag ik aan de service-worker om een abonnement op meldingen voor deze browser. Het abonnement
   / bevat een url naar de service-worker zelf. Dit abonnement sla ik op in de DB. Zodoende kan ik op een
@@ -91,48 +82,43 @@ export class NotificationSubscriptionFormComponent extends ParentComponent imple
   / Als er 2x wordt geregistreerd, komt er een duplicate key error.
   /***************************************************************************************************/
   onSubscribe() {
-    if (this.swPush.isEnabled) {
+    this.swPush.requestSubscription({           // geeft een promise terug en geen obserable. Kan dus niet registereren
+      // serverPublicKey: this.VAPID_PUBLIC_KEY
+      serverPublicKey: 'BL9GfIZqFPcIyOnFTOXsrORJg-BwMYG00s6VZyqQcJbXvvVFjsv-RfUI0dy8g14wyKORTPcw4-nKywaaOGCfSRw'
+    })
+      .then(subscription => {
+        // console.log('subscription gelukt', subscription, 'nu opslaan');
+        // console.log('this.isEdgeVariant',this.isEdgeVariant);
 
-      this.swPush.requestSubscription({           // geeft een promise terug en geen obserable. Kan dus niet registereren
-        // serverPublicKey: this.VAPID_PUBLIC_KEY
-        serverPublicKey: 'BL9GfIZqFPcIyOnFTOXsrORJg-BwMYG00s6VZyqQcJbXvvVFjsv-RfUI0dy8g14wyKORTPcw4-nKywaaOGCfSRw'
-      })
-        .then(subscription => {
-          // console.log('subscription gelukt', subscription, 'nu opslaan');
-          // console.log('this.isEdgeVariant',this.isEdgeVariant);
+        let notificationRecord = new NotificationRecord();
+        notificationRecord.UserId = this.authService.userId;
+        notificationRecord.Token = btoa(JSON.stringify(subscription));
+        notificationRecord.SendWithVapidAud = (!this.isEdgeVariant).ToNumberString();
+        // console.log('subscription gelukt', subscription, 'nu opslaan');
+        // console.log('notificationRecord dit ga ik opslaan', notificationRecord);
 
-          let notificationRecord = new NotificationRecord();
-          notificationRecord.UserId = this.authService.userId;
-          notificationRecord.Token = btoa(JSON.stringify(subscription));
-          notificationRecord.SendWithVapidAud = (!this.isEdgeVariant).ToNumberString();
-          // console.log('subscription gelukt', subscription, 'nu opslaan');
-          // console.log('notificationRecord dit ga ik opslaan', notificationRecord);
-
-          let sub1 = this.notificationService.create$(notificationRecord)
-            .subscribe({
-              next: (data) => {
-                // Dit werkt niet goed omdat als er meerdere registraties zijn van deze user de eerste browser een melding krijgt.
-                this.notificationService.sendNotification(JSON.stringify(subscription), 'TTVN Nieuwegein', 'Je krijgt meldingen in deze browser', (!this.isEdgeVariant).ToNumberString())
-                // this.notificationService.sendNotificationToUserId(notificationRecord.UserId, 'TTVN Nieuwegein', 'Je krijgt meldingen in deze browser');
-                this.showSnackBar('Aanmelding geregistreerd');
-              },
-              error: (error: AppError) => {
-                if (error instanceof DuplicateKeyError) {
-                  this.showSnackBar('Deze browser was al geregistreerd');
-                }
-                console.log("error create notification record", error);
+        let sub1 = this.notificationService.create$(notificationRecord)
+          .subscribe({
+            next: (data) => {
+              // Dit werkt niet goed omdat als er meerdere registraties zijn van deze user de eerste browser een melding krijgt.
+              this.notificationService.sendNotification(JSON.stringify(subscription), 'TTVN Nieuwegein', 'Je krijgt meldingen in deze browser', (!this.isEdgeVariant).ToNumberString())
+              // this.notificationService.sendNotificationToUserId(notificationRecord.UserId, 'TTVN Nieuwegein', 'Je krijgt meldingen in deze browser');
+              this.showSnackBar('Aanmelding geregistreerd');
+            },
+            error: (error: AppError) => {
+              if (error instanceof DuplicateKeyError) {
+                this.showSnackBar('Deze browser was al geregistreerd');
               }
-            })
-          this.registerSubscription(sub1);
-        })
-        .catch(err => {
-          this.showSnackBar('Could not subscribe to notifications');
-          console.log("Could not subscribe to notifications", err)
-        }
-        );
-    } else {
-      this.showSnackBar('Service Worker is not present', 'notification dialog: Service Worker not enabled');
-    }
+              console.log("error create notification record", error);
+            }
+          })
+        this.registerSubscription(sub1);
+      })
+      .catch(err => {
+        this.showSnackBar('Could not subscribe to notifications');
+        console.log("Could not subscribe to notifications", err)
+      }
+      );
   }
 
   /***************************************************************************************************

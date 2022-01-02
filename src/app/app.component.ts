@@ -17,17 +17,19 @@ export class AppComponent {
     public updates: SwUpdate,
     protected snackBar: MatSnackBar,
   ) {
-    updates.checkForUpdate().then((isThere: boolean) => {
-      if (isThere) {
-        updates.activateUpdate().then((successfull: boolean) => {
-          if (successfull)
-            snackBar.open('Er is een update geinstalleerd');
-          else
-            snackBar.open('Installatie update mislukt');
-        })
-      }
-    })
+    if (updates.isEnabled) {
+      updates.checkForUpdate().then((isThere: boolean) => {
+        if (isThere) {
+          updates.activateUpdate().then((successfull: boolean) => {
+            if (successfull)
+              snackBar.open('Er is een update geinstalleerd');
+            else
+              snackBar.open('Installatie update mislukt');
+          })
+        }
 
+      })
+    }
     /***************************************************************************************************
     / check out in what browser we are etc.
     /***************************************************************************************************/

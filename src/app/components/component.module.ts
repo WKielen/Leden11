@@ -35,7 +35,7 @@ import { DecisionMaintenanceCardComponent } from './action.compoments/decision.m
 import { DisplayDecisionDetailsComponent } from './action.compoments/display.decision.details.component';
 import { ActionMutationDialogComponent } from './action.compoments/action.mutation.dialog/action.mutation';
 import { DecisionMutationDialogComponent } from './action.compoments/decision.mutation.dialog/decision.mutation.dialog';
-import { NotificationSubscriptionFormComponent } from './action.compoments/notification.subscription.form.component';
+import { NotificationSubscriptionFormComponent } from './notification.subscription.form.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,

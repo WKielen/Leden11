@@ -1,11 +1,2 @@
 <app-mat-dialog-header-detail title='Configuratie'></app-mat-dialog-header-detail>
-
-<mat-dialog-content>
-    Aanmelden voor meldingen op deze browser of afmelden voor alle browsers<br>
-</mat-dialog-content>
-<mat-dialog-actions>
-    <button mat-raised-button color="primary" [disabled]="!enableSubscribeButton" type="button" (click)="onSubscribe()"
-        >Aanmelden</button>
-    <button mat-raised-button color="primary" [disabled]="!enableUnSubscribeButton" type="button"
-        (click)="onUnSubscribe()" >Afmelden</button>
-</mat-dialog-actions>
+<app-notification-subscription-form></app-notification-subscription-form>
