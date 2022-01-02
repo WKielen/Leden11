@@ -1,21 +1,41 @@
 import { Component, Injectable } from '@angular/core';
-// import { environment } from './../environments/environment';
-// import { SwUpdate } from '@angular/service-worker';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { SwUpdate } from '@angular/service-worker';
 import { AuthService } from './services/auth.service';
 
 @Component({
   selector: 'app-root',
-  //template: '<router-outlet></router-outlet>',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
 
 @Injectable()
 export class AppComponent {
-  constructor(public authServer: AuthService) {
-    // A2HS - START
+
+  constructor(
+    public authServer: AuthService,
+    public updates: SwUpdate,
+    protected snackBar: MatSnackBar,
+  ) {
+    updates.checkForUpdate().then((isThere: boolean) => {
+      if (isThere) {
+        updates.activateUpdate().then((successfull: boolean) => {
+          if (successfull)
+            snackBar.open('Er is een update geinstalleerd');
+          else
+            snackBar.open('Installatie update mislukt');
+        })
+      }
+    })
+
+    /***************************************************************************************************
+    / check out in what browser we are etc.
+    /***************************************************************************************************/
     authServer.checkUserAgent();
-    authServer.trackStandalone();
+
+    /***************************************************************************************************
+    / Do not ask to install on older browsers
+    /***************************************************************************************************/
     window.addEventListener('beforeinstallprompt', (e) => {
 
       // show the add button
@@ -28,12 +48,12 @@ export class AppComponent {
       authServer.promptSaved = true;
 
     });
+
+    // we ware installed.
     window.addEventListener('appinstalled', (evt) => {
       authServer.trackInstalled();
       // hide the add button
       // authServer.promptIntercepted = false;
     });
-    // A2HS - END
-
   }
 }

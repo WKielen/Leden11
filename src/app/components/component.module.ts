@@ -1,5 +1,4 @@
 import { CommonModule } from '@angular/common';
-
 import { NgModule } from '@angular/core';
 import { CustomMaterialModule } from 'src/app/material.module';
 import { SelectLidDropdownComponent } from './select.lid.dropdown.component';
@@ -20,7 +19,7 @@ import { HtmlEditorFormControlComponent } from './html.editor.formcontrol.compon
 import { SendMailSettingsComponent } from './send.mail.setting.component';
 import { HoldableModule } from '../shared/directives/directives.module';
 import { CardHeaderSpinnerComponent } from './card.header.spinner';
-import { CardHeaderDetailComponent } from './dialog.header.detail';
+import { DialogHeaderComponent } from './dialog.header.detail';
 import { AgendaMutationFormComponent } from './agenda.mutation.form/agenda.mutation.form.component';
 import { MemberCheckboxTableComponent } from './member.checkbox.table/member.checkbox.table.component';
 import { ContributieBedragenFormComponent } from './contributie.bedragen.component/contributie.bedragen.form.component';
@@ -36,11 +35,12 @@ import { DecisionMaintenanceCardComponent } from './action.compoments/decision.m
 import { DisplayDecisionDetailsComponent } from './action.compoments/display.decision.details.component';
 import { ActionMutationDialogComponent } from './action.compoments/action.mutation.dialog/action.mutation';
 import { DecisionMutationDialogComponent } from './action.compoments/decision.mutation.dialog/decision.mutation.dialog';
+import { NotificationSubscriptionFormComponent } from './action.compoments/notification.subscription.form.component';
 
 const componentList = [
   CardHeaderSpinnerComponent,
   SelectLidDropdownComponent,
-  CardHeaderDetailComponent,
+  DialogHeaderComponent,
   WaitingButtonComponent,
   CheckboxListComponent,
   DialogMessageBoxComponent,
@@ -68,6 +68,7 @@ const componentList = [
   DecisionDetailDialogComponent,
   DecisionMaintenanceCardComponent,
   DecisionMutationDialogComponent,
+  NotificationSubscriptionFormComponent,
 ]
 @NgModule({
   imports: [

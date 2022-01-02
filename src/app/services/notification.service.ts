@@ -31,7 +31,8 @@ export class NotificationService extends DataService {
       })
     };
 
-    return this.http.get(environment.proxyUrl, httpOptions)
+    // return this.http.get(environment.proxyUrl, httpOptions)
+    return this.http.get(environment.baseUrl )
       .pipe(
         retry(1),
         tap(

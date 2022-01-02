@@ -42,7 +42,7 @@ import { BaseComponent } from '../shared/base.component';
   ]
 })
 
-export class CardHeaderDetailComponent extends BaseComponent {
+export class DialogHeaderComponent extends BaseComponent {
 
   @Input() title: string;
   @Input() showButtons: boolean = false;

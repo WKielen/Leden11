@@ -194,7 +194,6 @@ export class DashboardComponent extends BaseComponent implements OnInit {
       this.ledenDataArray.forEach((lid:localLid) => {
         let lidvanaf: Date = new Date(lid.LidVanaf);
         let lidtot: Date = new Date(lid.LidTot);
-        console.log("DashboardComponent --> this.ledenDataArray.forEach --> lid.LidTot", lid.LidTot);
         
         if (lidvanaf < referenceDate && (referenceDate < lidtot || lid.Opgezegd == '0')) {
           countLeden += 1;

@@ -193,21 +193,9 @@ export class AuthService {
     if (/ipad/.test(uaString)) {
       this.whereIsShare = 'top';
     }
-  }
-  // showUserAgent() {
-  //   this.userAgent = navigator.userAgent.toLowerCase();
-  // }
-
-  trackStandalone () {
-    // called once from app.component
-    if ( this.checkStandalone() ) {
+    if ( window.matchMedia('(display-mode: standalone)').matches ) {
       this.isStandalone = true;
-      // this.gas.emitEvent('A2HS', 'Standalone', '' , 0);
     }
-  }
-
-  checkStandalone(): boolean {
-    return (window.matchMedia('(display-mode: standalone)').matches);
   }
 
   trackInstalled () {
@@ -218,34 +206,6 @@ export class AuthService {
   }
 
   addToHomeScreen () {
-    // call on custom button click
-    this.customButtonClicked = true;
-
-    if (!this.deferredPrompt) {
-      console.log('deferredPrompt null');
-      return;
-    }
-
-    // Show the prompt
-    this.deferredPrompt.prompt();
-    this.deferredPromptShown = true;
-
-    // Wait for the user to respond to the prompt
-    this.deferredPrompt.userChoice
-      .then((choiceResult) => {
-
-        if (choiceResult.outcome === 'accepted') {
-            // no matter the outcome, the prompt cannot be reused ON MOBILE
-            // for 3 months or until browser cache is cleared?
-        } else {
-            this.deferredPromptRejected = true;
-        }
-
-      });
-  }
-
-
-  addToHomeScreen2 () {
     // call on custom button click
     this.customButtonClicked = true;
 
