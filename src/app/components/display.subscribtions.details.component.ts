@@ -26,18 +26,18 @@ import { BaseComponent } from '../shared/base.component';
 <!-- </div> -->
 `,
 styles:[
-  `@use "src/mixins.scss" as s`,
-  `.mat-column-Naam {
+  `@use "src/mixins.scss" as s
+  .mat-column-Naam {
     @include s.mat-text-column-wrap-stuff;
     flex: 0 0 30% !important;
     width: 30% !important;
-    }`,
-  `.mat-column-Email {
+    }
+  .mat-column-Email {
     @include s.mat-text-column-wrap-stuff;
     flex: 0 0 30% !important;
     width: 30% !important;
-  }`,
-  `.mat-column-Toelichting {
+  }
+  .mat-column-Toelichting {
     @include s.mat-text-column-wrap-stuff;
     flex: 0 0 40% !important;
     width: 40% !important;
